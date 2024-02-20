@@ -1,0 +1,22 @@
+# depslib dependency file v1.0
+1708446545 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\main.cpp
+	<bits/stdc++.h>
+	"SDL.h"
+	"SDL_image.h"
+	"SDL_ttf.h"
+	"headers/globals.h"
+	"headers/button.h"
+
+1708445939 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\globals.h
+	<bits/stdc++.h>
+	<SDL.h>
+	<SDL_ttf.h>
+	<SDL_image.h>
+
+1708446646 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\button.h
+	<bits/stdc++.h>
+	"SDL.h"
+	"SDL_image.h"
+	"SDL_ttf.h"
+	"globals.h"
+

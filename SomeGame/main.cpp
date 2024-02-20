@@ -48,10 +48,15 @@ signed main(int argc, char *argv[]) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) logSDLError("SDL_Init", 1);
     if (TTF_Init() != 0) logTTFError("TTF_Init", 1);
 
-    gFont = TTF_OpenFont("assets/fonts/nasalization-rg.ttf", 180);
+    gFont = TTF_OpenFont("assets/fonts/nasalization-rg.ttf", 50);
+
+    int textWidth, textHeight;
+    TTF_SizeText(gFont, "click me!", &textWidth, &textHeight);
+
+    cerr << textWidth << " " << textHeight << endl;
 
     /// Setting up the window. THERE SHOULD ONLY BE 1 WINDOW, DECLARED GLOBALLY
-    gWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1080, 720, 0);
+    gWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
     gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
 
     SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
@@ -59,26 +64,27 @@ signed main(int argc, char *argv[]) {
     ///
 
     vector<Button> buttons;
-    buttons.emplace_back(Button("click me!", {0, 0, 200, 100}, white, {10, 10, 180, 80}, black, white));
+    buttons.emplace_back(Button("click me!", {0, 0, 300, 100}, white, 10, black, white, {255, 255, 255, 205}));
+
+    buttons.emplace_back(Button("no, me!", {0, 150, 300, 100}, white, 10, black, white, {255, 255, 255, 205}));
 
     SDL_Event event;
-    int it = 0;
     bool closed = 0;
     while (!closed) {
         while (SDL_PollEvent(&event)) {
+            for (auto &i : buttons) i.HandleEvent(&event);
             switch (event.type) {
                 default:
-                    for (auto i : buttons) {
-                        i.Display_Button();
-                        RenderFrame();
-                    }
                     continue;
                 case SDL_QUIT:
                     closed = 1;
                     break;
             }
         }
+
+        for (auto &i : buttons) i.Display_Button();
         RenderFrame();
+        SDL_Delay(1000 / 120);
     }
 
     Cleanup();

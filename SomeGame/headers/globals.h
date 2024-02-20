@@ -10,3 +10,12 @@ SDL_Texture* gTexture = nullptr;
 TTF_Font* gFont = nullptr;
 
 SDL_Color black = {0, 0, 0, 255}, white = {200, 200, 200, 76};
+
+int CURRENT_MODE;
+
+const int MAIN_MENU = 1000;
+const int TUTORIAL_SCREEN = 2000;
+const int IN_GAME = 3000;
+const int SCREEN_MODE_SELECTION = 4000;
+
+
