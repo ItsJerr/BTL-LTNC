@@ -8,8 +8,11 @@ using namespace std;
 
 class EventReceiver {
 public:
+/// EVERYTHING IN A LAYER SHOULD BE AN EventReceiver AND SHOULD HAVE THE FOLLOWING FUNCTIONS:
     virtual bool HandleEvent(const SDL_Event* event) {
         return false;
+
+        /// MUST BE IMPLEMENTED IN MEMBER FUNCTIONS: Returns True if handled, False otherwise.
     }
     virtual void DisplayAsset() {}
 };
@@ -21,6 +24,7 @@ public:
     }
 
     bool HandleEvent(const SDL_Event* event) {
+        /// Returns True if handled, False otherwise.
         if (MODE != CURRENT_MODE) return 0;
         for (const auto Handler : insiders)
             if (Handler -> HandleEvent(event)) return 1;

@@ -1,9 +1,6 @@
 #include "headers/game.h"
 using namespace std;
 
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 720;
-
 ofstream Log("log.txt");
 
 void logSDLError(const std::string &msg, bool fatal = false) {
@@ -21,16 +18,39 @@ void logTTFError(const std::string &msg, bool fatal = false) {
     }
 }
 
-/// GLOBAL DISPLAY VARIABLES
+/// INSERT LAYERS IN THE ORDER YOU WANT TO HANDLE EVENTS
+vector<Layer*> Layers;
 
+void Init() {
+    srand(time(NULL));
+
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) logSDLError("SDL_Init", 1);
+    if (TTF_Init() != 0) logTTFError("TTF_Init", 1);
+
+    gFont = TTF_OpenFont("assets/fonts/joystix.ttf", 35);
+
+    /// Setting up the window & renderer. THERE SHOULD ONLY BE 1 WINDOW, DECLARED GLOBALLY
+    gWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+    gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+
+    SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
+    SDL_RenderClear(gRenderer);
+
+    FrameEventID = SDL_RegisterEvents(1);
+
+    /// Setting up main menu
+    MainMenuNamespace::init(); Layers.push_back(&MainMenuNamespace::MainMenu);
+}
+
+/// call once per frame. clears the renderer so needs to redraw everything
 void RenderFrame() {
     SDL_RenderPresent(gRenderer);
     SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
+    SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND);
     SDL_RenderClear(gRenderer);
 }
-///
 
-void Cleanup() { /// CALL BEFORE QUITTING
+void Cleanup() { /// call before everything
     SDL_DestroyTexture(gTexture); gTexture = nullptr;
     SDL_DestroyRenderer(gRenderer); gRenderer = nullptr;
     SDL_DestroyWindow(gWindow); gWindow = nullptr;
@@ -39,42 +59,22 @@ void Cleanup() { /// CALL BEFORE QUITTING
 }
 
 signed main(int argc, char *argv[]) {
-    /// Just initialize everything for now, will initilize parts if sluggish
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) logSDLError("SDL_Init", 1);
-    if (TTF_Init() != 0) logTTFError("TTF_Init", 1);
-
-    gFont = TTF_OpenFont("assets/fonts/joystix.ttf", 35);
-
-    int textWidth, textHeight;
-    TTF_SizeText(gFont, "click me!", &textWidth, &textHeight);
-
-    cerr << textWidth << " " << textHeight << endl;
-
-    /// Setting up the window. THERE SHOULD ONLY BE 1 WINDOW, DECLARED GLOBALLY
-    gWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-    gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
-
-    SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
-    SDL_RenderClear(gRenderer);
-    ///
-
-    Layer MainMenu = Layer(MAIN_MENU);
-    Button NewGame = Button("New Game", {490, 282, 300, 75}, white, 3, black, white, {255, 255, 255, 125});
-
-    Button LoadGame = Button("Load Game", {490, 363, 300, 75}, white, 3, black, white, {255, 255, 255, 125});
-
-    MainMenu.addAsset(&NewGame); MainMenu.addAsset(&LoadGame);
-
-    /// ONLY WORK THROUGH LAYERS, DO NOT DIRECTLY CALL ASSETS IN LAYERS FOR ANY REASONs
-    vector<Layer*> Layers = {&MainMenu};
+    Init();
+    /// ONLY WORK THROUGH LAYERS, DO NOT DIRECTLY CALL ASSETS IN LAYERS FOR ANY REASONS
 
     SDL_Event event;
     bool closed = 0;
     while (!closed) {
+        /// Setup FrameEvent once per frame so that EventReceivers know when a frame has passed.
+        SDL_Event FrameEvent; SDL_zero(FrameEvent);
+        FrameEvent.type = FrameEventID;
+        SDL_PushEvent(&FrameEvent);
+
+        /// Event loop
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 default:
-                    for (const auto UI: Layers) if (UI -> HandleEvent(&event))
+                    for (const auto &UI: Layers) if (UI -> HandleEvent(&event))
                         continue;
                     continue;
                 case SDL_QUIT:
@@ -83,9 +83,12 @@ signed main(int argc, char *argv[]) {
             }
         }
 
-        for (const auto UI: Layers) UI -> Display();
+        /// Render loop
+        for (const auto &UI: Layers) UI -> Display();
         RenderFrame();
-        SDL_Delay(1000 / 120);
+
+        /// 60 FPS. TODO: Implement this better using some kind of clock/tick counter
+        SDL_Delay(1000 / 60);
     }
 
     Cleanup();

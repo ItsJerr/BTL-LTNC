@@ -29,8 +29,8 @@ public:
 
     bool HandleEvent(const SDL_Event* event) override {
         if (event -> type == SDL_MOUSEBUTTONDOWN && event -> button.button == SDL_BUTTON_LEFT && isHovered) {
-            if (HandlingEvent) return 0;
-            inFlash = HandlingEvent = 1;
+            if (ButtonFlashing) return 0;
+            inFlash = ButtonFlashing = 1;
             return 1;
         }
         else if (event -> type == SDL_MOUSEMOTION) {
@@ -52,16 +52,18 @@ public:
             textTexture = nullptr;
         }
         if (inFlash == 1) {
-            if ((flashFrameCounter / 20) % 2 == 0)
+            /// 3 ticks per sec, ticks for 1 sec
+
+            if ((flashFrameCounter / 10) % 2 == 0)
                 textSurface = TTF_RenderText_Solid(gFont, text.c_str(), flashColor);
             else
                 textSurface = TTF_RenderText_Solid(gFont, text.c_str(), textColor);
 
             textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
 
-            if (++flashFrameCounter == 120) {
+            if (++flashFrameCounter == 60) {
                 inFlash = 0;
-                HandlingEvent = 0;
+                ButtonFlashing = 0;
             }
         }
         else {
