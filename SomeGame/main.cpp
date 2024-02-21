@@ -1,9 +1,4 @@
-#include<bits/stdc++.h>
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
-#include "headers/globals.h"
-#include "headers/button.h"
+#include "headers/game.h"
 using namespace std;
 
 const int SCREEN_WIDTH = 1280;
@@ -48,7 +43,7 @@ signed main(int argc, char *argv[]) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) logSDLError("SDL_Init", 1);
     if (TTF_Init() != 0) logTTFError("TTF_Init", 1);
 
-    gFont = TTF_OpenFont("assets/fonts/nasalization-rg.ttf", 50);
+    gFont = TTF_OpenFont("assets/fonts/joystix.ttf", 35);
 
     int textWidth, textHeight;
     TTF_SizeText(gFont, "click me!", &textWidth, &textHeight);
@@ -63,18 +58,24 @@ signed main(int argc, char *argv[]) {
     SDL_RenderClear(gRenderer);
     ///
 
-    vector<Button> buttons;
-    buttons.emplace_back(Button("click me!", {0, 0, 300, 100}, white, 10, black, white, {255, 255, 255, 205}));
+    Layer MainMenu = Layer(MAIN_MENU);
+    Button NewGame = Button("New Game", {490, 282, 300, 75}, white, 3, black, white, {255, 255, 255, 125});
 
-    buttons.emplace_back(Button("no, me!", {0, 150, 300, 100}, white, 10, black, white, {255, 255, 255, 205}));
+    Button LoadGame = Button("Load Game", {490, 363, 300, 75}, white, 3, black, white, {255, 255, 255, 125});
+
+    MainMenu.addAsset(&NewGame); MainMenu.addAsset(&LoadGame);
+
+    /// ONLY WORK THROUGH LAYERS, DO NOT DIRECTLY CALL ASSETS IN LAYERS FOR ANY REASONs
+    vector<Layer*> Layers = {&MainMenu};
 
     SDL_Event event;
     bool closed = 0;
     while (!closed) {
         while (SDL_PollEvent(&event)) {
-            for (auto &i : buttons) i.HandleEvent(&event);
             switch (event.type) {
                 default:
+                    for (const auto UI: Layers) if (UI -> HandleEvent(&event))
+                        continue;
                     continue;
                 case SDL_QUIT:
                     closed = 1;
@@ -82,7 +83,7 @@ signed main(int argc, char *argv[]) {
             }
         }
 
-        for (auto &i : buttons) i.Display_Button();
+        for (const auto UI: Layers) UI -> Display();
         RenderFrame();
         SDL_Delay(1000 / 120);
     }

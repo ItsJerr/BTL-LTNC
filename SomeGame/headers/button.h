@@ -12,7 +12,7 @@ Notes:
 - text is NOT STRETCHED, instead made to center inside the inner rectangle
 */
 
-class Button {
+class Button: public EventReceiver {
 public:
     Button(string msg, SDL_Rect _rim, SDL_Color outer, int rim_width, SDL_Color inner, SDL_Color _textColor, SDL_Color _flashColor) {
         text = msg;
@@ -27,9 +27,10 @@ public:
         centerText.y = center.y + (center.h - centerText.h) / 2;
     }
 
-    bool HandleEvent(const SDL_Event* event) {
+    bool HandleEvent(const SDL_Event* event) override {
         if (event -> type == SDL_MOUSEBUTTONDOWN && event -> button.button == SDL_BUTTON_LEFT && isHovered) {
-            inFlash = !inFlash;
+            if (HandlingEvent) return 0;
+            inFlash = HandlingEvent = 1;
             return 1;
         }
         else if (event -> type == SDL_MOUSEMOTION) {
@@ -41,7 +42,7 @@ public:
         return false;
     }
 
-    void Display_Button() {
+    void DisplayAsset() override {
         if (textSurface) {
             SDL_FreeSurface(textSurface);
             textSurface = nullptr;
@@ -51,14 +52,17 @@ public:
             textTexture = nullptr;
         }
         if (inFlash == 1) {
-            if (flashFrameCounter < 90)
+            if ((flashFrameCounter / 20) % 2 == 0)
                 textSurface = TTF_RenderText_Solid(gFont, text.c_str(), flashColor);
             else
                 textSurface = TTF_RenderText_Solid(gFont, text.c_str(), textColor);
 
             textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
 
-            if (++flashFrameCounter == 180) flashFrameCounter = 0;
+            if (++flashFrameCounter == 120) {
+                inFlash = 0;
+                HandlingEvent = 0;
+            }
         }
         else {
             flashFrameCounter = 0;
