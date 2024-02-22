@@ -14,7 +14,12 @@ Notes:
 
 class Button: public EventReceiver {
 public:
-    Button(string msg, SDL_Rect _rim, SDL_Color outer, int rim_width, SDL_Color inner, SDL_Color _textColor, SDL_Color _flashColor) {
+    bool inFlash = 0, isHovered = 0;
+    int type = 0;
+
+    Button() {};
+
+    Button(string msg, SDL_Rect _rim, SDL_Color outer, int rim_width, SDL_Color inner, SDL_Color _textColor, SDL_Color _flashColor, int _type, bool c = true) {
         text = msg;
 
         rim = _rim;
@@ -25,10 +30,14 @@ public:
         TTF_SizeText(gFont, text.c_str(), &centerText.w, &centerText.h);
         centerText.x = center.x + (center.w - centerText.w) / 2;
         centerText.y = center.y + (center.h - centerText.h) / 2;
+
+        type = _type;
+
+        isClickable = c;
     }
 
     bool HandleEvent(const SDL_Event* event) override {
-        if (event -> type == SDL_MOUSEBUTTONDOWN && event -> button.button == SDL_BUTTON_LEFT && isHovered) {
+        if (event -> type == SDL_MOUSEBUTTONDOWN && event -> button.button == SDL_BUTTON_LEFT && isHovered && isClickable) {
             if (ButtonFlashing) return 0;
             inFlash = ButtonFlashing = 1;
             return 1;
@@ -99,7 +108,7 @@ private:
     SDL_Texture* textTexture = nullptr;
     string text = "";
 
-    bool inFlash = 0, isHovered = 0;
+    bool isClickable = 0;
     int flashFrameCounter = 0;
 };
 

@@ -46,24 +46,45 @@ public:
             SDL_RenderFillRect(gRenderer, &DotLocations[i]);
     }
 private:
-    const static int ParticleCount = 500;
+    const static int ParticleCount = 850;
     bool status = 0;
     SDL_Color DotColor;
     SDL_Rect* DotLocations = nullptr;
 };
 
-namespace MainMenuNamespace {
-    Layer MainMenu(MAIN_MENU);
+/// values to assign to button types, just use RNG and const static variables to avoid collision lol
+const static int NewGameButton = 2431096107;
+const static int LoadGameButton = 596889184;
 
-    vector<Button> Buttons;
-    Particles MainMenuParticles = Particles({150, 150, 150, 0});
+class MainMenuClass: public Layer {
+public:
+    MainMenuClass(int _MODE) {
+        MODE = _MODE;
 
-    void init() {
-        Buttons.push_back(Button("new game", {490, 282, 300, 75}, white, 3, black, white, {255, 255, 255, 100}));
-        Buttons.push_back(Button("load game", {490, 363, 300, 75}, white, 3, black, white, {255, 255, 255, 100}));
-
-        MainMenu.addAsset(&MainMenuParticles);
-        for (unsigned int i = 0; i < Buttons.size(); ++i) MainMenu.addAsset(&Buttons[i]);
+        insiders.push_back(&MainMenuParticle);
+        insiders.push_back(&MainMenu);
+        insiders.push_back(&LoadGame);
     }
-}
 
+    bool HandleEvent(const SDL_Event* event) override {
+        if (CURRENT_MODE != MODE) return 0;
+
+        for (const auto &Handler: insiders) if (Handler -> HandleEvent(event))
+            return 1;
+
+        return 0;
+    }
+
+    void Display() override {
+        for (const auto &asset: insiders) asset -> DisplayAsset();
+    }
+
+private:
+    int MODE;
+    vector<EventReceiver*> insiders;
+
+    Button MainMenu = Button("new game", {490, 282, 300, 75}, white, 3, black, white, {255, 255, 255, 100}, NewGameButton, true);
+    Button LoadGame = Button("load game", {490, 363, 300, 75}, white, 3, black, white, {255, 255, 255, 100}, LoadGameButton, 1);
+
+    Particles MainMenuParticle = Particles({200, 200, 200, 0});
+};

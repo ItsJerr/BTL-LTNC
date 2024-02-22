@@ -33,20 +33,21 @@ void Init() {
     gWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
     gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
 
+    SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
     SDL_RenderClear(gRenderer);
 
     FrameEventID = SDL_RegisterEvents(1);
 
     /// Setting up main menu
-    MainMenuNamespace::init(); Layers.push_back(&MainMenuNamespace::MainMenu);
+    CURRENT_MODE = 1000;
+    Layers.push_back(new MainMenuClass(MAIN_MENU));
 }
 
 /// call once per frame. clears the renderer so needs to redraw everything
 void RenderFrame() {
     SDL_RenderPresent(gRenderer);
     SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
-    SDL_SetRenderDrawBlendMode(gRenderer, SDL_BLENDMODE_BLEND);
     SDL_RenderClear(gRenderer);
 }
 

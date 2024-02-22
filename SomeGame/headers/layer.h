@@ -19,27 +19,10 @@ public:
 
 class Layer {
 public:
-    Layer(int _mode) {
-        MODE = _mode;
-    }
-
-    bool HandleEvent(const SDL_Event* event) {
+    virtual bool HandleEvent(const SDL_Event* event) {
         /// Returns True if handled, False otherwise.
-        if (MODE != CURRENT_MODE) return 0;
-        for (const auto Handler : insiders)
-            if (Handler -> HandleEvent(event)) return 1;
         return 0;
     }
 
-    void addAsset(EventReceiver* asset) {
-        insiders.push_back(asset);
-    }
-
-    void Display() {
-        for (const auto asset : insiders)
-            asset -> DisplayAsset();
-    }
-private:
-    int MODE;
-    vector<EventReceiver*> insiders;
+    virtual void Display() {}
 };
