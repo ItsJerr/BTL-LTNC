@@ -27,7 +27,7 @@ void Init() {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) logSDLError("SDL_Init", 1);
     if (TTF_Init() != 0) logTTFError("TTF_Init", 1);
 
-    gFont = TTF_OpenFont("assets/fonts/joystix.ttf", 35);
+    gFont = TTF_OpenFont("assets/fonts/dotty.ttf", 80);
 
     /// Setting up the window & renderer. THERE SHOULD ONLY BE 1 WINDOW, DECLARED GLOBALLY
     gWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
@@ -40,8 +40,8 @@ void Init() {
     FrameEventID = SDL_RegisterEvents(1);
 
     /// Setting up main menu
-    CURRENT_MODE = 1000;
-    Layers.push_back(new MainMenuClass(MAIN_MENU));
+    CurrentMode = 1000;
+    Layers.push_back(new MainMenuClass(1000));
 }
 
 /// call once per frame. clears the renderer so needs to redraw everything
@@ -61,7 +61,6 @@ void Cleanup() { /// call before everything
 
 signed main(int argc, char *argv[]) {
     Init();
-    /// ONLY WORK THROUGH LAYERS, DO NOT DIRECTLY CALL ASSETS IN LAYERS FOR ANY REASONS
 
     SDL_Event event;
     bool closed = 0;
@@ -71,13 +70,12 @@ signed main(int argc, char *argv[]) {
         FrameEvent.type = FrameEventID;
         SDL_PushEvent(&FrameEvent);
 
-        /// Event loop
+        /// Event loop, try not to modify
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 default:
-                    for (const auto &UI: Layers) if (UI -> HandleEvent(&event))
-                        continue;
-                    continue;
+                    for (const auto &UI: Layers) UI -> HandleEvent(&event);
+                    break;
                 case SDL_QUIT:
                     closed = 1;
                     break;

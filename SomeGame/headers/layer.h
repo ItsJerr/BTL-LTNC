@@ -1,3 +1,5 @@
+#pragma once
+
 #include<bits/stdc++.h>
 #include "SDL.h"
 #include "SDL_image.h"
@@ -8,7 +10,7 @@ using namespace std;
 
 class EventReceiver {
 public:
-/// EVERYTHING IN A LAYER SHOULD BE AN EventReceiver AND SHOULD HAVE THE FOLLOWING FUNCTIONS:
+    /// EVERYTHING IN A LAYER SHOULD BE AN EventReceiver AND SHOULD HAVE THE FOLLOWING FUNCTIONS:
     virtual bool HandleEvent(const SDL_Event* event) {
         return false;
 
@@ -19,10 +21,7 @@ public:
 
 class Layer {
 public:
-    virtual bool HandleEvent(const SDL_Event* event) {
-        /// Returns True if handled, False otherwise.
-        return 0;
-    }
+    virtual void HandleEvent(const SDL_Event* event) {}
 
     virtual void Display() {}
 };

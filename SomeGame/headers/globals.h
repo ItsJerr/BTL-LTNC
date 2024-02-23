@@ -17,11 +17,4 @@ const int SCREEN_HEIGHT = 720;
 
 unsigned int FrameEventID;
 
-int CURRENT_MODE;
-
-bool ButtonFlashing = 0;
-
-const int MAIN_MENU = 1000;
-const int TUTORIAL_SCREEN = 2000;
-const int IN_GAME = 3000;
-const int SCREEN_MODE_SELECTION = 4000;
+int CurrentMode;
