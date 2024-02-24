@@ -34,7 +34,10 @@
 		</Compiler>
 		<Unit filename="headers/button.h" />
 		<Unit filename="headers/globals.h" />
+		<Unit filename="headers/layer.h" />
+		<Unit filename="headers/mainmenu.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="mainmenu.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

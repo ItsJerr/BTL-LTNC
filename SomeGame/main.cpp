@@ -1,33 +1,32 @@
-#include "headers/game.h"
+//{ includes
+#include<bits/stdc++.h>
+#include "SDL.h"
+#include "SDL_image.h"
+#include "SDL_ttf.h"
+#include "headers/globals.h"
+#include "headers/mainmenu.h"
+//}
+
 using namespace std;
 
-ofstream Log("log.txt");
+//{Globals. You hate 'em, but they are needed and cannot be avoided :/
+SDL_Window* gWindow = nullptr;
+SDL_Renderer* gRenderer = nullptr;
+SDL_Texture* gTexture = nullptr;
+TTF_Font* gFont = nullptr;
 
-void logSDLError(const std::string &msg, bool fatal = false) {
-    Log << msg << " Error: " << SDL_GetError() << std::endl;
-    if (fatal) {
-        SDL_Quit();
-        exit(1);
-    }
-}
-void logTTFError(const std::string &msg, bool fatal = false) {
-    Log << msg << " Error: " << TTF_GetError() << std::endl;
-    if (fatal) {
-        SDL_Quit();
-        exit(1);
-    }
-}
+unsigned int FrameEventID;
 
-/// INSERT LAYERS IN THE ORDER YOU WANT TO HANDLE EVENTS
-vector<Layer*> Layers;
+int CURRENTMODE;
+
+Layer* CurrentLayer;
+//}
 
 void Init() {
-    srand(time(NULL));
+    SDL_Init(SDL_INIT_EVERYTHING);
+    TTF_Init();
 
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) logSDLError("SDL_Init", 1);
-    if (TTF_Init() != 0) logTTFError("TTF_Init", 1);
-
-    gFont = TTF_OpenFont("assets/fonts/joystix.ttf", 35);
+    gFont = TTF_OpenFont("assets/fonts/dotty.ttf", 80);
 
     /// Setting up the window & renderer. THERE SHOULD ONLY BE 1 WINDOW, DECLARED GLOBALLY
     gWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
@@ -40,8 +39,8 @@ void Init() {
     FrameEventID = SDL_RegisterEvents(1);
 
     /// Setting up main menu
-    CURRENT_MODE = 1000;
-    Layers.push_back(new MainMenuClass(MAIN_MENU));
+    CURRENTMODE = MAINMENUID;
+    CurrentLayer = new MainMenuClass(MAINMENUID);
 }
 
 /// call once per frame. clears the renderer so needs to redraw everything
@@ -55,13 +54,10 @@ void Cleanup() { /// call before everything
     SDL_DestroyTexture(gTexture); gTexture = nullptr;
     SDL_DestroyRenderer(gRenderer); gRenderer = nullptr;
     SDL_DestroyWindow(gWindow); gWindow = nullptr;
-
-    Log.close();
 }
 
 signed main(int argc, char *argv[]) {
     Init();
-    /// ONLY WORK THROUGH LAYERS, DO NOT DIRECTLY CALL ASSETS IN LAYERS FOR ANY REASONS
 
     SDL_Event event;
     bool closed = 0;
@@ -71,13 +67,12 @@ signed main(int argc, char *argv[]) {
         FrameEvent.type = FrameEventID;
         SDL_PushEvent(&FrameEvent);
 
-        /// Event loop
+        /// Event loop, try not to modify
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 default:
-                    for (const auto &UI: Layers) if (UI -> HandleEvent(&event))
-                        continue;
-                    continue;
+                    CurrentLayer -> HandleEvent(&event);
+                    break;
                 case SDL_QUIT:
                     closed = 1;
                     break;
@@ -85,7 +80,7 @@ signed main(int argc, char *argv[]) {
         }
 
         /// Render loop
-        for (const auto &UI: Layers) UI -> Display();
+        CurrentLayer -> Display();
         RenderFrame();
 
         /// 60 FPS. TODO: Implement this better using some kind of clock/tick counter

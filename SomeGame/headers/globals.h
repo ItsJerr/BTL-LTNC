@@ -1,27 +1,33 @@
-#pragma once
+#ifndef GLOBALS_H
+#define GLOBALS_H
+
 #include <bits/stdc++.h>
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
+
 using namespace std;
 
-SDL_Window* gWindow = nullptr;
-SDL_Renderer* gRenderer = nullptr;
-SDL_Texture* gTexture = nullptr;
-TTF_Font* gFont = nullptr;
+/// really important lol
+extern SDL_Window* gWindow;
+extern SDL_Renderer* gRenderer;
+extern SDL_Texture* gTexture;
+extern TTF_Font* gFont;
 
-SDL_Color black = {0, 0, 0, 255}, white = {255, 255, 255, 255};
+/// some common colors
+#define black {0, 0, 0, 255}
+#define white {255, 255, 255, 255}
 
+/// window resolution
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
-unsigned int FrameEventID;
+/// ID for the custom event signalling a frame
+extern unsigned int FrameEventID;
 
-int CURRENT_MODE;
+extern int CURRENTMODE;
 
-bool ButtonFlashing = 0;
-
-const int MAIN_MENU = 1000;
-const int TUTORIAL_SCREEN = 2000;
-const int IN_GAME = 3000;
-const int SCREEN_MODE_SELECTION = 4000;
+const int MAINMENUID = 1000;
+const int NEWGAMEID = 2000;
+const int LOADGAMEID = 3000;
+#endif // GLOBALS_H
