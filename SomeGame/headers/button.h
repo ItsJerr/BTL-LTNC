@@ -6,12 +6,12 @@
 #include "layer.h"
 using namespace std;
 
-/// IMPORTANT: If you ever need a button/text box with a specific feature (aka do something if pressed/clicked) please write your own class. The button in this implementation only flashes when clicked and does nothing else.
+/// If you ever need a button/text box with a specific feature (aka do something if pressed/clicked) please write your own class and override the function FlashEndAction().
 
 class Button: public EventReceiver {
 public:
     Button() {}
-    Button(string msg, SDL_Rect _rim, SDL_Color outer, int rim_width, SDL_Color inner, SDL_Color _textColor, SDL_Color _flashColor): text(msg), rim(_rim), rimColor(outer), centerColor(inner), textColor(_textColor), flashColor(_flashColor) {
+    Button(string msg, SDL_Rect _rim, SDL_Color outer, int rim_width, SDL_Color inner, SDL_Color _textColor, SDL_Color _flashColor, bool* ScrFlashChk = nullptr, bool* DispChk = nullptr): text(msg), rim(_rim), rimColor(outer), centerColor(inner), textColor(_textColor), flashColor(_flashColor), DisplayCheck(DispChk), ButtonFlashing(ScrFlashChk) {
         center = rim;
         center.x += rim_width; center.y += rim_width; center.h -= 2 * rim_width; center.w -= 2 * rim_width;
 
@@ -25,28 +25,34 @@ public:
 
     bool HandleEvent(const SDL_Event* event) override {
         if (event -> type == SDL_MOUSEBUTTONDOWN && event -> button.button == SDL_BUTTON_LEFT && isHovered) {
-            inFlash = 1;
-            return 1;
+            if (ButtonFlashing != nullptr && !*ButtonFlashing) {
+                inFlash = 1;
+                if (ButtonFlashing != nullptr) *ButtonFlashing = 1;
+                return 1;
+            }
         }
         else if (event -> type == SDL_MOUSEMOTION) {
             if (isHovered != inside(event -> motion.x, event -> motion.y)) {
                 isHovered = !isHovered;
+                if (DisplayCheck != nullptr) *DisplayCheck = isHovered;
                 return isHovered;
             }
         }
         return false;
     }
 
+    virtual void FlashEndAction() {}
+
     void DisplayAsset() override {
+        if (textSurface) {
+            SDL_FreeSurface(textSurface);
+            textSurface = nullptr;
+        }
+        if (textTexture) {
+            SDL_DestroyTexture(textTexture);
+            textTexture = nullptr;
+        }
         if (inFlash == 1) {
-            if (textSurface) {
-                SDL_FreeSurface(textSurface);
-                textSurface = nullptr;
-            }
-            if (textTexture) {
-                SDL_DestroyTexture(textTexture);
-                textTexture = nullptr;
-            }
             /// 3 ticks per sec, flashes for 1 sec
             if ((flashFrameCounter / 10) % 2 == 0)
                 textSurface = TTF_RenderText_Solid(gFont, text.c_str(), flashColor);
@@ -55,7 +61,11 @@ public:
 
             textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
 
-            if (++flashFrameCounter == 60) inFlash = 0;
+            if (++flashFrameCounter == 60) {
+                inFlash = 0;
+                if (ButtonFlashing != nullptr) *ButtonFlashing = 0;
+                FlashEndAction();
+            }
         }
         else {
             flashFrameCounter = 0;
@@ -91,6 +101,8 @@ protected:
     string text = "";
 
     bool inFlash = 0, isHovered = 0;
+    bool* ButtonFlashing = nullptr;
+    bool* DisplayCheck = nullptr;
     int flashFrameCounter = 0;
 };
 

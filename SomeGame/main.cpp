@@ -1,31 +1,23 @@
-#include "headers/game.h"
+//{ includes
+#include<bits/stdc++.h>
+#include "SDL.h"
+#include "SDL_image.h"
+#include "SDL_ttf.h"
+#include "headers/globals.h"
+#include "headers/layer.h"
+#include "headers/button.h"
+#include "headers/mainmenu.h"
+//}
+
 using namespace std;
 
-ofstream Log("log.txt");
-
-void logSDLError(const std::string &msg, bool fatal = false) {
-    Log << msg << " Error: " << SDL_GetError() << std::endl;
-    if (fatal) {
-        SDL_Quit();
-        exit(1);
-    }
-}
-void logTTFError(const std::string &msg, bool fatal = false) {
-    Log << msg << " Error: " << TTF_GetError() << std::endl;
-    if (fatal) {
-        SDL_Quit();
-        exit(1);
-    }
-}
-
 /// INSERT LAYERS IN THE ORDER YOU WANT TO HANDLE EVENTS
-vector<Layer*> Layers;
 
 void Init() {
     srand(time(NULL));
 
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) logSDLError("SDL_Init", 1);
-    if (TTF_Init() != 0) logTTFError("TTF_Init", 1);
+    SDL_Init(SDL_INIT_EVERYTHING) != 0;
+    TTF_Init() != 0;
 
     gFont = TTF_OpenFont("assets/fonts/dotty.ttf", 80);
 
@@ -40,8 +32,8 @@ void Init() {
     FrameEventID = SDL_RegisterEvents(1);
 
     /// Setting up main menu
-    CurrentMode = 1000;
-    Layers.push_back(new MainMenuClass(1000));
+    CURRENTMODE = MAINMENUID;
+    CurrentLayer = new MainMenuClass(MAINMENUID);
 }
 
 /// call once per frame. clears the renderer so needs to redraw everything
@@ -55,8 +47,6 @@ void Cleanup() { /// call before everything
     SDL_DestroyTexture(gTexture); gTexture = nullptr;
     SDL_DestroyRenderer(gRenderer); gRenderer = nullptr;
     SDL_DestroyWindow(gWindow); gWindow = nullptr;
-
-    Log.close();
 }
 
 signed main(int argc, char *argv[]) {
@@ -74,7 +64,7 @@ signed main(int argc, char *argv[]) {
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 default:
-                    for (const auto &UI: Layers) UI -> HandleEvent(&event);
+                    CurrentLayer -> HandleEvent(&event);
                     break;
                 case SDL_QUIT:
                     closed = 1;
@@ -83,7 +73,7 @@ signed main(int argc, char *argv[]) {
         }
 
         /// Render loop
-        for (const auto &UI: Layers) UI -> Display();
+        CurrentLayer -> Display();
         RenderFrame();
 
         /// 60 FPS. TODO: Implement this better using some kind of clock/tick counter
