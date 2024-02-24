@@ -1,22 +1,19 @@
 # depslib dependency file v1.0
-1708783543 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\main.cpp
+1708801170 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\main.cpp
 	<bits/stdc++.h>
 	"SDL.h"
 	"SDL_image.h"
 	"SDL_ttf.h"
 	"headers/globals.h"
-	"headers/layer.h"
-	"headers/button.h"
 	"headers/mainmenu.h"
 
-1708783536 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\globals.h
+1708801158 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\globals.h
 	<bits/stdc++.h>
 	"SDL.h"
 	"SDL_image.h"
 	"SDL_ttf.h"
-	"layer.h"
 
-1708772305 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\button.h
+1708801529 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\button.h
 	<bits/stdc++.h>
 	"SDL.h"
 	"SDL_image.h"
@@ -34,19 +31,17 @@
 	"button.h"
 	"mainmenu.h"
 
-1708783522 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\layer.h
+1708800325 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\layer.h
+	<bits/stdc++.h>
+	"SDL.h"
+
+1708799958 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\mainmenu.h
 	<bits/stdc++.h>
 	"SDL.h"
 	"SDL_image.h"
 	"SDL_ttf.h"
+	"button.h"
 
-1708783563 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\mainmenu.h
-	<bits/stdc++.h>
-	"SDL.h"
-	"SDL_image.h"
-	"SDL_ttf.h"
-	"globals.h"
-
-1708571083 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\mainmenu.cpp
-	"headers/game.h"
+1708801006 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\mainmenu.cpp
+	"headers/mainmenu.h"
 

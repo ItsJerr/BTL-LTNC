@@ -1,3 +1,6 @@
+#ifndef BUTTON_H
+#define BUTTON_H
+
 #include<bits/stdc++.h>
 #include "SDL.h"
 #include "SDL_image.h"
@@ -10,7 +13,6 @@ using namespace std;
 
 class Button: public EventReceiver {
 public:
-    Button() {}
     Button(string msg, SDL_Rect _rim, SDL_Color outer, int rim_width, SDL_Color inner, SDL_Color _textColor, SDL_Color _flashColor, bool* ScrFlashChk = nullptr, bool* DispChk = nullptr): text(msg), rim(_rim), rimColor(outer), centerColor(inner), textColor(_textColor), flashColor(_flashColor), DisplayCheck(DispChk), ButtonFlashing(ScrFlashChk) {
         center = rim;
         center.x += rim_width; center.y += rim_width; center.h -= 2 * rim_width; center.w -= 2 * rim_width;
@@ -21,6 +23,10 @@ public:
 
         textSurface = TTF_RenderText_Solid(gFont, text.c_str(), textColor);
         textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+    }
+
+    virtual void ModifyText(string msg) {
+        text = msg;
     }
 
     bool HandleEvent(const SDL_Event* event) override {
@@ -34,11 +40,20 @@ public:
         else if (event -> type == SDL_MOUSEMOTION) {
             if (isHovered != inside(event -> motion.x, event -> motion.y)) {
                 isHovered = !isHovered;
-                if (DisplayCheck != nullptr) *DisplayCheck = isHovered;
+                if (inFlash && DisplayCheck) *DisplayCheck = 1;
+                else if (DisplayCheck) {
+                    if (ButtonFlashing && *ButtonFlashing && !inFlash) *DisplayCheck = 0;
+                    else *DisplayCheck = isHovered;
+                }
                 return isHovered;
             }
         }
         return false;
+    }
+
+    virtual ~Button() {
+        if (textSurface) SDL_FreeSurface(textSurface);
+        if (textTexture) SDL_DestroyTexture(textTexture);
     }
 
     virtual void FlashEndAction() {}
@@ -126,6 +141,11 @@ public:
         textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
     }
 
+    virtual ~TextBox() {
+        if (textSurface) SDL_FreeSurface(textSurface);
+        if (textTexture) SDL_DestroyTexture(textTexture);
+    }
+
     bool HandleEvent(const SDL_Event* event) override {
         return false;
     }
@@ -151,3 +171,4 @@ protected:
     string text = "";
     bool* displayed = nullptr;
 };
+#endif // BUTTON_H

@@ -4,20 +4,27 @@
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 #include "headers/globals.h"
-#include "headers/layer.h"
-#include "headers/button.h"
 #include "headers/mainmenu.h"
 //}
 
 using namespace std;
 
-/// INSERT LAYERS IN THE ORDER YOU WANT TO HANDLE EVENTS
+//{Globals. You hate 'em, but they are needed and cannot be avoided :/
+SDL_Window* gWindow = nullptr;
+SDL_Renderer* gRenderer = nullptr;
+SDL_Texture* gTexture = nullptr;
+TTF_Font* gFont = nullptr;
+
+unsigned int FrameEventID;
+
+int CURRENTMODE;
+
+Layer* CurrentLayer;
+//}
 
 void Init() {
-    srand(time(NULL));
-
-    SDL_Init(SDL_INIT_EVERYTHING) != 0;
-    TTF_Init() != 0;
+    SDL_Init(SDL_INIT_EVERYTHING);
+    TTF_Init();
 
     gFont = TTF_OpenFont("assets/fonts/dotty.ttf", 80);
 
