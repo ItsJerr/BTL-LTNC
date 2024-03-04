@@ -3,10 +3,10 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
-#include "headers/globals.h"
-#include "headers/mainmenu.h"
-#include "headers/newcharacter.h"
-#include "headers/savefile.h"
+#include "globals.h"
+#include "mainmenu.h"
+#include "loadcharacter.h"
+#include "savefile.h"
 //}
 
 using namespace std;
@@ -38,8 +38,8 @@ void ChangeMode(int ModeID) {
             CurrentLayer = new MainMenuClass();
             break;
         }
-        case NEWCHARACTERID: {
-            CurrentLayer = new NewCharacterClass();
+        case LOADCHARACTERID: {
+            CurrentLayer = new LoadCharacterClass();
             break;
         }
     }
@@ -65,7 +65,7 @@ void Init() {
     ChangeModeEventID = FrameEventID + 1;
 
     /// Setting up main menu
-    ChangeMode(NEWCHARACTERID);
+    ChangeMode(MAINMENUID);
 }
 
 /// call once per frame. clears the renderer so needs to redraw everything

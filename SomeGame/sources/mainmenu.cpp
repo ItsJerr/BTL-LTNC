@@ -1,4 +1,4 @@
-#include "headers/mainmenu.h"
+#include "mainmenu.h"
 
 void Particles::DisplayAsset() {
     // Set color and render dots
@@ -6,9 +6,6 @@ void Particles::DisplayAsset() {
     for (int i = 0; i < ParticleCount; ++i)
         SDL_RenderFillRect(gRenderer, &DotLocations[i]);
 }
-
-// Values to assign to button types, just use RNG and const static variables to avoid collision lol
-const static int MainMenuModeID = 1000;
 
 // Booleans used for handling the display of description buttons
 static bool NewCharacterDescDisplayed = 0;
@@ -18,14 +15,14 @@ static bool QuitCharacterDescDisplayed = 0;
 // Used to ensure only 1 button is flashing at the same moment
 static bool ButtonFlashCheck = 0;
 
-void QuitCharacterButton::FlashEndAction() {
+void QuitClickAction() {
     // Push SDL_QUIT event to quit the game
     SDL_Event tmp; SDL_zero(tmp);
     tmp.type = SDL_QUIT;
     SDL_PushEvent(&tmp);
 }
 
-void NewCharacterButton::FlashEndAction() {
+void NewCharacterClickAction() {
     // Push ChangeMode event to change mode
     SDL_Event tmp; SDL_zero(tmp);
     tmp.type = ChangeModeEventID;
@@ -33,7 +30,7 @@ void NewCharacterButton::FlashEndAction() {
     SDL_PushEvent(&tmp);
 }
 
-void LoadCharacterButton::FlashEndAction() {
+void LoadCharacterClickAction() {
     // Push ChangeMode event to change mode
     SDL_Event tmp; SDL_zero(tmp);
     tmp.type = ChangeModeEventID;
@@ -43,16 +40,16 @@ void LoadCharacterButton::FlashEndAction() {
 
 MainMenuClass::MainMenuClass() {
     // Create buttons and description text boxes
-    NewCharacter = new NewCharacterButton("new character", {600, 450, 360, 75}, white, 3, black, white, offwhite, &ButtonFlashCheck, &NewCharacterDescDisplayed, 1);
-    LoadCharacter = new LoadCharacterButton("load character", {600, 531, 360, 75}, white, 3, black, white, offwhite, &ButtonFlashCheck, &LoadCharacterDescDisplayed, 1);
-    QuitCharacter = new QuitCharacterButton("quit game", {600, 612, 360, 75}, white, 3, black, white, offwhite, &ButtonFlashCheck, &QuitCharacterDescDisplayed, 1);
+    NewCharacter = new Button("new character", {600, 450, 360, 75}, white, 3, black, white, offwhite, NewCharacterClickAction, &ButtonFlashCheck, &NewCharacterDescDisplayed, 1);
+    LoadCharacter = new Button("load character", {600, 531, 360, 75}, white, 3, black, white, offwhite, LoadCharacterClickAction, &ButtonFlashCheck, &LoadCharacterDescDisplayed, 1);
+    QuitCharacter = new Button("quit game", {600, 612, 360, 75}, white, 3, black, white, offwhite, QuitClickAction, &ButtonFlashCheck, &QuitCharacterDescDisplayed, 1);
 
     NewCharacterDesc = new TextBox("create a new character.", {-10, 830, SCREEN_WIDTH + 10, 75}, white, 3, black, white, &NewCharacterDescDisplayed);
     LoadCharacterDesc = new TextBox("load an existing save file.", {-10, 830, SCREEN_WIDTH + 10, 75}, white, 3, black, white, &LoadCharacterDescDisplayed);
     QuitCharacterDesc = new TextBox("exit the game.", {-10, 830, SCREEN_WIDTH + 10, 75}, white, 3, black, white, &QuitCharacterDescDisplayed);
 
     // Create particles
-    MainMenuParticle = new Particles({200, 200, 200, 0});
+    MainMenuParticle = new Particles({100, 100, 100, 255});
 
     // Add all asset pointers to insiders
     insiders.push_back(MainMenuParticle);

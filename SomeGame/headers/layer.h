@@ -28,4 +28,50 @@ public:
     virtual void Display() {}
 };
 
+class Particles: public EventReceiver {
+public:
+    Particles(SDL_Color col): DotColor(col), SaveA(col.a) {
+        status = 0;
+        DotColor.a = 0;
+        delta = SaveA / 100;
+        GenerateDots();
+    }
+
+    void GenerateDots() {
+        DotLocations = new SDL_Rect[ParticleCount];
+
+        // Generate random locations for dots
+        for (int i = 0; i < ParticleCount; ++i) {
+            DotLocations[i] = {rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT, 2, 2};
+        }
+    }
+    bool HandleEvent(const SDL_Event* event) override {
+        if (event -> type != FrameEventID) return false;
+
+        if (!status) {
+            if (DotColor.a > SaveA - delta) status = 1;
+            else DotColor.a += delta;
+        }
+        else {
+            DotColor.a -= delta;
+            if (DotColor.a == 0) {
+                status = 0;
+                delete[] DotLocations;
+                GenerateDots();
+            }
+        }
+
+        // cerr << (int)(DotColor.a) << endl;
+
+        return true;
+    }
+    void DisplayAsset() override;
+private:
+    const static int ParticleCount = 1000;
+    bool status = 0;
+    SDL_Color DotColor;
+    Uint8 SaveA = 0, delta = 0;
+    SDL_Rect* DotLocations = nullptr;
+};
+
 #endif

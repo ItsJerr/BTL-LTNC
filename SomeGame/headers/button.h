@@ -9,16 +9,22 @@
 #include "layer.h"
 using namespace std;
 
-/// If you ever need a button/text box with a specific feature (aka do something if pressed/clicked) please write your own class and override the function FlashEndAction().
+/// If you ever need a button/text box with a specific feature (aka do something if pressed/clicked) write your own function and pass it to the Button constructor.
 
 class Button: public EventReceiver {
 public:
-    Button(string msg, SDL_Rect _rim, SDL_Color outer, int rim_width, SDL_Color inner, SDL_Color _textColor, SDL_Color _flashColor, bool* ScrFlashChk = nullptr, bool* DispChk = nullptr): text(msg), rim(_rim), rimColor(outer), centerColor(inner), textColor(_textColor), flashColor(_flashColor), DisplayCheck(DispChk), ButtonFlashing(ScrFlashChk) {
+     Button(const string& msg, const SDL_Rect& rect, const SDL_Color& outerColor, const int& rimWidth,
+            const SDL_Color& innerColor, const SDL_Color& textColor, const SDL_Color& flashColor,
+            function<void()> onClick, bool* scrFlashCheck = nullptr,
+            bool* dependencies = nullptr, bool clickable = false)
+            : text(msg), rim(rect), rimColor(outerColor), centerColor(innerColor),
+              textColor(textColor), flashColor(flashColor), FlashEndAction(onClick),
+              dependencies(dependencies), ButtonFlashing(scrFlashCheck), clickable(clickable) {
         center = rim;
-        center.x += rim_width; center.y += rim_width; center.h -= 2 * rim_width; center.w -= 2 * rim_width;
+        center.x += rimWidth; center.y += rimWidth; center.h -= 2 * rimWidth; center.w -= 2 * rimWidth;
 
         TTF_SizeText(gFont, text.c_str(), &centerText.w, &centerText.h);
-        centerText.x = center.x + (center.w - centerText.w) / 2;
+        centerText.x = center.x + (center.w - centerText.w) / 2 + rimWidth;
         centerText.y = center.y + (center.h - centerText.h) / 2;
 
         textSurface = TTF_RenderText_Solid(gFont, text.c_str(), textColor);
@@ -30,7 +36,7 @@ public:
     }
 
     bool HandleEvent(const SDL_Event* event) override {
-        if (event -> type == SDL_MOUSEBUTTONDOWN && event -> button.button == SDL_BUTTON_LEFT && isHovered) {
+        if (event -> type == SDL_MOUSEBUTTONDOWN && event -> button.button == SDL_BUTTON_LEFT && isHovered && clickable) {
             if (ButtonFlashing != nullptr && !*ButtonFlashing) {
                 inFlash = 1;
                 if (ButtonFlashing != nullptr) *ButtonFlashing = 1;
@@ -40,10 +46,10 @@ public:
         else if (event -> type == SDL_MOUSEMOTION) {
             if (isHovered != inside(event -> motion.x, event -> motion.y)) {
                 isHovered = !isHovered;
-                if (inFlash && DisplayCheck) *DisplayCheck = 1;
-                else if (DisplayCheck) {
-                    if (ButtonFlashing && *ButtonFlashing && !inFlash) *DisplayCheck = 0;
-                    else *DisplayCheck = isHovered;
+                if (inFlash && dependencies) *dependencies = 1;
+                else if (dependencies) {
+                    if (ButtonFlashing && *ButtonFlashing && !inFlash) *dependencies = 0;
+                    else *dependencies = isHovered;
                 }
                 return isHovered;
             }
@@ -55,8 +61,6 @@ public:
         if (textSurface) SDL_FreeSurface(textSurface);
         if (textTexture) SDL_DestroyTexture(textTexture);
     }
-
-    virtual void FlashEndAction() {}
 
     void DisplayAsset() override {
         if (textSurface) {
@@ -115,27 +119,34 @@ protected:
     SDL_Texture* textTexture = nullptr;
     string text = "";
 
-    bool inFlash = 0, isHovered = 0;
+    bool inFlash = 0, isHovered = 0, clickable = 0;
     bool* ButtonFlashing = nullptr;
-    bool* DisplayCheck = nullptr;
+    bool* dependencies = nullptr;
     int flashFrameCounter = 0;
+    function<void()> FlashEndAction;
 };
 
 class TextBox: public EventReceiver {
 public:
-    TextBox(string msg, SDL_Rect _rim, SDL_Color outer, int rim_width, SDL_Color inner, SDL_Color _textColor, bool* _displayed) {
-        text = msg;
-
-        rim = _rim;
-        center = rim; center.x += rim_width; center.y += rim_width; center.h -= 2 * rim_width; center.w -= 2 * rim_width;
-
-        rimColor = outer; centerColor = inner; textColor = _textColor;
+    TextBox(const string& msg, const SDL_Rect& rect, const SDL_Color& outerColor, const int& rimWidth,
+            const SDL_Color& innerColor, const SDL_Color& textColor,
+            bool* displayed = nullptr, bool* dependencies = nullptr, bool centered = true)
+            : text(msg), rim(rect), rimColor(outerColor), centerColor(innerColor),
+              textColor(textColor), dependencies(dependencies), displayed(displayed) {
+        center = rim;
+        center.x += rimWidth; center.y += rimWidth;
+        center.h -= 2 * rimWidth; center.w -= 2 * rimWidth;
 
         TTF_SizeText(gFont, text.c_str(), &centerText.w, &centerText.h);
-        centerText.x = center.x + (center.w - centerText.w) / 2;
-        centerText.y = center.y + (center.h - centerText.h) / 2;
 
-        displayed = _displayed;
+        if (centered) {
+            centerText.x = center.x + (center.w - centerText.w) / 2;
+            centerText.y = center.y + (center.h - centerText.h) / 2;
+        }
+        else {
+            centerText.x = center.x + 5;
+            centerText.y = center.y + 5;
+        }
 
         textSurface = TTF_RenderText_Solid(gFont, text.c_str(), textColor);
         textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
@@ -151,7 +162,7 @@ public:
     }
 
     void DisplayAsset() override {
-        if (displayed == nullptr || !*displayed) return;
+        if (displayed != nullptr && !*displayed) return;
         /// draw outer rectangle
         SDL_SetRenderDrawColor(gRenderer, rimColor.r, rimColor.g, rimColor.b, rimColor.a);
         SDL_RenderFillRect(gRenderer, &rim);
@@ -169,6 +180,7 @@ protected:
     SDL_Surface* textSurface = nullptr;
     SDL_Texture* textTexture = nullptr;
     string text = "";
-    bool* displayed = nullptr;
+    bool *displayed = nullptr, *dependencies = nullptr;
 };
+
 #endif // BUTTON_H
