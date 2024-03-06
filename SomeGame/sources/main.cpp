@@ -5,7 +5,7 @@
 #include "SDL_ttf.h"
 #include "globals.h"
 #include "mainmenu.h"
-#include "loadcharacter.h"
+#include "character.h"
 #include "savefile.h"
 //}
 
@@ -36,6 +36,10 @@ void ChangeMode(int ModeID) {
         }
         case MAINMENUID: {
             CurrentLayer = new MainMenuClass();
+            break;
+        }
+        case NEWCHARACTERID: {
+            CurrentLayer = new NewCharacterClass();
             break;
         }
         case LOADCHARACTERID: {

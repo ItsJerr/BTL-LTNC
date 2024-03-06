@@ -10,6 +10,7 @@ const int ENDLESSMODE = 200;
 class GameData {
 public:
     bool GameDataLoaded = 0;
+    int SaveFileIndex = 0;
 
     /// Player stats
     int PlayerLevel, PlayerEXP, CoinBalance;
@@ -41,6 +42,14 @@ public:
         MagicResModifier = 1.0 + (0.05 * MagicResistanceUpgradeLevel) + (0.02 * PlayerLevel);
         EnemyHPModifier = (DungeonLevel - 1) / 2;
         EnemyDamageModifier = 1.0 + (0.05 * DungeonLevel) / 2;
+    }
+
+    void Wipe() { /// for the love of god, dont use this anywhere else other than creating a new character. PLEASE NO
+        GameDataLoaded = 1;
+        PlayerLevel = PlayerEXP = CoinBalance = GunBought = HPUpgradeLevel = AttackUpgradeLevel = GunUpgradeLevel = ManaUpgradeLevel
+        = AmmoUpgradeLevel = MagicResistanceUpgradeLevel = ArmorUpgradeLevel = InDungeon = DungeonMode = DungeonLevel = 0;
+
+        CalculateModifiers();
     }
 };
 

@@ -44,13 +44,13 @@
 			<Add directory="C:/Users/Administrator/Desktop/C++/Uni/SDL2-2.30.0/i686-w64-mingw32/lib" />
 		</Linker>
 		<Unit filename="headers/button.h" />
+		<Unit filename="headers/character.h" />
 		<Unit filename="headers/gamevar.h" />
 		<Unit filename="headers/globals.h" />
 		<Unit filename="headers/layer.h" />
-		<Unit filename="headers/loadcharacter.h" />
 		<Unit filename="headers/mainmenu.h" />
 		<Unit filename="headers/savefile.h" />
-		<Unit filename="sources/loadcharacter.cpp" />
+		<Unit filename="sources/character.cpp" />
 		<Unit filename="sources/main.cpp" />
 		<Unit filename="sources/mainmenu.cpp" />
 		<Unit filename="sources/savefile.cpp" />

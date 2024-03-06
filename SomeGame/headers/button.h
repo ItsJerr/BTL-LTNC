@@ -25,7 +25,7 @@ public:
 
         TTF_SizeText(gFont, text.c_str(), &centerText.w, &centerText.h);
         centerText.x = center.x + (center.w - centerText.w) / 2 + rimWidth;
-        centerText.y = center.y + (center.h - centerText.h) / 2;
+        centerText.y = center.y + (center.h - centerText.h) / 2 + rimWidth;
 
         textSurface = TTF_RenderText_Solid(gFont, text.c_str(), textColor);
         textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
@@ -51,13 +51,12 @@ public:
                     if (ButtonFlashing && *ButtonFlashing && !inFlash) *dependencies = 0;
                     else *dependencies = isHovered;
                 }
-                return isHovered;
             }
         }
         return false;
     }
 
-    virtual ~Button() {
+    ~Button() {
         if (textSurface) SDL_FreeSurface(textSurface);
         if (textTexture) SDL_DestroyTexture(textTexture);
     }
@@ -147,6 +146,22 @@ public:
             centerText.x = center.x + 5;
             centerText.y = center.y + 5;
         }
+
+        textSurface = TTF_RenderText_Solid(gFont, text.c_str(), textColor);
+        textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+    }
+
+    TextBox(const string& msg, const SDL_Rect& rect, const SDL_Color& outerColor, const int& rimWidth,
+            const SDL_Color& innerColor, const SDL_Color& textColor, const pair<int, int>& position,
+            bool* displayed = nullptr, bool* dependencies = nullptr)
+            : text(msg), rim(rect), rimColor(outerColor), centerColor(innerColor),
+              textColor(textColor), dependencies(dependencies), displayed(displayed) {
+        center = rim;
+        center.x += rimWidth; center.y += rimWidth;
+        center.h -= 2 * rimWidth; center.w -= 2 * rimWidth;
+
+        TTF_SizeText(gFont, text.c_str(), &centerText.w, &centerText.h);
+        tie(centerText.x, centerText.y) = position;
 
         textSurface = TTF_RenderText_Solid(gFont, text.c_str(), textColor);
         textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);

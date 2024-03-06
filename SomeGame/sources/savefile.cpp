@@ -27,15 +27,12 @@ void LoadGame(const int fileIndex, GameData* dataLoc) {
         cerr << "Error: Game data is already loaded." << endl;
         return;
     }
+    dataLoc -> SaveFileIndex = fileIndex;
 
     // Construct save file path
     string saveFilePath = "assets/saves/savefile" + to_string(fileIndex) + ".sav";
     ifstream loadFileStream(saveFilePath);
-    if (!loadFileStream.is_open()) {
-        cerr << "Error: Failed to open save file '" << saveFilePath << "'." << endl;
-        return;
-    }
-
+    if (!loadFileStream.is_open()) return;
 
     // Define variables to load from the file
     vector<void*> variables = {&dataLoc -> PlayerLevel, &dataLoc -> PlayerEXP, &dataLoc -> CoinBalance, &dataLoc -> GunBought, &dataLoc -> HPUpgradeLevel, &dataLoc -> AttackUpgradeLevel, &dataLoc -> GunUpgradeLevel, &dataLoc -> ManaUpgradeLevel, &dataLoc -> AmmoUpgradeLevel, &dataLoc -> MagicResistanceUpgradeLevel, &dataLoc -> ArmorUpgradeLevel, &dataLoc -> InDungeon, &dataLoc -> DungeonMode, &dataLoc -> DungeonLevel};
@@ -72,7 +69,7 @@ void LoadGame(const int fileIndex, GameData* dataLoc) {
 }
 
 // Function to save game data to a save file
-void SaveGame(const int fileIndex, GameData* dataLoc) {
+void SaveGame(GameData* dataLoc) {
     // Check if game data is loaded
     if (!dataLoc -> GameDataLoaded) {
         cerr << "Error: Game data is not loaded." << endl;
@@ -80,7 +77,7 @@ void SaveGame(const int fileIndex, GameData* dataLoc) {
     }
 
     // Construct save file path
-    string saveFilePath = "assets/saves/savefile" + to_string(fileIndex) + ".sav";
+    string saveFilePath = "assets/saves/savefile" + to_string(dataLoc -> SaveFileIndex) + ".sav";
     ofstream saveFileStream(saveFilePath);
     if (!saveFileStream.is_open()) {
         cerr << "Error: Failed to open save file '" << saveFilePath << "' for writing." << endl;
@@ -147,12 +144,6 @@ pair<bool, SDL_Texture*> PreviewSaveFile(const int fileIndex) {
         int YAxisOffset = 0;
         for (const string &line : Description) {
             SDL_Surface* CurrentLine = TTF_RenderText_Solid(gFont, line.c_str(), white);
-            if (CurrentLine == nullptr) {
-                cerr << "Error: Failed to preview save file: Failed to render text line in preview.";
-                SDL_FreeSurface(TextSurface);
-                delete TempData;
-                return make_pair(0, nullptr);
-            }
             SDL_Rect DstRect = {0, YAxisOffset, 0, 0};
             SDL_BlitSurface(CurrentLine, nullptr, TextSurface, &DstRect);
             YAxisOffset += CurrentLine -> h + 3;

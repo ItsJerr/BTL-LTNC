@@ -15,7 +15,7 @@ template<typename T> bool LoadVariableFromFile(ifstream &InFile, T &Variable);
 
 void LoadGame(const int FileIndex, GameData* DataLoc);
 
-void SaveGame(const int FileIndex, GameData* DataLoc);
+void SaveGame(GameData* DataLoc);
 
 pair<bool, SDL_Texture*> PreviewSaveFile(const int FileIndex);
 
