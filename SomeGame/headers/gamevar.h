@@ -15,7 +15,7 @@ public:
     /// Player stats
     int PlayerLevel, PlayerEXP, CoinBalance;
     /// Every stat increases by 2% per level, max is 50
-    bool GunBought = 0;
+    bool MainGameCompleted, GunBought;
     int HPUpgradeLevel; /// Increases max HP by 5% each level, max is 50
     int AttackUpgradeLevel; /// Increases all attack damage by 5% each level, max is 50
     int GunUpgradeLevel; /// Increases gun damage by 30% each level, max is 10
@@ -46,8 +46,9 @@ public:
 
     void Wipe() { /// for the love of god, dont use this anywhere else other than creating a new character. PLEASE NO
         GameDataLoaded = 1;
-        PlayerLevel = PlayerEXP = CoinBalance = GunBought = HPUpgradeLevel = AttackUpgradeLevel = GunUpgradeLevel = ManaUpgradeLevel
-        = AmmoUpgradeLevel = MagicResistanceUpgradeLevel = ArmorUpgradeLevel = InDungeon = DungeonMode = DungeonLevel = 0;
+        PlayerLevel = PlayerEXP = CoinBalance = MainGameCompleted = GunBought = HPUpgradeLevel = AttackUpgradeLevel = GunUpgradeLevel
+        = ManaUpgradeLevel = AmmoUpgradeLevel = MagicResistanceUpgradeLevel = ArmorUpgradeLevel = InDungeon = DungeonMode
+        = DungeonLevel = 0;
 
         CalculateModifiers();
     }

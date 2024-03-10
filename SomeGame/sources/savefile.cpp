@@ -35,11 +35,11 @@ void LoadGame(const int fileIndex, GameData* dataLoc) {
     if (!loadFileStream.is_open()) return;
 
     // Define variables to load from the file
-    vector<void*> variables = {&dataLoc -> PlayerLevel, &dataLoc -> PlayerEXP, &dataLoc -> CoinBalance, &dataLoc -> GunBought, &dataLoc -> HPUpgradeLevel, &dataLoc -> AttackUpgradeLevel, &dataLoc -> GunUpgradeLevel, &dataLoc -> ManaUpgradeLevel, &dataLoc -> AmmoUpgradeLevel, &dataLoc -> MagicResistanceUpgradeLevel, &dataLoc -> ArmorUpgradeLevel, &dataLoc -> InDungeon, &dataLoc -> DungeonMode, &dataLoc -> DungeonLevel};
+    vector<void*> variables = {&dataLoc -> PlayerLevel, &dataLoc -> PlayerEXP, &dataLoc -> CoinBalance, &dataLoc -> MainGameCompleted, &dataLoc -> GunBought, &dataLoc -> HPUpgradeLevel, &dataLoc -> AttackUpgradeLevel, &dataLoc -> GunUpgradeLevel, &dataLoc -> ManaUpgradeLevel, &dataLoc -> AmmoUpgradeLevel, &dataLoc -> MagicResistanceUpgradeLevel, &dataLoc -> ArmorUpgradeLevel, &dataLoc -> InDungeon, &dataLoc -> DungeonMode, &dataLoc -> DungeonLevel};
 
     // Load variables from file using the template function
     const vector<string> variableNames = {
-        "PlayerLevel", "PlayerEXP", "CoinBalance", "GunBought", "HPUpgradeLevel", "AttackUpgradeLevel", "GunUpgradeLevel", "ManaUpgradeLevel", "AmmoUpgradeLevel", "MagicResistanceUpgradeLevel",  "ArmorUpgradeLevel", "InDungeon", "DungeonMode", "DungeonLevel"
+        "PlayerLevel", "PlayerEXP", "CoinBalance", "MainGameCompleted", "GunBought", "HPUpgradeLevel", "AttackUpgradeLevel", "GunUpgradeLevel", "ManaUpgradeLevel", "AmmoUpgradeLevel", "MagicResistanceUpgradeLevel",  "ArmorUpgradeLevel", "InDungeon", "DungeonMode", "DungeonLevel"
     };
 
     for (size_t i = 0; i < variableNames.size(); ++i) {
@@ -88,6 +88,7 @@ void SaveGame(GameData* dataLoc) {
     saveFileStream << "PlayerLevel " << dataLoc -> PlayerLevel << endl;
     saveFileStream << "PlayerEXP " << dataLoc -> PlayerEXP << endl;
     saveFileStream << "CoinBalance " << dataLoc -> CoinBalance << endl;
+    saveFileStream << "MainGameCompleted " << dataLoc -> MainGameCompleted << endl;
     saveFileStream << "GunBought " << dataLoc -> GunBought << endl;
     saveFileStream << "HPUpgradeLevel " << dataLoc -> HPUpgradeLevel << endl;
     saveFileStream << "AttackUpgradeLevel " << dataLoc -> AttackUpgradeLevel << endl;

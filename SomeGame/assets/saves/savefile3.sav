@@ -1,6 +1,7 @@
 PlayerLevel 0
 PlayerEXP 0
 CoinBalance 0
+MainGameCompleted 0
 GunBought 0
 HPUpgradeLevel 0
 AttackUpgradeLevel 0

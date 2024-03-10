@@ -7,46 +7,44 @@ void Particles::DisplayAsset() {
         SDL_RenderFillRect(gRenderer, &DotLocations[i]);
 }
 
-// Booleans used for handling the display of description buttons
-static bool NewCharacterDescDisplayed = 0;
-static bool LoadCharacterDescDisplayed = 0;
-static bool QuitCharacterDescDisplayed = 0;
-
-// Used to ensure only 1 button is flashing at the same moment
-static bool ButtonFlashCheck = 0;
-
-void QuitClickAction() {
+bool QuitClickAction() {
     // Push SDL_QUIT event to quit the game
     SDL_Event tmp; SDL_zero(tmp);
     tmp.type = SDL_QUIT;
     SDL_PushEvent(&tmp);
+    return 0;
 }
 
-void NewCharacterClickAction() {
+bool NewCharacterClickAction() {
     // Push ChangeMode event to change mode
     SDL_Event tmp; SDL_zero(tmp);
     tmp.type = ChangeModeEventID;
     tmp.user.data1 = new int(NEWCHARACTERID);
     SDL_PushEvent(&tmp);
+    return 0;
 }
 
-void LoadCharacterClickAction() {
+bool LoadCharacterClickAction() {
     // Push ChangeMode event to change mode
     SDL_Event tmp; SDL_zero(tmp);
     tmp.type = ChangeModeEventID;
     tmp.user.data1 = new int(LOADCHARACTERID);
     SDL_PushEvent(&tmp);
+    return 0;
 }
 
-MainMenuClass::MainMenuClass() {
+MainMenuLayer::MainMenuLayer() {
     // Create buttons and description text boxes
-    NewCharacter = new Button("new character", {600, 450, 360, 75}, white, 3, black, white, offwhite, NewCharacterClickAction, &ButtonFlashCheck, &NewCharacterDescDisplayed, 1);
-    LoadCharacter = new Button("load character", {600, 531, 360, 75}, white, 3, black, white, offwhite, LoadCharacterClickAction, &ButtonFlashCheck, &LoadCharacterDescDisplayed, 1);
-    QuitCharacter = new Button("quit game", {600, 612, 360, 75}, white, 3, black, white, offwhite, QuitClickAction, &ButtonFlashCheck, &QuitCharacterDescDisplayed, 1);
+    NewCharacter = new Button("new character", {600, 450, 360, 75}, 3, NewCharacterClickAction, &ButtonFlashing,
+                              &NewCharacterDescDisplayed);
+    LoadCharacter = new Button("load character", {600, 531, 360, 75}, 3, LoadCharacterClickAction, &ButtonFlashing,
+                               &LoadCharacterDescDisplayed);
+    QuitCharacter = new Button("quit game", {600, 612, 360, 75}, 3, QuitClickAction, &ButtonFlashing,
+                               &QuitCharacterDescDisplayed);
 
-    NewCharacterDesc = new TextBox("create a new character.", {-10, 830, SCREEN_WIDTH + 10, 75}, white, 3, black, white, &NewCharacterDescDisplayed);
-    LoadCharacterDesc = new TextBox("load an existing save file.", {-10, 830, SCREEN_WIDTH + 10, 75}, white, 3, black, white, &LoadCharacterDescDisplayed);
-    QuitCharacterDesc = new TextBox("exit the game.", {-10, 830, SCREEN_WIDTH + 10, 75}, white, 3, black, white, &QuitCharacterDescDisplayed);
+    NewCharacterDesc = new TextBox("create a new character.", {-10, 830, SCREEN_WIDTH + 10, 75}, 3, &NewCharacterDescDisplayed);
+    LoadCharacterDesc = new TextBox("load an existing save file.", {-10, 830, SCREEN_WIDTH + 10, 75}, 3, &LoadCharacterDescDisplayed);
+    QuitCharacterDesc = new TextBox("exit the game.", {-10, 830, SCREEN_WIDTH + 10, 75}, 3, &QuitCharacterDescDisplayed);
 
     // Create particles
     MainMenuParticle = new Particles({100, 100, 100, 255});
@@ -61,20 +59,20 @@ MainMenuClass::MainMenuClass() {
     insiders.push_back(QuitCharacterDesc);
 }
 
-MainMenuClass::~MainMenuClass() {
+MainMenuLayer::~MainMenuLayer() {
     // Delete all allocated memory for assets
     for (EventReceiver* asset : insiders) delete asset;
     insiders.clear();
 }
 
-void MainMenuClass::HandleEvent(const SDL_Event* event) {
+void MainMenuLayer::HandleEvent(const SDL_Event* event) {
     // Handle events for current mode
     if (CURRENTMODE != MAINMENUID) return;
 
     for (const auto &Handler: insiders) Handler -> HandleEvent(event);
 }
 
-void MainMenuClass::Display() {
+void MainMenuLayer::Display() {
     // Display all assets
     for (const auto &asset: insiders) asset -> DisplayAsset();
 }

@@ -9,34 +9,32 @@
 #include "layer.h"
 using namespace std;
 
-/// If you ever need a button/text box with a specific feature (aka do something if pressed/clicked) write your own function and pass it to the Button constructor.
+/// If you ever need a button/text box with a specific feature (aka do something if pressed/clicked) write your own OnClick function and pass it to the Button constructor. IMPORTANT: The function should return a boolean value of True if it has called the destructor and False otherwise.
 
 class Button: public EventReceiver {
 public:
-     Button(const string& msg, const SDL_Rect& rect, const SDL_Color& outerColor, const int& rimWidth,
-            const SDL_Color& innerColor, const SDL_Color& textColor, const SDL_Color& flashColor,
-            function<void()> onClick, bool* scrFlashCheck = nullptr,
-            bool* dependencies = nullptr, bool clickable = false)
-            : text(msg), rim(rect), rimColor(outerColor), centerColor(innerColor),
-              textColor(textColor), flashColor(flashColor), FlashEndAction(onClick),
-              dependencies(dependencies), ButtonFlashing(scrFlashCheck), clickable(clickable) {
+     Button(const string& msg, const SDL_Rect& rect, const int& rimWidth, function<bool()> onClick, bool* scrFlashCheck = nullptr,
+            bool* dependencies = nullptr, int WrapLength = 0)
+            : text(msg), rim(rect), rimColor(white), centerColor(black), textColor(white), flashColor(offwhite),
+            FlashEndAction(onClick), wrapLength(WrapLength), dependencies(dependencies), ButtonFlashing(scrFlashCheck) {
         center = rim;
         center.x += rimWidth; center.y += rimWidth; center.h -= 2 * rimWidth; center.w -= 2 * rimWidth;
 
         TTF_SizeText(gFont, text.c_str(), &centerText.w, &centerText.h);
         centerText.x = center.x + (center.w - centerText.w) / 2 + rimWidth;
         centerText.y = center.y + (center.h - centerText.h) / 2 + rimWidth;
-
-        textSurface = TTF_RenderText_Solid(gFont, text.c_str(), textColor);
-        textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
     }
 
-    virtual void ModifyText(string msg) {
+    void SetText(const string& msg) final {
         text = msg;
     }
 
-    bool HandleEvent(const SDL_Event* event) override {
-        if (event -> type == SDL_MOUSEBUTTONDOWN && event -> button.button == SDL_BUTTON_LEFT && isHovered && clickable) {
+    void SetColor(const SDL_Color& RimColor, const SDL_Color& InnerColor, const SDL_Color& TextColor, const SDL_Color& FlashColor) final {
+        rimColor = RimColor; centerColor = InnerColor; textColor = TextColor; flashColor = FlashColor;
+    }
+
+    bool HandleEvent(const SDL_Event* event) final {
+        if (event -> type == SDL_MOUSEBUTTONDOWN && event -> button.button == SDL_BUTTON_LEFT && isHovered) {
             if (ButtonFlashing != nullptr && !*ButtonFlashing) {
                 inFlash = 1;
                 if (ButtonFlashing != nullptr) *ButtonFlashing = 1;
@@ -61,7 +59,7 @@ public:
         if (textTexture) SDL_DestroyTexture(textTexture);
     }
 
-    void DisplayAsset() override {
+    void DisplayAsset() final {
         if (textSurface) {
             SDL_FreeSurface(textSurface);
             textSurface = nullptr;
@@ -82,12 +80,12 @@ public:
             if (++flashFrameCounter == 60) {
                 inFlash = 0;
                 if (ButtonFlashing != nullptr) *ButtonFlashing = 0;
-                FlashEndAction();
+                if (FlashEndAction()) return;
             }
         }
         else {
             flashFrameCounter = 0;
-            textSurface = TTF_RenderText_Solid(gFont, text.c_str(), textColor);
+            textSurface = TTF_RenderText_Solid_Wrapped(gFont, text.c_str(), textColor, wrapLength);
             textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
         }
 
@@ -118,65 +116,60 @@ protected:
     SDL_Texture* textTexture = nullptr;
     string text = "";
 
-    bool inFlash = 0, isHovered = 0, clickable = 0;
+    bool inFlash = 0, isHovered = 0;
     bool* ButtonFlashing = nullptr;
     bool* dependencies = nullptr;
-    int flashFrameCounter = 0;
-    function<void()> FlashEndAction;
+    int flashFrameCounter = 0, wrapLength = 0;
+    function<bool()> FlashEndAction;
 };
 
 class TextBox: public EventReceiver {
 public:
-    TextBox(const string& msg, const SDL_Rect& rect, const SDL_Color& outerColor, const int& rimWidth,
-            const SDL_Color& innerColor, const SDL_Color& textColor,
-            bool* displayed = nullptr, bool* dependencies = nullptr, bool centered = true)
-            : text(msg), rim(rect), rimColor(outerColor), centerColor(innerColor),
-              textColor(textColor), dependencies(dependencies), displayed(displayed) {
+    TextBox(const string& msg, const SDL_Rect& rect, const int& rimWidth, bool* displayed = nullptr, bool* dependencies = nullptr)
+            : text(msg), rim(rect), rimColor(white), centerColor(black),
+              textColor(white), dependencies(dependencies), displayed(displayed) {
         center = rim;
         center.x += rimWidth; center.y += rimWidth;
         center.h -= 2 * rimWidth; center.w -= 2 * rimWidth;
 
         TTF_SizeText(gFont, text.c_str(), &centerText.w, &centerText.h);
 
-        if (centered) {
-            centerText.x = center.x + (center.w - centerText.w) / 2;
-            centerText.y = center.y + (center.h - centerText.h) / 2;
-        }
-        else {
-            centerText.x = center.x + 5;
-            centerText.y = center.y + 5;
-        }
+        centerText.x = center.x + (center.w - centerText.w) / 2;
+        centerText.y = center.y + (center.h - centerText.h) / 2;
 
         textSurface = TTF_RenderText_Solid(gFont, text.c_str(), textColor);
         textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
     }
 
-    TextBox(const string& msg, const SDL_Rect& rect, const SDL_Color& outerColor, const int& rimWidth,
-            const SDL_Color& innerColor, const SDL_Color& textColor, const pair<int, int>& position,
-            bool* displayed = nullptr, bool* dependencies = nullptr)
-            : text(msg), rim(rect), rimColor(outerColor), centerColor(innerColor),
-              textColor(textColor), dependencies(dependencies), displayed(displayed) {
-        center = rim;
-        center.x += rimWidth; center.y += rimWidth;
-        center.h -= 2 * rimWidth; center.w -= 2 * rimWidth;
-
-        TTF_SizeText(gFont, text.c_str(), &centerText.w, &centerText.h);
-        tie(centerText.x, centerText.y) = position;
-
-        textSurface = TTF_RenderText_Solid(gFont, text.c_str(), textColor);
-        textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
-    }
-
-    virtual ~TextBox() {
+    ~TextBox() {
         if (textSurface) SDL_FreeSurface(textSurface);
         if (textTexture) SDL_DestroyTexture(textTexture);
     }
 
-    bool HandleEvent(const SDL_Event* event) override {
-        return false;
+    void SetText(const string& msg) final {
+        text = msg;
     }
 
-    void DisplayAsset() override {
+    void SetColor(const SDL_Color& RimColor, const SDL_Color& InnerColor, const SDL_Color& TextColor) final {
+        rimColor = RimColor; centerColor = InnerColor; textColor = TextColor;
+    }
+
+    void SetPosition(const int& dx, const int& dy) final {
+        centerText.x = center.x + dx;
+        centerText.y = center.y + dy;
+    }
+
+    bool HandleEvent(const SDL_Event* event) final {
+        if (event -> type == SDL_MOUSEMOTION) {
+            if (isHovered != inside(event -> motion.x, event -> motion.y)) {
+                isHovered = !isHovered;
+                if (dependencies) *dependencies = isHovered;
+                return isHovered;
+            }
+        }
+    }
+
+    void DisplayAsset() final {
         if (displayed != nullptr && !*displayed) return;
         /// draw outer rectangle
         SDL_SetRenderDrawColor(gRenderer, rimColor.r, rimColor.g, rimColor.b, rimColor.a);
@@ -190,12 +183,22 @@ public:
         SDL_RenderCopy(gRenderer, textTexture, nullptr, &centerText);
     }
 protected:
+    bool inside(int x, int y) {
+        if (x < rim.x) return false;
+        if (x > rim.x + rim.w) return false;
+        if (y < rim.y) return false;
+        if (y > rim.y + rim.h) return false;
+
+        return true;
+    }
+
     SDL_Rect rim, center, centerText;
     SDL_Color rimColor, centerColor, textColor;
     SDL_Surface* textSurface = nullptr;
     SDL_Texture* textTexture = nullptr;
     string text = "";
     bool *displayed = nullptr, *dependencies = nullptr;
+    bool isHovered = 0;
 };
 
 #endif // BUTTON_H

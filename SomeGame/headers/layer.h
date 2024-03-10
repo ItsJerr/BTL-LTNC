@@ -17,6 +17,15 @@ public:
         /// MUST BE IMPLEMENTED IN MEMBER FUNCTIONS: Returns True if handled, False otherwise.
     }
     virtual void DisplayAsset() {}
+
+    /// for Button and TextBox
+    virtual void SetText(const string& msg) {}
+    /// for Button
+    virtual void SetColor(const SDL_Color& RimColor, const SDL_Color& InnerColor, const SDL_Color& TextColor,
+                          const SDL_Color& FlashColor) {}
+    /// for TextBox
+    virtual void SetColor(const SDL_Color& RimColor, const SDL_Color& InnerColor, const SDL_Color& TextColor) {}
+    virtual void SetPosition(const int& dx, const int& dy) {}
 };
 
 class Layer {

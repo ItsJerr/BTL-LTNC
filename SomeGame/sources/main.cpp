@@ -5,7 +5,7 @@
 #include "SDL_ttf.h"
 #include "globals.h"
 #include "mainmenu.h"
-#include "character.h"
+#include "charactersaveload.h"
 #include "savefile.h"
 //}
 
@@ -28,25 +28,25 @@ Layer* CurrentLayer;
 
 void ChangeMode(int ModeID) {
     delete CurrentLayer; CurrentLayer = nullptr;
-    CURRENTMODE = ModeID;
     switch (ModeID) {
         default: {
             cerr << "Fatal error: Cannot find a mode with ID " << ModeID;
             exit(0);
         }
         case MAINMENUID: {
-            CurrentLayer = new MainMenuClass();
+            CurrentLayer = new MainMenuLayer();
             break;
         }
         case NEWCHARACTERID: {
-            CurrentLayer = new NewCharacterClass();
+            CurrentLayer = new NewCharacterLayer();
             break;
         }
         case LOADCHARACTERID: {
-            CurrentLayer = new LoadCharacterClass();
+            CurrentLayer = new LoadCharacterLayer();
             break;
         }
     }
+    CURRENTMODE = ModeID;
 }
 
 void Init() {

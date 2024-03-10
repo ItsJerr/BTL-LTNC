@@ -7,10 +7,10 @@
 #include "SDL_ttf.h"
 #include "button.h"
 
-class MainMenuClass: public Layer {
+class MainMenuLayer: public Layer {
 public:
-    MainMenuClass();
-    ~MainMenuClass();
+    MainMenuLayer();
+    ~MainMenuLayer();
 
     void HandleEvent(const SDL_Event* event) final;
     void Display() final;
@@ -26,5 +26,7 @@ private:
     TextBox* QuitCharacterDesc = nullptr;
 
     Particles* MainMenuParticle = nullptr;
+
+    bool NewCharacterDescDisplayed = 0, LoadCharacterDescDisplayed = 0, QuitCharacterDescDisplayed = 0, ButtonFlashing = 0;
 };
 #endif // MAINMENU_H

@@ -8,10 +8,10 @@
 #include "button.h"
 #include "savefile.h"
 
-class LoadCharacterClass: public Layer {
+class LoadCharacterLayer: public Layer {
 public:
-    LoadCharacterClass();
-    ~LoadCharacterClass();
+    LoadCharacterLayer();
+    ~LoadCharacterLayer();
 
     void HandleEvent(const SDL_Event* event) final;
     void Display() final;
@@ -19,7 +19,7 @@ private:
     vector<EventReceiver*> insiders;
 
     Particles* FlashingParticles = nullptr;
-    Button* SaveGameButtons[5] = {nullptr, nullptr, nullptr, nullptr, nullptr};
+    EventReceiver* SaveGameButtons[5] = {nullptr, nullptr, nullptr, nullptr, nullptr};
     Button* BackButton = nullptr;
     SDL_Texture* SaveFilePreviews[5] = {nullptr, nullptr, nullptr, nullptr, nullptr};
     bool DisplayingPreview[5] = {0, 0, 0, 0, 0}, SaveFileExistance[5] = {0, 0, 0, 0, 0}, ButtonFlashing = 0;
@@ -27,24 +27,24 @@ private:
     TextBox *title = nullptr, *preview = nullptr;
 };
 
-class NewCharacterClass: public Layer {
+class NewCharacterLayer: public Layer {
 public:
-    NewCharacterClass();
-    ~NewCharacterClass();
+    NewCharacterLayer();
+    ~NewCharacterLayer();
 
     void HandleEvent(const SDL_Event* event) final;
     void Display() final;
 private:
     class ConfirmationBox: public EventReceiver {
     public:
-        ConfirmationBox(const int& idx, NewCharacterClass& parent);
+        ConfirmationBox(const int& idx, NewCharacterLayer& parent);
         ~ConfirmationBox();
 
         bool HandleEvent(const SDL_Event* event) final;
         void DisplayAsset() final;
 
     private:
-        function<void()> YesClick, NoClick;
+        function<bool()> YesClick, NoClick;
 
         Button *YesButton = nullptr, *NoButton = nullptr;
         TextBox* Prompt = nullptr;
@@ -54,7 +54,7 @@ private:
     vector<EventReceiver*> insiders;
 
     Particles* FlashingParticles = nullptr;
-    Button* SaveGameButtons[5] = {nullptr, nullptr, nullptr, nullptr, nullptr};
+    EventReceiver* SaveGameButtons[5] = {nullptr, nullptr, nullptr, nullptr, nullptr};
     Button* BackButton = nullptr;
     SDL_Texture* SaveFilePreviews[5] = {nullptr, nullptr, nullptr, nullptr, nullptr};
     bool DisplayingPreview[5] = {0, 0, 0, 0, 0}, SaveFileExistance[5] = {0, 0, 0, 0, 0}, ButtonFlashing = 0;
