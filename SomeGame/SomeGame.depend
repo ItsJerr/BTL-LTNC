@@ -9,14 +9,14 @@
 	"headers/newcharacter.h"
 	"headers/savefile.h"
 
-1710085156 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\globals.h
+1710129468 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\globals.h
 	<bits/stdc++.h>
-	"gamevar.h"
+	"engine.h"
 	"SDL.h"
 	"SDL_image.h"
 	"SDL_ttf.h"
 
-1710095081 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\button.h
+1710494395 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\button.h
 	<bits/stdc++.h>
 	"SDL.h"
 	"SDL_image.h"
@@ -34,11 +34,12 @@
 	"button.h"
 	"mainmenu.h"
 
-1710095075 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\layer.h
+1710498117 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\layer.h
 	<bits/stdc++.h>
 	"SDL.h"
+	"globals.h"
 
-1710095211 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\mainmenu.h
+1710170112 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\mainmenu.h
 	<bits/stdc++.h>
 	"SDL.h"
 	"SDL_image.h"
@@ -52,12 +53,12 @@
 	"headers/savefile.h"
 	<iostream>
 
-1709694483 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\savefile.h
+1710481727 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\savefile.h
 	<fstream>
 	"gamevar.h"
 	"button.h"
 
-1710085359 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\gamevar.h
+1710128492 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\gamevar.h
 	<iostream>
 
 1709493957 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\newgame.cpp
@@ -82,7 +83,7 @@
 	"button.h"
 	"savefile.h"
 
-1710095226 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\mainmenu.cpp
+1710170314 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\mainmenu.cpp
 	"mainmenu.h"
 
 1706832906 c:\users\administrator\desktop\c++\uni\sdl2-2.30.0\i686-w64-mingw32\include\sdl2\sdl.h
@@ -492,11 +493,11 @@
 1709540926 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\newcharacter.cpp
 	"newcharacter.h"
 
-1710085399 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\savefile.cpp
+1710440303 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\savefile.cpp
 	"savefile.h"
 	<iostream>
 
-1710090339 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\main.cpp
+1710440217 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\main.cpp
 	<bits/stdc++.h>
 	"SDL.h"
 	"SDL_image.h"
@@ -504,6 +505,7 @@
 	"globals.h"
 	"mainmenu.h"
 	"charactersaveload.h"
+	"charactermenu.h"
 	"savefile.h"
 
 1709555320 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\loadcharacter.h
@@ -528,14 +530,24 @@
 	"button.h"
 	"savefile.h"
 
-1710094600 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\charactersaveload.cpp
+1710494874 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\charactersaveload.cpp
 	"charactersaveload.h"
 
-1710094501 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\charactersaveload.h
+1710440183 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\charactersaveload.h
 	<bits/stdc++.h>
 	"SDL.h"
 	"SDL_image.h"
 	"SDL_ttf.h"
 	"button.h"
 	"savefile.h"
+
+1710126016 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\engine.h
+	"gamevar.h"
+
+1710494909 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\charactermenu.cpp
+	"charactermenu.h"
+	"globals.h"
+
+1710129703 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\charactermenu.h
+	"button.h"
 

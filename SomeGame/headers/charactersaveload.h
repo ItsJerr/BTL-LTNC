@@ -18,13 +18,8 @@ public:
 private:
     vector<EventReceiver*> insiders;
 
-    Particles* FlashingParticles = nullptr;
-    EventReceiver* SaveGameButtons[5] = {nullptr, nullptr, nullptr, nullptr, nullptr};
-    Button* BackButton = nullptr;
     SDL_Texture* SaveFilePreviews[5] = {nullptr, nullptr, nullptr, nullptr, nullptr};
-    bool DisplayingPreview[5] = {0, 0, 0, 0, 0}, SaveFileExistance[5] = {0, 0, 0, 0, 0}, ButtonFlashing = 0;
-
-    TextBox *title = nullptr, *preview = nullptr;
+    bool DisplayingPreview[5] = {0, 0, 0, 0, 0}, ButtonFlashing = 0;
 };
 
 class NewCharacterLayer: public Layer {
@@ -53,14 +48,8 @@ private:
 
     vector<EventReceiver*> insiders;
 
-    Particles* FlashingParticles = nullptr;
-    EventReceiver* SaveGameButtons[5] = {nullptr, nullptr, nullptr, nullptr, nullptr};
-    Button* BackButton = nullptr;
     SDL_Texture* SaveFilePreviews[5] = {nullptr, nullptr, nullptr, nullptr, nullptr};
-    bool DisplayingPreview[5] = {0, 0, 0, 0, 0}, SaveFileExistance[5] = {0, 0, 0, 0, 0}, ButtonFlashing = 0;
-
-    TextBox *title = nullptr, *preview = nullptr;
-    ConfirmationBox* ConfDialog = nullptr;
+    bool DisplayingPreview[5] = {0, 0, 0, 0, 0}, ButtonFlashing = 0;
 };
 
 #endif // NEWGAME_H

@@ -21,7 +21,7 @@ bool LoadVariableFromFile(ifstream& inFile, T* variable, const string& varName) 
 }
 
 // Function to load game data from a save file
-void LoadGame(const int fileIndex, GameData* dataLoc) {
+void LoadGame(const int& fileIndex, GameData* dataLoc) {
     // Check if game data is already loaded
     if (dataLoc -> GameDataLoaded) {
         cerr << "Error: Game data is already loaded." << endl;
@@ -69,7 +69,7 @@ void LoadGame(const int fileIndex, GameData* dataLoc) {
 }
 
 // Function to save game data to a save file
-void SaveGame(GameData* dataLoc) {
+void SaveGame(const GameData* dataLoc) {
     // Check if game data is loaded
     if (!dataLoc -> GameDataLoaded) {
         cerr << "Error: Game data is not loaded." << endl;
@@ -106,13 +106,13 @@ void SaveGame(GameData* dataLoc) {
 }
 
 // Function to preview the content of a save file
-pair<bool, SDL_Texture*> PreviewSaveFile(const int fileIndex) {
+pair<bool, SDL_Texture*> PreviewSaveFile(const int& fileIndex) {
     GameData* TempData = new GameData;
 
     // Load game data
     LoadGame(fileIndex, TempData);
 
-    // Create SDL surface for text rendering
+    // Surface to render text on
     SDL_Surface* TextSurface = SDL_CreateRGBSurface(0, 1050, 650, 32, 0, 0, 0, 0);
     if (TextSurface == nullptr) {
         cerr << "Error: Failed to preview save file: Failed to create a new SDL_Surface.";
@@ -122,34 +122,30 @@ pair<bool, SDL_Texture*> PreviewSaveFile(const int fileIndex) {
     }
     SDL_SetColorKey(TextSurface, SDL_TRUE, SDL_MapRGB(TextSurface -> format, 0, 0, 0));
 
+    // Check whether valid save file exists
     bool ret = 0;
 
     // Render text based on loaded game data
     if (TempData -> GameDataLoaded) {
-        vector<string> Description;
-        Description.push_back("Level: " + to_string(TempData -> PlayerLevel));
-        Description.push_back("Experience: " + to_string(TempData -> PlayerEXP) + "/");
-        Description.push_back("Balance: " + to_string(TempData -> CoinBalance) + " coin" + ((TempData -> CoinBalance > 1) ? "s" : ""));
-        Description.push_back("Stats:");
-        Description.push_back("HP +" + to_string((int)(100 * (TempData -> HPModifier - 1))) + "%");
-        Description.push_back("MP +" + to_string((int)(100 * (TempData -> ManaModifier - 1))) + "%");
-        Description.push_back("All Damage +" + to_string((int)(100 * (TempData -> DMGModifier - 1))) + "%");
-        Description.push_back("Armor Effectiveness +" + to_string((int)(100 * (TempData -> ArmorModifier - 1))) + "%");
-        Description.push_back("Magic Resistance +" + to_string((int)(100 * (TempData -> MagicResModifier - 1))) + "%");
+        string Description = "";
+        Description += "Level: " + to_string(TempData -> PlayerLevel) + "\n";
+        Description += "Experience: " + to_string(TempData -> PlayerEXP) + "/" + "\n";
+        Description += "Balance: " + to_string(TempData -> CoinBalance) + " coin" + ((TempData -> CoinBalance > 1) ? "s" : "") + "\n";
+        Description += "Stats:\n";
+        Description += "HP +" + to_string((int)(100 * (TempData -> HPModifier - 1))) + "%" + "\n";
+        Description += "MP +" + to_string((int)(100 * (TempData -> ManaModifier - 1))) + "%" + "\n";
+        Description += "All Damage +" + to_string((int)(100 * (TempData -> DMGModifier - 1))) + "%" + "\n";
+        Description += "Armor Effectiveness +" + to_string((int)(100 * (TempData -> ArmorModifier - 1))) + "%" + "\n";
+        Description += "Magic Resistance +" + to_string((int)(100 * (TempData -> MagicResModifier - 1))) + "%" + "\n";
         if (TempData -> GunBought) {
-            Description.push_back("Additional Gun Damage +" + to_string((int)(100 * (TempData -> DMGModifier - 1))) + "%");
-            Description.push_back("Maximum Gun Capacity +" + to_string((int)(100 * (TempData -> AmmoModifier - 1))) + "%");
+            Description += "Additional Gun Damage +" + to_string((int)(100 * (TempData -> DMGModifier - 1))) + "%" + "\n";
+            Description += "Maximum Gun Capacity +" + to_string((int)(100 * (TempData -> AmmoModifier - 1))) + "%";
         }
 
         // Render text lines
-        int YAxisOffset = 0;
-        for (const string &line : Description) {
-            SDL_Surface* CurrentLine = TTF_RenderText_Solid(gFont, line.c_str(), white);
-            SDL_Rect DstRect = {0, YAxisOffset, 0, 0};
-            SDL_BlitSurface(CurrentLine, nullptr, TextSurface, &DstRect);
-            YAxisOffset += CurrentLine -> h + 3;
-            SDL_FreeSurface(CurrentLine);
-        }
+        SDL_Surface* LineSurface = TTF_RenderText_Solid_Wrapped(gFont, Description.c_str(), white, 0);
+        SDL_BlitSurface(LineSurface, nullptr, TextSurface, nullptr);
+        SDL_FreeSurface(LineSurface);
 
         ret = 1;
     }

@@ -36,7 +36,8 @@ public:
     bool HandleEvent(const SDL_Event* event) final {
         if (event -> type == SDL_MOUSEBUTTONDOWN && event -> button.button == SDL_BUTTON_LEFT && isHovered) {
             if (ButtonFlashing != nullptr && !*ButtonFlashing) {
-                inFlash = *ButtonFlashing = 1;
+                inFlash = 1;
+                if (ButtonFlashing != nullptr) *ButtonFlashing = 1;
                 return 1;
             }
         }
@@ -125,9 +126,9 @@ protected:
 class TextBox: public EventReceiver {
 public:
     TextBox(const string& msg, const SDL_Rect& rect, const int& rimWidth, bool* displayed = nullptr, bool* dependencies = nullptr,
-            bool* scrFlashCheck = nullptr, int WrapLength = 0)
+            int WrapLength = 0)
             : text(msg), rim(rect), rimColor(white), centerColor(black), textColor(white), dependencies(dependencies),
-            displayed(displayed), ButtonFlashing(scrFlashCheck), wrapLength(WrapLength) {
+            displayed(displayed), wrapLength(WrapLength) {
         center = rim;
         center.x += rimWidth; center.y += rimWidth;
         center.h -= 2 * rimWidth; center.w -= 2 * rimWidth;
@@ -184,10 +185,7 @@ public:
         if (event -> type == SDL_MOUSEMOTION) {
             if (isHovered != inside(event -> motion.x, event -> motion.y)) {
                 isHovered = !isHovered;
-                if (dependencies) {
-                    if (ButtonFlashing && *ButtonFlashing) *dependencies = 0;
-                    else *dependencies = isHovered;
-                }
+                if (dependencies) *dependencies = isHovered;
                 return isHovered;
             }
         }
@@ -222,7 +220,7 @@ protected:
     SDL_Surface* textSurface = nullptr;
     SDL_Texture* textTexture = nullptr;
     string text = "";
-    bool *displayed = nullptr, *dependencies = nullptr, *ButtonFlashing = nullptr;
+    bool *displayed = nullptr, *dependencies = nullptr;
     bool isHovered = 0;
     int wrapLength = 0;
 };

@@ -34,29 +34,17 @@ bool LoadCharacterClickAction() {
 }
 
 MainMenuLayer::MainMenuLayer() {
-    // Create buttons and description text boxes
-    NewCharacter = new Button("new character", {600, 450, 360, 75}, 3, NewCharacterClickAction, &ButtonFlashing,
-                              &NewCharacterDescDisplayed);
-    LoadCharacter = new Button("load character", {600, 531, 360, 75}, 3, LoadCharacterClickAction, &ButtonFlashing,
-                               &LoadCharacterDescDisplayed);
-    QuitCharacter = new Button("quit game", {600, 612, 360, 75}, 3, QuitClickAction, &ButtonFlashing,
-                               &QuitCharacterDescDisplayed);
-
-    NewCharacterDesc = new TextBox("create a new character.", {-10, 830, SCREEN_WIDTH + 10, 75}, 3, &NewCharacterDescDisplayed);
-    LoadCharacterDesc = new TextBox("load an existing save file.", {-10, 830, SCREEN_WIDTH + 10, 75}, 3, &LoadCharacterDescDisplayed);
-    QuitCharacterDesc = new TextBox("exit the game.", {-10, 830, SCREEN_WIDTH + 10, 75}, 3, &QuitCharacterDescDisplayed);
-
-    // Create particles
-    MainMenuParticle = new Particles({100, 100, 100, 255});
-
-    // Add all asset pointers to insiders
-    insiders.push_back(MainMenuParticle);
-    insiders.push_back(NewCharacter);
-    insiders.push_back(LoadCharacter);
-    insiders.push_back(QuitCharacter);
-    insiders.push_back(NewCharacterDesc);
-    insiders.push_back(LoadCharacterDesc);
-    insiders.push_back(QuitCharacterDesc);
+    // Create buttons and description text boxes. Add all asset pointers to insiders
+    insiders.push_back(new Particles({100, 100, 100, 255}));
+    insiders.push_back(new Button("new character", {600, 450, 360, 75}, 3, NewCharacterClickAction, &ButtonFlashing,
+                                  &NewCharacterDescDisplayed));
+    insiders.push_back(new Button("load character", {600, 531, 360, 75}, 3, LoadCharacterClickAction, &ButtonFlashing,
+                              &LoadCharacterDescDisplayed));
+    insiders.push_back(new Button("quit game", {600, 612, 360, 75}, 3, QuitClickAction, &ButtonFlashing,
+                              &QuitCharacterDescDisplayed));
+    insiders.push_back(new TextBox("create a new character.", {-10, 830, SCREEN_WIDTH + 10, 75}, 3, &NewCharacterDescDisplayed));
+    insiders.push_back(new TextBox("load an existing save file.", {-10, 830, SCREEN_WIDTH + 10, 75}, 3, &LoadCharacterDescDisplayed));
+    insiders.push_back(new TextBox("exit the game.", {-10, 830, SCREEN_WIDTH + 10, 75}, 3, &QuitCharacterDescDisplayed));
 }
 
 MainMenuLayer::~MainMenuLayer() {

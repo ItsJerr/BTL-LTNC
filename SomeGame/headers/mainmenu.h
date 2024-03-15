@@ -17,16 +17,6 @@ public:
 private:
     vector<EventReceiver*> insiders;
 
-    Button* NewCharacter = nullptr;
-    Button* LoadCharacter = nullptr;
-    Button* QuitCharacter = nullptr;
-
-    TextBox* NewCharacterDesc = nullptr;
-    TextBox* LoadCharacterDesc = nullptr;
-    TextBox* QuitCharacterDesc = nullptr;
-
-    Particles* MainMenuParticle = nullptr;
-
     bool NewCharacterDescDisplayed = 0, LoadCharacterDescDisplayed = 0, QuitCharacterDescDisplayed = 0, ButtonFlashing = 0;
 };
 #endif // MAINMENU_H

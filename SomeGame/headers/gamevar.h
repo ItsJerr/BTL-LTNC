@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-const int STORYMODE = 100;
+const int CLASSICMODE = 100;
 const int ENDLESSMODE = 200;
 
 class GameData {

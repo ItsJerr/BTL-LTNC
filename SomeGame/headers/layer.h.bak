@@ -40,16 +40,11 @@ public:
 
 class Particles: public EventReceiver {
 public:
-    Particles(SDL_Color col): DotColor(col) {
+    Particles(SDL_Color col): DotColor(col), SaveA(col.a) {
         status = 0;
         DotColor.a = 0;
-		SaveA = col.a;
         delta = max(1, SaveA / 100);
         GenerateDots();
-    }
-
-    ~Particles() {
-        if (DotLocations) delete[] DotLocations;
     }
 
     void GenerateDots() {

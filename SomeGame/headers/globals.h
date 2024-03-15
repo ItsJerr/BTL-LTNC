@@ -2,7 +2,7 @@
 #define GLOBALS_H
 
 #include <bits/stdc++.h>
-#include "gamevar.h"
+#include "engine.h"
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
@@ -15,7 +15,7 @@ extern SDL_Renderer* gRenderer;
 extern SDL_Texture* gTexture;
 extern TTF_Font* gFont;
 
-extern GameData* gGameData;
+extern Engine* GameEngine;
 
 /// some common colors
 const SDL_Color black = SDL_Color{0, 0, 0, 255};
@@ -37,6 +37,8 @@ extern int CURRENTMODE;
 const int MAINMENUID = 1000;
 const int NEWCHARACTERID = 2000;
 const int LOADCHARACTERID = 3000;
-const int CHARACTERMAINMENUID = 4000;
+const int CHARACTERMENUID = 4000;
+const int INGAMEID = 5000;
+const int SHOPID = 6000;
 
 #endif // GLOBALS_H
