@@ -149,12 +149,18 @@ public:
     void SetText(const string& msg) final {
         text = msg;
 
+        if (textSurface) SDL_FreeSurface(textSurface);
+        if (textTexture) SDL_DestroyTexture(textTexture);
+
         textSurface = TTF_RenderText_Solid_Wrapped(gFont, text.c_str(), textColor, wrapLength);
         textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
     }
 
     void SetColor(const SDL_Color& RimColor, const SDL_Color& InnerColor, const SDL_Color& TextColor) final {
         rimColor = RimColor; centerColor = InnerColor; textColor = TextColor;
+
+        if (textSurface) SDL_FreeSurface(textSurface);
+        if (textTexture) SDL_DestroyTexture(textTexture);
 
         textSurface = TTF_RenderText_Solid_Wrapped(gFont, text.c_str(), textColor, wrapLength);
         textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
@@ -175,6 +181,9 @@ public:
             centerText.x = center.x + dx;
             centerText.y = center.y + dy;
         }
+
+        if (textSurface) SDL_FreeSurface(textSurface);
+        if (textTexture) SDL_DestroyTexture(textTexture);
 
         textSurface = TTF_RenderText_Solid_Wrapped(gFont, text.c_str(), textColor, wrapLength);
         textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
