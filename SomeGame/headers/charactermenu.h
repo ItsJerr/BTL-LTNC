@@ -1,3 +1,6 @@
+#ifndef CHARACTERMENU_H
+#define CHARACTERMENU_H
+
 #include "button.h"
 
 class CharacterMenuLayer: public Layer {
@@ -14,3 +17,5 @@ private:
 
     vector<EventReceiver*> insiders;
 };
+
+#endif // CHARACTERMENU_H

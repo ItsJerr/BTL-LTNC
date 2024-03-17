@@ -1,3 +1,6 @@
+#ifndef ENGINE_H
+#define ENGINE_H
+
 #include "gamevar.h"
 
 class Engine {
@@ -12,3 +15,5 @@ public:
 
     GameData* gGameData;
 };
+
+#endif // ENGINE_H
