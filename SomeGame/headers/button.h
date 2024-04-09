@@ -25,11 +25,11 @@ public:
         centerText.y = center.y + (center.h - centerText.h) / 2;
     }
 
-    void SetText(const string& msg) final {
+    void SetText(const string& msg) {
         text = msg;
     }
 
-    void SetColor(const SDL_Color& RimColor, const SDL_Color& InnerColor, const SDL_Color& TextColor, const SDL_Color& FlashColor) final {
+    void SetColor(const SDL_Color& RimColor, const SDL_Color& InnerColor, const SDL_Color& TextColor, const SDL_Color& FlashColor) {
         rimColor = RimColor; centerColor = InnerColor; textColor = TextColor; flashColor = FlashColor;
     }
 
@@ -58,7 +58,7 @@ public:
         if (textTexture) SDL_DestroyTexture(textTexture);
     }
 
-    void DisplayAsset() final {
+    void DisplayAsset() override {
         if (textSurface) {
             SDL_FreeSurface(textSurface);
             textSurface = nullptr;
@@ -146,7 +146,7 @@ public:
         if (textTexture) SDL_DestroyTexture(textTexture);
     }
 
-    void SetText(const string& msg) final {
+    void SetText(const string& msg) {
         text = msg;
 
         if (textSurface) SDL_FreeSurface(textSurface);
@@ -156,7 +156,7 @@ public:
         textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
     }
 
-    void SetColor(const SDL_Color& RimColor, const SDL_Color& InnerColor, const SDL_Color& TextColor) final {
+    void SetColor(const SDL_Color& RimColor, const SDL_Color& InnerColor, const SDL_Color& TextColor) {
         rimColor = RimColor; centerColor = InnerColor; textColor = TextColor;
 
         if (textSurface) SDL_FreeSurface(textSurface);
@@ -166,7 +166,7 @@ public:
         textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
     }
 
-    void SetPosition(const SDL_Rect* pos = nullptr, int dx = -1, int dy = -1) final {
+    void SetPosition(const SDL_Rect* pos = nullptr, int dx = -1, int dy = -1) {
         if (pos) {
             int rimWidth = center.x - rim.x;
             rim = *pos;

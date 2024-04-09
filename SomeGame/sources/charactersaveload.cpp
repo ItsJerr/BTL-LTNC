@@ -10,9 +10,9 @@ LoadCharacterLayer::LoadCharacterLayer() {
     insiders.push_back(new Particles({100, 100, 100, 255}));
 
     insiders.push_back(new TextBox("Choose a save file", {0, 0, SCREEN_WIDTH, 120}, 0));
-    insiders.back() -> SetColor(transparent, transparent, white);
+    dynamic_cast<TextBox*>(insiders.back()) -> SetColor(transparent, transparent, white);
     insiders.push_back(new TextBox("Preview:", {460, 120, 1040, 700}, 5));
-    insiders.back() -> SetPosition(nullptr, 5, 5);
+    dynamic_cast<TextBox*>(insiders.back()) -> SetPosition(nullptr, 5, 5);
 
     insiders.push_back(new Button("back", {20, 20, 120, 50}, 3, []() -> bool {
         SDL_Event tmp; SDL_zero(tmp);
@@ -45,7 +45,7 @@ LoadCharacterLayer::LoadCharacterLayer() {
         else {
             insiders.push_back(new TextBox("save slot #" + to_string(i + 1), {100, 270 + i * delta, 300, 75}, 3, nullptr,
                                            &DisplayingPreview[i], &ButtonFlashing));
-            insiders.back() -> SetColor(white, black, offwhite);
+            dynamic_cast<TextBox*>(insiders.back()) -> SetColor(white, black, offwhite);
         }
     }
 }
@@ -79,14 +79,6 @@ NewCharacterLayer::ConfirmationBox::ConfirmationBox(const int& idx, NewCharacter
         tmp.user.data1 = new int(CHARACTERMENUID);
         SDL_PushEvent(&tmp);
 
-        vector<EventReceiver*>::iterator it = find(parent.insiders.begin(), parent.insiders.end(), this);
-        if (it == parent.insiders.end()) {
-            cerr << "Critical error: Failed to find ConfirmationBox iterator inside parents.insiders.";
-            exit(0);
-        }
-        parent.insiders.erase(it);
-
-        this -> ~ConfirmationBox();
         return 1;
     };
     NoClick = [this, &parent, &idx]() -> bool {
@@ -135,9 +127,9 @@ NewCharacterLayer::NewCharacterLayer() {
     insiders.push_back(new Particles({100, 100, 100, 255}));
 
     insiders.push_back(new TextBox("Choose a save slot", {0, 0, SCREEN_WIDTH, 120}, 0));
-    insiders.back() -> SetColor(transparent, transparent, white);
+    dynamic_cast<TextBox*>(insiders.back()) -> SetColor(transparent, transparent, white);
     insiders.push_back(new TextBox("Preview:", {460, 120, 1040, 700}, 5));
-    insiders.back() -> SetPosition(nullptr, 5, 5);
+    dynamic_cast<TextBox*>(insiders.back()) -> SetPosition(nullptr, 5, 5);
 
     insiders.push_back(new Button("back", {20, 20, 120, 50}, 3, []() -> bool {
         SDL_Event tmp; SDL_zero(tmp);

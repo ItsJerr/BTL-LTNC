@@ -16,7 +16,7 @@
 	"SDL_image.h"
 	"SDL_ttf.h"
 
-1710499210 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\button.h
+1711943043 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\button.h
 	<bits/stdc++.h>
 	"SDL.h"
 	"SDL_image.h"
@@ -34,7 +34,7 @@
 	"button.h"
 	"mainmenu.h"
 
-1710498117 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\layer.h
+1711943024 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\layer.h
 	<bits/stdc++.h>
 	"SDL.h"
 	"globals.h"
@@ -497,7 +497,7 @@
 	"savefile.h"
 	<iostream>
 
-1710689198 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\main.cpp
+1711961514 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\main.cpp
 	<bits/stdc++.h>
 	"SDL.h"
 	"SDL_image.h"
@@ -530,7 +530,7 @@
 	"button.h"
 	"savefile.h"
 
-1710500813 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\charactersaveload.cpp
+1711943199 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\charactersaveload.cpp
 	"charactersaveload.h"
 
 1710440183 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\charactersaveload.h
@@ -544,10 +544,18 @@
 1710688862 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\engine.h
 	"gamevar.h"
 
-1710494909 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\charactermenu.cpp
+1711943155 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\charactermenu.cpp
 	"charactermenu.h"
 	"globals.h"
 
 1710687777 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\charactermenu.h
+	"button.h"
+
+1711942413 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\shop.cpp
+	"shop.h"
+
+1711942484 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\shop.h
+	"engine.h"
+	"layer.h"
 	"button.h"
 

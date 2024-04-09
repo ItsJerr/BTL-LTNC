@@ -68,7 +68,7 @@ CharacterMenuLayer::CharacterMenuLayer() {
     }
     else {
         Buttons[1] = new TextBox("play endless", {600, 381, 360, 75}, 3, nullptr, &DisplayControl[2]);
-        Buttons[1] -> SetColor(white, black, offwhite);
+        dynamic_cast<TextBox*>(Buttons[1]) -> SetColor(white, black, offwhite);
         ButtonDescriptions[1] = new TextBox("unlocks after completing classic mode once", {-10, 830, 1570, 75}, 3,
                                             &DisplayControl[2], nullptr, &DisplayControl[0]);
     }

@@ -74,7 +74,7 @@ void Init() {
     ChangeModeEventID = FrameEventID + 1;
 
     /// Setting up main menu
-    ChangeMode(MAINMENUID);
+    ChangeMode(NEWCHARACTERID);
 }
 
 /// call once per frame. clears the renderer so needs to redraw everything

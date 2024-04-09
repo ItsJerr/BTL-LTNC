@@ -52,4 +52,4 @@ private:
     bool DisplayingPreview[5] = {0, 0, 0, 0, 0}, ButtonFlashing = 0;
 };
 
-#endif // NEWGAME_H
+#endif // LOADCHARACTER_H

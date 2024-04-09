@@ -57,6 +57,7 @@
 		<Unit filename="sources/main.cpp" />
 		<Unit filename="sources/mainmenu.cpp" />
 		<Unit filename="sources/savefile.cpp" />
+		<Unit filename="sources/shop.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
