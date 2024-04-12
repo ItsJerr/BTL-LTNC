@@ -29,7 +29,7 @@ LoadCharacterLayer::LoadCharacterLayer() {
 
         if (SaveFileExistance) {
             function<bool()> OnClickFunction = [this, i]() {
-                LoadGame(i + 1, GameEngine -> gGameData);
+                LoadGame(i + 1, gEngine -> gGameData);
 
                 SDL_Event tmp; SDL_zero(tmp);
                 tmp.type = ChangeModeEventID;
@@ -52,8 +52,6 @@ LoadCharacterLayer::LoadCharacterLayer() {
 
 void LoadCharacterLayer::HandleEvent(const SDL_Event* event) {
     // Handle events for current mode
-    if (CURRENTMODE != LOADCHARACTERID) return;
-
     for (const auto &Handler: insiders) Handler -> HandleEvent(event);
 }
 
@@ -66,13 +64,13 @@ void LoadCharacterLayer::Display() {
     }
 }
 
-NewCharacterLayer::ConfirmationBox::ConfirmationBox(const int& idx, NewCharacterLayer& parent) {
+NewCharacterLayer::ConfirmationBox::ConfirmationBox(const int idx, NewCharacterLayer& parent) {
     parent.ButtonFlashing = 1;
-    YesClick = [this, &parent, &idx]() -> bool {
+    YesClick = [this, &parent, idx]() -> bool {
         parent.ButtonFlashing = 0;
-        GameEngine -> gGameData -> SaveFileIndex = idx;
-        GameEngine -> gGameData -> Wipe();
-        SaveGame(GameEngine -> gGameData);
+        gEngine -> gGameData -> SaveFileIndex = idx;
+        gEngine -> gGameData -> Wipe();
+        SaveGame(gEngine -> gGameData);
 
         SDL_Event tmp; SDL_zero(tmp);
         tmp.type = ChangeModeEventID;
@@ -81,7 +79,7 @@ NewCharacterLayer::ConfirmationBox::ConfirmationBox(const int& idx, NewCharacter
 
         return 1;
     };
-    NoClick = [this, &parent, &idx]() -> bool {
+    NoClick = [this, &parent, idx]() -> bool {
         parent.ButtonFlashing = 0;
 
         vector<EventReceiver*>::iterator it = find(parent.insiders.begin(), parent.insiders.end(), this);
@@ -162,8 +160,6 @@ NewCharacterLayer::~NewCharacterLayer() {
 
 void NewCharacterLayer::HandleEvent(const SDL_Event* event) {
     // Handle events for current mode
-    if (CURRENTMODE != NEWCHARACTERID) return;
-
     for (const auto &Handler: insiders) Handler -> HandleEvent(event);
 }
 

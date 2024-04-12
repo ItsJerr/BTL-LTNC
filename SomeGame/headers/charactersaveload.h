@@ -32,7 +32,7 @@ public:
 private:
     class ConfirmationBox: public EventReceiver {
     public:
-        ConfirmationBox(const int& idx, NewCharacterLayer& parent);
+        ConfirmationBox(const int idx, NewCharacterLayer& parent);
         ~ConfirmationBox();
 
         bool HandleEvent(const SDL_Event* event) final;

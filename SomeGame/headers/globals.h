@@ -15,7 +15,7 @@ extern SDL_Renderer* gRenderer;
 extern SDL_Texture* gTexture;
 extern TTF_Font* gFont;
 
-extern Engine* GameEngine;
+extern Engine* gEngine;
 
 /// some common colors
 const SDL_Color black = SDL_Color{0, 0, 0, 255};

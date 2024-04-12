@@ -1,3 +1,10 @@
+// An attempt at a mix of OOP and functional programming.
+// Uses a lot of <functional> in a lot of bad positions
+// because i'm bad at coding
+// and can't bother to plan out modules before working on them.
+
+// good learning chance though, appreciate it
+
 //{ includes
 #include<bits/stdc++.h>
 #include "SDL.h"
@@ -8,6 +15,7 @@
 #include "charactersaveload.h"
 #include "charactermenu.h"
 #include "savefile.h"
+#include "shop.h"
 //}
 
 using namespace std;
@@ -17,12 +25,12 @@ SDL_Window* gWindow = nullptr;
 SDL_Renderer* gRenderer = nullptr;
 SDL_Texture* gTexture = nullptr;
 TTF_Font* gFont = nullptr;
-Engine* GameEngine = nullptr;
+Engine* gEngine = nullptr;
 
 unsigned int FrameEventID;
 unsigned int ChangeModeEventID;
 
-int CURRENTMODE;
+int CurrentMode;
 
 Layer* CurrentLayer;
 //}
@@ -50,8 +58,12 @@ void ChangeMode(int ModeID, void* Data = nullptr) {
             CurrentLayer = new CharacterMenuLayer();
             break;
         }
+        case SHOPID: {
+            CurrentLayer = new ShopLayer(CurrentMode);
+            break;
+        }
     }
-    CURRENTMODE = ModeID;
+    CurrentMode = ModeID;
 }
 
 void Init() {
@@ -60,7 +72,7 @@ void Init() {
 
     gFont = TTF_OpenFont("assets/fonts/dotty.ttf", 80);
 
-    GameEngine = new Engine;
+    gEngine = new Engine;
 
     /// Setting up the window & renderer. THERE SHOULD ONLY BE 1 WINDOW, DECLARED GLOBALLY
     gWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
@@ -74,7 +86,7 @@ void Init() {
     ChangeModeEventID = FrameEventID + 1;
 
     /// Setting up main menu
-    ChangeMode(NEWCHARACTERID);
+    ChangeMode(MAINMENUID);
 }
 
 /// call once per frame. clears the renderer so needs to redraw everything

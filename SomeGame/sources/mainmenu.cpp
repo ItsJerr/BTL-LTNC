@@ -55,8 +55,6 @@ MainMenuLayer::~MainMenuLayer() {
 
 void MainMenuLayer::HandleEvent(const SDL_Event* event) {
     // Handle events for current mode
-    if (CURRENTMODE != MAINMENUID) return;
-
     for (const auto &Handler: insiders) Handler -> HandleEvent(event);
 }
 
