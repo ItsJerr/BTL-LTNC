@@ -1,12 +1,49 @@
-#pragma once
-#include<bits/stdc++.h>
-#include<SDL.h>
-#include<SDL_ttf.h>
-#include<SDL_image.h>
+#ifndef GLOBALS_H
+#define GLOBALS_H
 
-SDL_Window* gWindow = nullptr;
-SDL_Renderer* gRenderer = nullptr;
-SDL_Texture* gTexture = nullptr;
-TTF_Font* gFont = nullptr;
+#include <bits/stdc++.h>
+#include "engine.h"
+#include "SDL.h"
+#include "SDL_image.h"
+#include "SDL_ttf.h"
 
-SDL_Color black = {0, 0, 0, 255}, white = {200, 200, 200, 76};
+using namespace std;
+
+/// really important lol
+extern SDL_Window* gWindow;
+extern SDL_Renderer* gRenderer;
+extern SDL_Texture* gTexture;
+extern TTF_Font* gFont;
+extern TTF_Font* smallGFont;
+
+extern Engine* GameEngine;
+
+/// some common colors
+const SDL_Color black = SDL_Color{0, 0, 0, 255};
+const SDL_Color white = SDL_Color{255, 255, 255, 255};
+const SDL_Color offwhite = SDL_Color{255, 255, 255, 100};
+const SDL_Color transparent = SDL_Color{0, 0, 0, 0};
+
+/// window resolution
+const int SCREEN_WIDTH = 1560;
+const int SCREEN_HEIGHT = 900;
+
+/// ID for the custom event signalling a frame
+extern unsigned int FrameEventID;
+/// ID for the custom event signalling changing mode
+extern unsigned int ChangeModeEventID;
+
+extern int CURRENTMODE;
+
+const int MAINMENUID = 1000;
+const int NEWCHARACTERID = 2000;
+const int LOADCHARACTERID = 3000;
+const int CHARACTERMENUID = 4000;
+const int INGAMEID = 5000;
+const int SHOPID = 6000;
+const int SELECTIONID = 7000;
+
+const int speed = 10;
+
+
+#endif // GLOBALS_H

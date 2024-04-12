@@ -1,0 +1,15 @@
+PlayerLevel 0
+PlayerEXP 0
+CoinBalance 0
+MainGameCompleted 0
+GunBought 0
+HPUpgradeLevel 0
+AttackUpgradeLevel 0
+GunUpgradeLevel 0
+ManaUpgradeLevel 0
+AmmoUpgradeLevel 0
+MagicResistanceUpgradeLevel 0
+ArmorUpgradeLevel 0
+InDungeon 1
+DungeonMode 100
+DungeonLevel 1
