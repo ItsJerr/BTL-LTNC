@@ -35,18 +35,38 @@ void LoadGame(const int& fileIndex, GameData* dataLoc) {
     ifstream loadFileStream(saveFilePath);
     if (!loadFileStream.is_open()) return;
 
-    // Define variables to load from the file
-    vector<void*> variables = {&dataLoc -> PlayerLevel, &dataLoc -> PlayerEXP, &dataLoc -> CoinBalance, &dataLoc -> MainGameCompleted, &dataLoc -> GunBought, &dataLoc -> HPUpgradeLevel, &dataLoc -> MPUpgradeLevel, &dataLoc -> AttackUpgradeLevel, &dataLoc -> CritUpgradeLevel, &dataLoc -> DefenseUpgradeLevel, &dataLoc -> EvasionUpgradeLevel, &dataLoc -> GunUpgradeLevel, &dataLoc -> AmmoUpgradeLevel, &dataLoc -> ArmorUpgradeLevel, &dataLoc -> LuckUpgradeLevel, &dataLoc -> InventoryUpgradeLevel, &dataLoc -> InDungeon, &dataLoc -> DungeonMode, &dataLoc -> DungeonLevel};
+    //{ Define variables to load from the file
+                               // Player data
+    vector<void*> variables = {&dataLoc -> PlayerLevel, &dataLoc -> PlayerEXP, &dataLoc -> CoinBalance, &dataLoc -> MainGameCompleted,
+                               &dataLoc -> AttackUpgradeLevel, &dataLoc -> CritUpgradeLevel,
+                               &dataLoc -> DefenseUpgradeLevel, &dataLoc -> EvasionUpgradeLevel,
+                               &dataLoc -> ArmorUpgradeLevel, &dataLoc -> LuckUpgradeLevel, &dataLoc -> InventoryUpgradeLevel,
+                               // Dungeon data
+                               &dataLoc -> InDungeon, &dataLoc -> DungeonMode, &dataLoc -> DungeonLevel,
+                               &dataLoc -> CurrentHP, &dataLoc -> CurrentMP};
+    //}
 
     // Load variables from file using the template function
     const vector<string> variableNames = {
-        "PlayerLevel", "PlayerEXP", "CoinBalance", "MainGameCompleted", "GunBought", "HPUpgradeLevel", "MPUpgradeLevel", "AttackUpgradeLevel", "CritUpgradeLevel", "DefenseUpgradeLevel", "EvasionUpgradeLevel", "GunUpgradeLevel", "AmmoUpgradeLevel",  "ArmorUpgradeLevel", "LuckUpgradeLevel", "InventoryUpgradeLevel", "InDungeon", "DungeonMode", "DungeonLevel"
+        "PlayerLevel", "PlayerEXP", "CoinBalance", "MainGameCompleted",
+        "AttackUpgradeLevel", "CritUpgradeLevel",
+        "DefenseUpgradeLevel", "EvasionUpgradeLevel",
+        "ArmorUpgradeLevel", "LuckUpgradeLevel", "InventoryUpgradeLevel",
+        "InDungeon", "DungeonMode", "DungeonLevel",
+        "CurrentHP", "CurrentMP"
     };
 
     for (size_t i = 0; i < variableNames.size(); ++i) {
-        if (variableNames[i] == "GunBought" || variableNames[i] == "InDungeon" || variableNames[i] == "MainGameCompleted") {
+        if (variableNames[i] == "InDungeon" || variableNames[i] == "MainGameCompleted") {
             // Load boolean variables
             if (!LoadVariableFromFile(loadFileStream, static_cast<bool*>(variables[i]), variableNames[i])) {
+                loadFileStream.close();
+                return;
+            }
+        }
+        else if (variableNames[i] == "CurrentHP" || variableNames[i] == "CurrentMP") {
+            // Load float variables
+            if (!LoadVariableFromFile(loadFileStream, static_cast<float*>(variables[i]), variableNames[i])) {
                 loadFileStream.close();
                 return;
             }
@@ -85,26 +105,24 @@ void SaveGame(const GameData* dataLoc) {
         return;
     }
 
-    // Save variables to file
+    //{ Save variables to file
     saveFileStream << "PlayerLevel " << dataLoc -> PlayerLevel << endl;
     saveFileStream << "PlayerEXP " << dataLoc -> PlayerEXP << endl;
     saveFileStream << "CoinBalance " << dataLoc -> CoinBalance << endl;
     saveFileStream << "MainGameCompleted " << dataLoc -> MainGameCompleted << endl;
-    saveFileStream << "GunBought " << dataLoc -> GunBought << endl;
-    saveFileStream << "HPUpgradeLevel " << dataLoc -> HPUpgradeLevel << endl;
-    saveFileStream << "MPUpgradeLevel " << dataLoc -> MPUpgradeLevel << endl;
     saveFileStream << "AttackUpgradeLevel " << dataLoc -> AttackUpgradeLevel << endl;
     saveFileStream << "CritUpgradeLevel " << dataLoc -> CritUpgradeLevel << endl;
     saveFileStream << "DefenseUpgradeLevel " << dataLoc -> DefenseUpgradeLevel << endl;
     saveFileStream << "EvasionUpgradeLevel " << dataLoc -> EvasionUpgradeLevel << endl;
-    saveFileStream << "GunUpgradeLevel " << dataLoc -> GunUpgradeLevel << endl;
-    saveFileStream << "AmmoUpgradeLevel " << dataLoc -> AmmoUpgradeLevel << endl;
     saveFileStream << "ArmorUpgradeLevel " << dataLoc -> ArmorUpgradeLevel << endl;
     saveFileStream << "LuckUpgradeLevel " << dataLoc -> LuckUpgradeLevel << endl;
     saveFileStream << "InventoryUpgradeLevel " << dataLoc -> InventoryUpgradeLevel << endl;
     saveFileStream << "InDungeon " << dataLoc -> InDungeon << endl;
     saveFileStream << "DungeonMode " << dataLoc -> DungeonMode << endl;
     saveFileStream << "DungeonLevel " << dataLoc -> DungeonLevel << endl;
+    saveFileStream << "CurrentHP " << dataLoc -> CurrentHP << endl;
+    saveFileStream << "CurrentMP " << dataLoc -> CurrentMP << endl;
+    //}
 
     saveFileStream.close();
     return;
@@ -139,10 +157,6 @@ pair<bool, SDL_Texture*> PreviewSaveFile(const int& fileIndex) {
 
         Description += "Balance: " + to_string(TempData -> CoinBalance) + " coin" + ((TempData -> CoinBalance > 1) ? "s" : "") + "\n";
 
-        Description += "HP +" + to_string((int)(100 * (TempData -> HPModifier - 1))) + "%\n";
-
-        Description += "MP +" + to_string((int)(100 * (TempData -> MPModifier - 1))) + "%\n";
-
         Description += "Damage dealt +" + to_string((int)(100 * (TempData -> AttackModifier - 1))) + "%\n";
         // this is probably the worst ever coding decision i've made in this code so far.
         // basically, truncates spare digits at the back. can use stringstream but i'm lazy so...
@@ -159,11 +173,6 @@ pair<bool, SDL_Texture*> PreviewSaveFile(const int& fileIndex) {
         stat = to_string(100.0 * (TempData -> EvasionChance));
         while (stat.size() > 1 && (stat.back() == '0' || stat.back() == '.')) stat.pop_back();
         Description += "Evasion chance +" + stat + "%\n";
-
-        if (TempData -> GunBought) {
-            Description += "Additional Gun Damage +" + to_string((int)(100 * (TempData -> GunAttackModifier - 1))) + "%\n";
-            Description += "Maximum Gun Capacity: " + to_string(TempData -> GetAmmoCapacity()) + "\n";
-        }
 
         Description += "Armor Effectiveness +" + to_string((int)(100 * (TempData -> ArmorModifier - 1))) + "%\n";
 

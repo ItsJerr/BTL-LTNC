@@ -1,4 +1,5 @@
 #include "charactersaveload.h"
+#include "engine.h"
 
 LoadCharacterLayer::~LoadCharacterLayer() {
     for (int i = 0; i < 5; ++i) SDL_DestroyTexture(SaveFilePreviews[i]);

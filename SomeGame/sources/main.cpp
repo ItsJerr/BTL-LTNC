@@ -1,6 +1,5 @@
 // An attempt at a mix of OOP and functional programming.
-// Uses a lot of <functional> in a lot of bad positions
-// because i'm bad at coding
+// A lot of botched sections because i'm horrible at coding
 // and can't bother to plan out modules before working on them.
 
 // good learning chance though, appreciate it
@@ -16,6 +15,7 @@
 #include "charactermenu.h"
 #include "savefile.h"
 #include "shop.h"
+#include "gamelayer.h"
 //}
 
 using namespace std;
@@ -23,9 +23,10 @@ using namespace std;
 //{Globals. You hate 'em, but they are needed and cannot be avoided :/
 SDL_Window* gWindow = nullptr;
 SDL_Renderer* gRenderer = nullptr;
-SDL_Texture* gTexture = nullptr;
 TTF_Font* gFont = nullptr;
+TTF_Font* gameFont = nullptr;
 Engine* gEngine = nullptr;
+SDL_Texture* TileSet = nullptr;
 
 unsigned int FrameEventID;
 unsigned int ChangeModeEventID;
@@ -58,8 +59,8 @@ void ChangeMode(int ModeID, void* Data = nullptr) {
             CurrentLayer = new CharacterMenuLayer();
             break;
         }
-        case SHOPID: {
-            CurrentLayer = new ShopLayer(CurrentMode);
+        case INGAMEID: {
+            CurrentLayer = new GameLayer();
             break;
         }
     }
@@ -70,11 +71,6 @@ void Init() {
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
 
-    gFont = TTF_OpenFont("assets/fonts/dotty.ttf", 80);
-
-    gEngine = new Engine;
-
-    /// Setting up the window & renderer. THERE SHOULD ONLY BE 1 WINDOW, DECLARED GLOBALLY
     gWindow = SDL_CreateWindow("Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
     gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
 
@@ -82,11 +78,23 @@ void Init() {
     SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
     SDL_RenderClear(gRenderer);
 
+    SDL_Surface* TileSetSurface = IMG_Load("assets/img/tileset.bmp");
+    TileSet = SDL_CreateTextureFromSurface(gRenderer, TileSetSurface);
+    SDL_FreeSurface(TileSetSurface);
+
+    gFont = TTF_OpenFont("assets/fonts/dotty.ttf", 80);
+    gameFont = TTF_OpenFont("assets/fonts/gohufont.ttf", 18);
+
+    gEngine = new Engine;
+
+    /// Setting up the window & renderer. THERE SHOULD ONLY BE 1 WINDOW, DECLARED GLOBALLY
+
     FrameEventID = SDL_RegisterEvents(2);
     ChangeModeEventID = FrameEventID + 1;
 
     /// Setting up main menu
-    ChangeMode(MAINMENUID);
+    ChangeMode(INGAMEID);
+    gEngine -> StartGame();
 }
 
 /// call once per frame. clears the renderer so needs to redraw everything
@@ -97,7 +105,6 @@ void RenderFrame() {
 }
 
 void Cleanup() { /// call before everything
-    SDL_DestroyTexture(gTexture); gTexture = nullptr;
     SDL_DestroyRenderer(gRenderer); gRenderer = nullptr;
     SDL_DestroyWindow(gWindow); gWindow = nullptr;
 }

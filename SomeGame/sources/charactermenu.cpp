@@ -1,5 +1,6 @@
 #include "charactermenu.h"
 #include "globals.h"
+#include "engine.h"
 
 bool PlayClassicClickAction() {
     gEngine -> gGameData -> InDungeon = 1;
@@ -42,6 +43,8 @@ bool ShopClickAction() {
 }
 
 bool MainMenuClickAction() {
+    gEngine -> gGameData -> GameDataLoaded = 0;
+
     SDL_Event tmp; SDL_zero(tmp);
     tmp.type = ChangeModeEventID;
     tmp.user.data1 = new int(MAINMENUID);

@@ -138,6 +138,8 @@ public:
 
         textSurface = TTF_RenderText_Solid_Wrapped(TextFont, text.c_str(), textColor, wrapLength);
         textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+
+        centerText.w = textSurface -> w, centerText.h = textSurface -> h;
     }
 
     TextBox(const string& msg, const SDL_Rect& rect, const int& rimWidth, bool* displayed = nullptr, bool* dependencies = nullptr,
@@ -173,7 +175,7 @@ public:
     void SetPosition(const SDL_Rect* pos = nullptr, int dx = -1, int dy = -1) {
         if (pos) {
             int rimWidth = center.x - rim.x;
-            rim = *pos;
+            rim = center = *pos;
             center.x += rimWidth; center.y += rimWidth;
             center.h -= 2 * rimWidth; center.w -= 2 * rimWidth;
         }
@@ -187,6 +189,11 @@ public:
 
     void SetFont(TTF_Font* const target) {
         TextFont = target;
+        RenderText();
+
+        centerText.w = textSurface -> w, centerText.h = textSurface -> h;
+        centerText.x = center.x + (center.w - centerText.w) / 2;
+        centerText.y = center.y + (center.h - centerText.h) / 2;
     }
 
     bool HandleEvent(const SDL_Event* event) final {
@@ -205,6 +212,8 @@ public:
 
     void DisplayAsset() override {
         if (displayed != nullptr && !*displayed) return;
+        // RenderText();
+
         /// draw outer rectangle
         SDL_SetRenderDrawColor(gRenderer, rimColor.r, rimColor.g, rimColor.b, rimColor.a);
         SDL_RenderFillRect(gRenderer, &rim);

@@ -2,49 +2,43 @@
 #define ENGINE_H
 
 #include<bits/stdc++.h>
+#include "map.h"
 #include "gamevar.h"
-
+#include "actor.h"
+#include "layer.h"
+#include "rightpanel.h"
 using namespace std;
 
 class Engine {
 public:
+    GameData* gGameData;
+    vector<Actor*> actors;
+    enum status {
+        NotInGame,
+        Idle,
+        NewTurn,
+        Dead
+    } GameStatus;
+    int Turn = 0;
+
+    void CreateLevel();
+    void WipeLevel();
+    void StartGame();
+
     Engine() {
         gGameData = new GameData;
+        StatPanel = new RightPanel;
     }
 
     ~Engine() {
         delete gGameData;
+        delete StatPanel;
     }
 
-    GameData* gGameData;
+    void HandleEvent(const SDL_Event* event);
+    void Display();
 
     /// This section contains functions used for purchasable upgrades.
-    //{ HP
-    int HPUpgradeCost() {
-        if (gGameData -> HPUpgradeLevel == 50) return -1;
-        return int(20 * pow(1.15, gGameData -> HPUpgradeLevel)) * 5;
-    }
-
-    bool HPUpgrade() {
-        gGameData -> CoinBalance -= HPUpgradeCost();
-        ++gGameData -> HPUpgradeLevel;
-        gGameData -> CalculateModifiers();
-        return false;
-    }
-    //}
-    //{ MP
-    int MPUpgradeCost() {
-        if (gGameData -> MPUpgradeLevel == 50) return -1;
-        return int(20 * pow(1.15, gGameData -> MPUpgradeLevel)) * 5;
-    }
-
-    bool MPUpgrade() {
-        gGameData -> CoinBalance -= MPUpgradeCost();
-        ++gGameData -> MPUpgradeLevel;
-        gGameData -> CalculateModifiers();
-        return false;
-    }
-    //}
     //{ Attack
     int AttackUpgradeCost() {
         if (gGameData -> AttackUpgradeLevel == 50) return -1;
@@ -67,45 +61,6 @@ public:
     bool DefenseUpgrade() {
         gGameData -> CoinBalance -= DefenseUpgradeCost();
         ++gGameData -> DefenseUpgradeLevel;
-        gGameData -> CalculateModifiers();
-        return false;
-    }
-    //}
-    //{ Gun purchase
-    int GunPurchaseCost() {
-        if (gGameData -> GunBought) return -1;
-        return 20000;
-    }
-
-    bool GunPurchase() {
-        gGameData -> CoinBalance -= MPUpgradeCost();
-        ++gGameData -> MPUpgradeLevel;
-        gGameData -> CalculateModifiers();
-        return false;
-    }
-    //}
-    //{ Gun upgrade
-    int GunUpgradeCost() {
-        if (gGameData -> GunUpgradeLevel == 10) return -1;
-        return int(1000 * pow(1.5, gGameData -> GunUpgradeLevel)) * 5;
-    }
-
-    bool GunUpgrade() {
-        gGameData -> CoinBalance -= GunUpgradeCost();
-        ++gGameData -> GunUpgradeLevel;
-        gGameData -> CalculateModifiers();
-        return false;
-    }
-    //}
-    //{ Ammo
-    int AmmoUpgradeCost() {
-        if (gGameData -> AmmoUpgradeLevel == 5) return -1;
-        return array<int, 5>{3000, 8000, 20000, 45000, 100000}[gGameData -> ArmorUpgradeLevel];
-    }
-
-    bool AmmoUpgrade() {
-        gGameData -> CoinBalance -= AmmoUpgradeCost();
-        ++gGameData -> AmmoUpgradeLevel;
         gGameData -> CalculateModifiers();
         return false;
     }
@@ -150,6 +105,12 @@ public:
         return false;
     }
     //}
+
+    Actor* Player = nullptr;
+    Actor* Stairs = nullptr;
+    RightPanel* StatPanel = nullptr;
+    DungeonMap* Map = nullptr;
+    Layer* Overlay = nullptr;
 };
 
 #endif // ENGINE_H

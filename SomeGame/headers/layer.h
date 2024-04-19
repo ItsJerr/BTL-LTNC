@@ -71,7 +71,11 @@ public:
 
         return true;
     }
-    void DisplayAsset() override;
+    void DisplayAsset() override {
+        SDL_SetRenderDrawColor(gRenderer, DotColor.r, DotColor.g, DotColor.b, DotColor.a);
+        for (int i = 0; i < ParticleCount; ++i) SDL_RenderFillRect(gRenderer, &DotLocations[i]);
+        assert(gRenderer != nullptr);
+    }
 private:
     const static int ParticleCount = 1000;
     bool status = 0;

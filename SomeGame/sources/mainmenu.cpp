@@ -1,12 +1,5 @@
 #include "mainmenu.h"
 
-void Particles::DisplayAsset() {
-    // Set color and render dots
-    SDL_SetRenderDrawColor(gRenderer, DotColor.r, DotColor.g, DotColor.b, DotColor.a);
-    for (int i = 0; i < ParticleCount; ++i)
-        SDL_RenderFillRect(gRenderer, &DotLocations[i]);
-}
-
 bool QuitClickAction() {
     // Push SDL_QUIT event to quit the game
     SDL_Event tmp; SDL_zero(tmp);
