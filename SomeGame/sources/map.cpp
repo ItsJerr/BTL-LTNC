@@ -65,8 +65,40 @@ void DungeonMap::AddItem(int x, int y) {
     }
 }
 
+// add gear at a certain coordinate. will rework later to port a list of gears
+void DungeonMap::AddGear(int x, int y, bool type) {
+    int roll = rnd(1, 100);
+    if (type == 0) { // weapon
+        if (roll < 50) {
+            gEngine -> actors.push_back(new Actor("Bow", x, y, 26, 23));
+            gEngine -> actors.back() -> blocks = 0;
+            gEngine -> actors.back() -> pickable = new Gear(0, 3);
+        }
+        else {
+            gEngine -> actors.push_back(new Actor("Axe", x, y, 42, 22));
+            gEngine -> actors.back() -> blocks = 0;
+            gEngine -> actors.back() -> pickable = new Gear(0, 4);
+        }
+    }
+    else {
+        if (roll < 50) {
+            gEngine -> actors.push_back(new Actor("Light Armor", x, y, 32, 24));
+            gEngine -> actors.back() -> blocks = 0;
+            gEngine -> actors.back() -> pickable = new Gear(1, 3);
+        }
+        else {
+            gEngine -> actors.push_back(new Actor("Chainmail", x, y, 33, 24));
+            gEngine -> actors.back() -> blocks = 0;
+            gEngine -> actors.back() -> pickable = new Gear(1, 4);
+        }
+    }
+}
+
 // generate maps using a primitive "digging" method: dig non-intersecting rooms in an originally all-wall map
-DungeonMap::DungeonMap(const int& MaxMonsters, const int& MaxItems) {
+DungeonMap::DungeonMap(int mapx, int mapy, int roomcnt, int ItemCount, int MonsterCount): mapx(mapx), mapy(mapy), roomcnt(roomcnt) {
+    Map = new Tile*[mapx];
+    for (int i = 0; i < mapx; ++i) Map[i] = new Tile[mapy];
+
     const int sidemin = 5, sidemax = 12;
 
     for (int i = 0; i < roomcnt; ++i) {
@@ -147,8 +179,7 @@ DungeonMap::DungeonMap(const int& MaxMonsters, const int& MaxItems) {
     delete connected;
     delete dist;
 
-    int NumMonster = rnd(1, MaxMonsters);
-    while (NumMonster--) {
+    while (MonsterCount--) {
         int room = rnd(1, rooms.size() - 1);
         int x = rnd(get<0>(rooms[room]), get<0>(rooms[room]) + get<2>(rooms[room]) - 1);
         int y = rnd(get<1>(rooms[room]), get<1>(rooms[room]) + get<3>(rooms[room]) - 1);
@@ -159,8 +190,7 @@ DungeonMap::DungeonMap(const int& MaxMonsters, const int& MaxItems) {
         AddMonster(x, y);
     }
 
-    int NumItem = rnd(1, MaxItems);
-    while (NumItem--) {
+    while (ItemCount--) {
         int room = rnd(0, rooms.size() - 1);
         int x = rnd(get<0>(rooms[room]), get<0>(rooms[room]) + get<2>(rooms[room]) - 1);
         int y = rnd(get<1>(rooms[room]), get<1>(rooms[room]) + get<3>(rooms[room]) - 1);
@@ -170,6 +200,22 @@ DungeonMap::DungeonMap(const int& MaxMonsters, const int& MaxItems) {
         }
         AddItem(x, y);
     }
+
+    for (int i = 0; i < 2; ++i) {
+        int room = rnd(0, rooms.size() - 1);
+        int x = rnd(get<0>(rooms[room]), get<0>(rooms[room]) + get<2>(rooms[room]) - 1);
+        int y = rnd(get<1>(rooms[room]), get<1>(rooms[room]) + get<3>(rooms[room]) - 1);
+        while (!CanPlace(x, y)) {
+            x = rnd(get<0>(rooms[room]), get<0>(rooms[room]) + get<2>(rooms[room]) - 1);
+            y = rnd(get<1>(rooms[room]), get<1>(rooms[room]) + get<3>(rooms[room]) - 1);
+        }
+        AddGear(x, y, i);
+    }
+}
+
+DungeonMap::~DungeonMap() {
+    for (int i = 0; i < mapx; ++i) delete Map[i];
+    delete Map;
 }
 
 pair<int, int> DungeonMap::GetStart() {

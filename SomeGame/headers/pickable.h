@@ -13,6 +13,15 @@ public:
 };
 
 // implement items here
+class Gear: public Pickable {
+public:
+    bool type = 0;
+    int amount = 0;
+
+    Gear(bool type, int value);
+    bool use(Actor* owner, Actor* wearer);
+};
+
 class Healer: public Pickable {
 public:
     int amount;

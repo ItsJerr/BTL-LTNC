@@ -20,7 +20,7 @@ void Engine::CreateLevel() {
     WipeLevel();
     GameStatus = Idle;
 
-    Map = new DungeonMap();
+    Map = new DungeonMap(50, 50, 10, 3, 3);
 
     int stx, sty; tie(stx, sty) = Map -> GetStart();
     Player -> x = stx; Player -> y = sty;
@@ -33,10 +33,6 @@ void Engine::CreateLevel() {
 
     actors.push_back(Player);
     actors.push_back(Stairs);
-
-    actors.push_back(new Actor("Scroll of Confusion", stx, sty + 1, 30, 25));
-    actors.back() -> blocks = 0;
-    actors.back() -> pickable = new Confuser();
 }
 
 void Engine::StartGame() {

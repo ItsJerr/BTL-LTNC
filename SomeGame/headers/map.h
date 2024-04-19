@@ -9,14 +9,12 @@ struct Tile {
     int scent = 0;
 };
 
-const int mapx = 100, mapy = 100, // map dimensions
-          roomcnt = 30; // number of rooms
-
 class DungeonMap {
 public:
-    int CurrentScent = 20;
+    int CurrentScent = 20, mapx, mapy, roomcnt;
 
-    DungeonMap(const int& MaxMonsters = 10, const int& MaxItems = 5);
+    DungeonMap(int mapx, int mapy, int roomcnt, int MonsterCount, int ItemCount);
+    ~DungeonMap();
     pair<int, int> GetStart();
     pair<int, int> GetTarget();
 
@@ -31,7 +29,7 @@ public:
     void Display(int px, int py);
 
 private:
-    Tile Map[mapx][mapy];
+    Tile** Map;
     vector<tuple<int, int, int, int>> rooms; // up-left coordinates and side lengths. does not include wall border.
 
     void cast_light(int x, int y, int radius, int row, float start_slope, float end_slope, int xx, int xy, int yx, int yy);
@@ -39,6 +37,7 @@ private:
     bool CanPlace(int x, int y);
     void AddMonster(int x, int y);
     void AddItem(int x, int y);
+    void AddGear(int x, int y, bool type);
 };
 
 #endif // MAP_H

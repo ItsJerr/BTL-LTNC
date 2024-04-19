@@ -49,7 +49,7 @@ ItemBox::ItemBox(Actor* actor) : actor(actor) {
     use -> SetPosition(nullptr, 0, 0);
     use -> SetColor(transparent, transparent, white);
 
-    drop = new TextBox("Drop", {485, 425, 1, 1}, 0);
+    drop = new TextBox("Discard", {485, 425, 1, 1}, 0);
     drop -> SetFont(gameFont);
     drop -> SetPosition(nullptr, 0, 0);
     drop -> SetColor(transparent, transparent, white);

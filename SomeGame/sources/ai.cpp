@@ -63,7 +63,9 @@ void PlayerAI::update(Actor* owner, const SDL_Event* event) {
     else if (enter) {
         ++gEngine -> Turn;
         if (owner -> x == gEngine -> Stairs -> x && owner -> y == gEngine -> Stairs -> y) {
-            gEngine -> StatPanel -> AddMessage("You descended down to floor");
+            gEngine -> StatPanel -> AddMessage("You take a moment to rest, and recover your strength.");
+            gEngine -> Player -> combat -> heal(gEngine -> Player -> combat -> MaxHP / 2);
+            gEngine -> StatPanel -> AddMessage("After a rare moment of peace, you descend deeper into the heart of the dungeon...");
             gEngine -> CreateLevel();
         }
         else {

@@ -21,8 +21,8 @@ void PlayerCombatStat::die(Actor* owner, const string& killer) {
 }
 
 void Actor::MeleeCombat(Actor* oppo) {
-    float attack = combat -> attack;
-    float defense = oppo -> combat -> defense;
+    float attack = combat -> attack; if (weapon) attack += dynamic_cast<Gear*>(weapon -> pickable) -> amount;
+    float defense = oppo -> combat -> defense; if (oppo -> armor) defense += dynamic_cast<Gear*>(oppo -> weapon -> pickable) -> amount;
 
     float damage;
 

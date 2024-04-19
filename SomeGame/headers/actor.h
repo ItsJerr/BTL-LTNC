@@ -28,6 +28,7 @@ public:
     Pickable* pickable = nullptr;
     Container* container = nullptr;
     AI* ai = nullptr;
+    Actor *weapon = nullptr, *armor = nullptr;
 
     Actor(const string& name, int x, int y, int px, int py);
     ~Actor() {

@@ -22,6 +22,27 @@ bool Pickable::use(Actor* owner, Actor* wearer) {
 }
 
 // implement items here
+Gear::Gear(bool type, int value): type(type), amount(value) {};
+
+bool Gear::use(Actor* owner, Actor* wearer) {
+    if (wearer -> combat) {
+        if (type == 0) { // weapon
+            if (wearer -> weapon) {
+                if (wearer -> container) wearer -> container -> inventory.push_back(wearer -> weapon); // move the current weapon into the inventory
+            }
+            wearer -> weapon = owner;
+        }
+        else { // armor
+            if (wearer -> armor) {
+                if (wearer -> container) wearer -> container -> inventory.push_back(wearer -> armor); // move the current armor into the inventory
+            }
+            wearer -> armor = owner;
+        }
+        return Pickable::use(owner, wearer);
+    }
+    return false;
+}
+
 bool Healer::use(Actor* owner, Actor* wearer) {
     if (wearer -> combat) {
         int healed = wearer -> combat -> heal(amount);
