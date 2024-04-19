@@ -52,7 +52,6 @@
 		<Unit filename="headers/engine.h" />
 		<Unit filename="headers/gamelayer.h" />
 		<Unit filename="headers/gamevar.h" />
-		<Unit filename="headers/gear.h" />
 		<Unit filename="headers/globals.h" />
 		<Unit filename="headers/inventory.h" />
 		<Unit filename="headers/layer.h" />

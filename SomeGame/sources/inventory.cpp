@@ -114,6 +114,7 @@ void ItemBox::HandleEvent(const SDL_Event* event, Inventory* owner) {
             delete gEngine -> Overlay;
             gEngine -> Overlay = nullptr;
             ++gEngine -> Turn;
+            assert(actor != nullptr);
             if (status == 0) actor -> pickable -> use(actor, gEngine -> Player);
             else gEngine -> Player -> container -> remove(actor);
             gEngine -> GameStatus = Engine::NewTurn;

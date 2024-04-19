@@ -13,7 +13,7 @@ class DungeonMap {
 public:
     int CurrentScent = 20, mapx, mapy, roomcnt;
 
-    DungeonMap(int mapx, int mapy, int roomcnt, int MonsterCount, int ItemCount);
+    DungeonMap(int mapx, int mapy, int roomcnt, int HealerCount, int ScrollCount, int MonsterCount);
     ~DungeonMap();
     pair<int, int> GetStart();
     pair<int, int> GetTarget();
@@ -36,7 +36,7 @@ private:
 
     bool CanPlace(int x, int y);
     void AddMonster(int x, int y);
-    void AddItem(int x, int y);
+    void AddHealer(int x, int y);
     void AddGear(int x, int y, bool type);
 };
 

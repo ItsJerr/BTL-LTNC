@@ -21,8 +21,17 @@ void PlayerCombatStat::die(Actor* owner, const string& killer) {
 }
 
 void Actor::MeleeCombat(Actor* oppo) {
-    float attack = combat -> attack; if (weapon) attack += dynamic_cast<Gear*>(weapon -> pickable) -> amount;
-    float defense = oppo -> combat -> defense; if (oppo -> armor) defense += dynamic_cast<Gear*>(oppo -> weapon -> pickable) -> amount;
+    float attack = combat -> attack;
+    if (weapon) attack += static_cast<Gear*>(weapon -> pickable) -> amount;
+
+    cerr << "ok1\n";
+    float defense = oppo -> combat -> defense;
+    if (oppo -> armor) {
+        cerr << "ok2\n";
+        assert(oppo -> armor -> pickable != nullptr);
+        defense += static_cast<Gear*>(oppo -> armor -> pickable) -> amount;
+    }
+    cerr << "ok3\n";
 
     float damage;
 
@@ -55,5 +64,8 @@ void Actor::MeleeCombat(Actor* oppo) {
         gEngine -> StatPanel -> AddMessage(name + " hit " + oppo -> name + " for " + to_string(rdamage) + " damage!" + (crit ? "!" : ""));
 
     oppo -> combat -> HP -= damage;
-    if (oppo -> combat -> isDead()) oppo -> combat -> die(oppo, name);
+    if (oppo -> combat -> isDead()) {
+        balance += oppo -> value;
+        oppo -> combat -> die(oppo, name);
+    }
 }

@@ -19,13 +19,13 @@ public:
     int amount = 0;
 
     Gear(bool type, int value);
-    bool use(Actor* owner, Actor* wearer);
+    bool use(Actor* owner, Actor* wearer) override;
 };
 
 class Healer: public Pickable {
 public:
-    int amount;
-    Healer(int amount): amount(amount) {}
+    int amount, cost;
+    Healer(int amount, int cost): amount(amount), cost(cost) {}
 
     bool use(Actor* owner, Actor* wearer) override;
 };

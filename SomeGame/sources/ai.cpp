@@ -28,6 +28,19 @@ bool PlayerAI::MoveOrAttack(Actor* owner, int x, int y) {
 }
 
 void PlayerAI::update(Actor* owner, const SDL_Event* event) {
+    cerr << "actors: " << endl;
+    for (Actor* actor : gEngine -> actors) {
+        assert(actor != nullptr);
+        cerr << actor -> name << " " << actor << endl;
+    }
+    cerr << "inventory: " << endl;
+    for (Actor* actor : gEngine -> Player -> container -> inventory) {
+        cerr << actor -> name << " " << actor << endl;
+        assert(actor != nullptr);
+    }
+
+    cerr << endl;
+
     if (owner -> combat -> isDead()) return;
     int dx = 0, dy = 0;
     bool pick = 0, enter = 0;

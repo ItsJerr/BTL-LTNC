@@ -2,7 +2,11 @@
 #include "engine.h"
 #include "map.h"
 
-Actor::Actor(const string& name, int x, int y, int px, int py): name(name), x(x), y(y), tilx((px - 1) * 13 + 1), tily((py - 1) * 13 + 1) {}
+Actor::Actor(const string& name, int x, int y, int px, int py): name(name), x(x), y(y) {
+    tilx = (px - 1) * 13 + 1;
+    tily = (py - 1) * 13 + 1;
+    value = rnd(1, 2);
+}
 
 // coordinates for actors are given relative to the player, as the player will always be at the center of the screen.
 const int PlayerX = 29, PlayerY = 21;

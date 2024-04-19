@@ -9,6 +9,11 @@
 #include "rightpanel.h"
 using namespace std;
 
+struct Healable {
+    string name;
+    int sx, sy, amount, cost;
+};
+
 class Engine {
 public:
     GameData* gGameData;
@@ -21,6 +26,10 @@ public:
     } GameStatus;
     int Turn = 0;
 
+    vector<Healable> potions;
+
+    void ImportPotion(vector<Healable>& v);
+
     void CreateLevel();
     void WipeLevel();
     void StartGame();
@@ -28,6 +37,8 @@ public:
     Engine() {
         gGameData = new GameData;
         StatPanel = new RightPanel;
+
+        ImportPotion(potions);
     }
 
     ~Engine() {

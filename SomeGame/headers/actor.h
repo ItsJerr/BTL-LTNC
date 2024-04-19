@@ -20,6 +20,7 @@ class Actor {
 public:
     int x, y; // position
     int tilx, tily; // position in the tileset
+    int value, balance; // economy related stuff
     string name;
     bool blocks = 1; // whether it blocks the way or not
 

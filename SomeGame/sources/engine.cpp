@@ -7,6 +7,29 @@
 
 using namespace std;
 
+void Engine::ImportPotion(vector<Healable>& v) {
+    ifstream in("assets/data/healables.txt");
+    string line, word;
+    while (getline(in, line)) {
+        istringstream iss(line);
+        vector<string> words;
+        while (iss >> word) words.push_back(word);
+
+        Healable cur;
+
+        cur.cost = stoi(words.back()); words.pop_back();
+        cur.amount = stoi(words.back()); words.pop_back();
+        cur.sy = stoi(words.back()); words.pop_back();
+        cur.sx = stoi(words.back()); words.pop_back();
+
+        cur.name = "";
+        for (const string &w : words) cur.name += w + " ";
+        cur.name.pop_back();
+
+        v.push_back(cur);
+    }
+}
+
 void Engine::WipeLevel() {
     for (Actor* actor: actors) if (actor != Player) delete actor;
     actors.clear();
@@ -20,7 +43,7 @@ void Engine::CreateLevel() {
     WipeLevel();
     GameStatus = Idle;
 
-    Map = new DungeonMap(50, 50, 10, 3, 3);
+    Map = new DungeonMap(50, 50, 10, 3, 3, 3);
 
     int stx, sty; tie(stx, sty) = Map -> GetStart();
     Player -> x = stx; Player -> y = sty;
@@ -54,7 +77,7 @@ void Engine::HandleEvent(const SDL_Event* event) {
     }
     if (GameStatus == NewTurn) {
         ++Map -> CurrentScent;
-        for (Actor* actor : actors) if (actor != Player) actor -> update();
+        for (Actor* actor : actors) if (actor != Player && !Player -> combat -> isDead()) actor -> update();
         for (auto it = actors.begin(); it != actors.end();) {
             Actor* actor = *it;
             if (actor != Player && actor -> combat && actor -> combat -> isDead()) {

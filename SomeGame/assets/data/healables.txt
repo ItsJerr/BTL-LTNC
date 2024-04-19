@@ -1,0 +1,18 @@
+Mushroom 1 17 5 10
+Steak 2 17 20 30
+Carrot 3 17 5 10
+Apple 4 17 5 10
+Bamboo 5 17 2 5
+Fried Chicken 6 17 20 30
+Cherry 7 17 5 10
+Cheese 8 17 5 10
+Egg 9 17 5 10
+Pumpkin 11 17 20 30
+Potato 17 17 20 30
+Banana 20 17 5 10
+Corn 21 17 20 30
+Turnip 22 17 2 5
+Strawberry 25 17 5 10
+Small Health Potion 3 18 5 10
+Medium Health Potion 4 18 10 18
+Large Health Potion 5 18 20 30

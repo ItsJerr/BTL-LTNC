@@ -78,6 +78,10 @@ void RightPanel::Display() {
     // remaking strings
     Health -> SetText("Health: " + to_string(gEngine -> Player -> combat -> HP) + "/" + to_string(gEngine -> Player -> combat -> MaxHP));
     Turn -> SetText("Turn: " + to_string(gEngine -> Turn));
+    if (gEngine -> Player -> weapon) Weapon -> SetText("Weapon: " + gEngine -> Player -> weapon -> name);
+    else Weapon -> SetText("Weapon: none");
+    if (gEngine -> Player -> armor) Armor -> SetText("Armor: " + gEngine -> Player -> armor -> name);
+    else Armor -> SetText("Armor: none");
 
     // stats
     Level -> DisplayAsset();
