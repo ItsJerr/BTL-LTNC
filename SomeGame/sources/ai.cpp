@@ -70,9 +70,14 @@ void PlayerAI::update(Actor* owner, const SDL_Event* event) {
     else if (enter) {
         ++gEngine -> Turn;
         if (owner -> x == gEngine -> Stairs -> x && owner -> y == gEngine -> Stairs -> y) {
-            gEngine -> StatPanel -> AddMessage("You descended down to floor");
-            this -> Prayed = false;
-            gEngine -> CreateLevel();
+            if(1 == 2/*(floor == 10 && !Kayn) || (floor == 15 && !Jhin)*/){
+                gEngine -> StatPanel -> AddMessage("Someone sealed these stairs, you must find them to delve further.")
+            }
+            else {
+                gEngine -> StatPanel -> AddMessage("You descended down to floor");
+                this -> Prayed = false;
+                gEngine -> CreateLevel();
+            }
         }
         else {
             gEngine -> GameStatus = Engine::NewTurn;
