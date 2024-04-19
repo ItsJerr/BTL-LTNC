@@ -9,14 +9,13 @@
 	"headers/newcharacter.h"
 	"headers/savefile.h"
 
-1710129468 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\globals.h
+1713427556 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\globals.h
 	<bits/stdc++.h>
-	"engine.h"
 	"SDL.h"
 	"SDL_image.h"
 	"SDL_ttf.h"
 
-1710499210 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\button.h
+1713441745 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\button.h
 	<bits/stdc++.h>
 	"SDL.h"
 	"SDL_image.h"
@@ -34,7 +33,7 @@
 	"button.h"
 	"mainmenu.h"
 
-1710498117 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\layer.h
+1712995098 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\layer.h
 	<bits/stdc++.h>
 	"SDL.h"
 	"globals.h"
@@ -58,8 +57,9 @@
 	"gamevar.h"
 	"button.h"
 
-1710128492 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\gamevar.h
+1713410113 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\gamevar.h
 	<iostream>
+	<array>
 
 1709493957 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\newgame.cpp
 	"headers/newgame.h"
@@ -83,7 +83,7 @@
 	"button.h"
 	"savefile.h"
 
-1710170314 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\mainmenu.cpp
+1712995095 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\mainmenu.cpp
 	"mainmenu.h"
 
 1706832906 c:\users\administrator\desktop\c++\uni\sdl2-2.30.0\i686-w64-mingw32\include\sdl2\sdl.h
@@ -493,11 +493,11 @@
 1709540926 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\newcharacter.cpp
 	"newcharacter.h"
 
-1710505831 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\savefile.cpp
+1713410141 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\savefile.cpp
 	"savefile.h"
 	<iostream>
 
-1710689198 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\main.cpp
+1713466034 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\main.cpp
 	<bits/stdc++.h>
 	"SDL.h"
 	"SDL_image.h"
@@ -507,6 +507,8 @@
 	"charactersaveload.h"
 	"charactermenu.h"
 	"savefile.h"
+	"shop.h"
+	"gamelayer.h"
 
 1709555320 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\loadcharacter.h
 	<bits/stdc++.h>
@@ -530,10 +532,11 @@
 	"button.h"
 	"savefile.h"
 
-1710500813 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\charactersaveload.cpp
+1712983834 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\charactersaveload.cpp
 	"charactersaveload.h"
+	"engine.h"
 
-1710440183 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\charactersaveload.h
+1712658815 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\charactersaveload.h
 	<bits/stdc++.h>
 	"SDL.h"
 	"SDL_image.h"
@@ -541,13 +544,298 @@
 	"button.h"
 	"savefile.h"
 
-1710688862 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\engine.h
+1713465478 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\engine.h
+	<bits/stdc++.h>
+	"map.h"
 	"gamevar.h"
+	"actor.h"
+	"layer.h"
+	"rightpanel.h"
 
-1710494909 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\charactermenu.cpp
+1712996560 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\charactermenu.cpp
 	"charactermenu.h"
 	"globals.h"
+	"engine.h"
 
 1710687777 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\charactermenu.h
 	"button.h"
+
+1712920673 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\shop.cpp
+	"shop.h"
+
+1712916028 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\shop.h
+	"engine.h"
+	"layer.h"
+	"button.h"
+
+1713457566 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\actor.cpp
+	"actor.h"
+	"engine.h"
+	"map.h"
+
+1713413243 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\actor.h
+	<bits/stdc++.h>
+	"combat.h"
+	"ai.h"
+	"pickable.h"
+	"container.h"
+
+1713456175 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\rightpanel.cpp
+	"rightpanel.h"
+	"engine.h"
+	"globals.h"
+
+1713440308 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\rightpanel.h
+	"layer.h"
+	"button.h"
+
+1712987925 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\gamelayer.h
+	"engine.h"
+	"layer.h"
+
+1713461313 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\map.h
+	<bits/stdc++.h>
+
+1713468255 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\map.cpp
+	"map.h"
+	"globals.h"
+	"engine.h"
+	"actor.h"
+
+1713489141 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\engine.cpp
+	"engine.h"
+	"gamevar.h"
+	"rightpanel.h"
+	"map.h"
+	"actor.h"
+	"inventory.h"
+
+1713107995 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\destructible.h
+	<bits/stdc++.h>
+
+1713412881 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\combat.h
+	<bits/stdc++.h>
+
+1713488725 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\ai.h
+	<bits/stdc++.h>
+	"SDL.h"
+
+1713489307 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\ai.cpp
+	"ai.h"
+	"engine.h"
+	"actor.h"
+	"globals.h"
+
+1713457594 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\combat.cpp
+	"combat.h"
+	"actor.h"
+	"engine.h"
+
+1713427565 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\globals.cpp
+	"globals.h"
+
+1713427211 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\container.h
+	<bits/stdc++.h>
+
+1713488222 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\pickable.h
+	<bits/stdc++.h>
+
+1713427230 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\container.cpp
+	"container.h"
+	"actor.h"
+
+1713489242 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\pickable.cpp
+	"pickable.h"
+	"actor.h"
+	"globals.h"
+	"engine.h"
+
+1713467462 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\inventory.cpp
+	"inventory.h"
+	"actor.h"
+	"engine.h"
+	"globals.h"
+
+1713456350 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\inventory.h
+	<bits/stdc++.h>
+	"layer.h"
+	"button.h"
+
+1713498949 source:c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\sources\main.cpp
+	<bits/stdc++.h>
+	"SDL.h"
+	"SDL_image.h"
+	"SDL_ttf.h"
+	"globals.h"
+	"mainmenu.h"
+	"charactersaveload.h"
+	"charactermenu.h"
+	"savefile.h"
+	"shop.h"
+	"gamelayer.h"
+
+1713498949 source:c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\sources\mainmenu.cpp
+	"mainmenu.h"
+
+1713519145 source:c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\sources\map.cpp
+	"map.h"
+	"globals.h"
+	"engine.h"
+	"actor.h"
+
+1713498949 source:c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\sources\pickable.cpp
+	"pickable.h"
+	"actor.h"
+	"globals.h"
+	"engine.h"
+
+1713498949 source:c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\sources\rightpanel.cpp
+	"rightpanel.h"
+	"engine.h"
+	"globals.h"
+
+1713498949 source:c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\sources\savefile.cpp
+	"savefile.h"
+	<iostream>
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\globals.h
+	<bits/stdc++.h>
+	"SDL.h"
+	"SDL_image.h"
+	"SDL_ttf.h"
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\mainmenu.h
+	<bits/stdc++.h>
+	"SDL.h"
+	"SDL_image.h"
+	"SDL_ttf.h"
+	"button.h"
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\button.h
+	<bits/stdc++.h>
+	"SDL.h"
+	"SDL_image.h"
+	"SDL_ttf.h"
+	"globals.h"
+	"layer.h"
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\layer.h
+	<bits/stdc++.h>
+	"SDL.h"
+	"globals.h"
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\charactersaveload.h
+	<bits/stdc++.h>
+	"SDL.h"
+	"SDL_image.h"
+	"SDL_ttf.h"
+	"button.h"
+	"savefile.h"
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\savefile.h
+	<fstream>
+	"gamevar.h"
+	"button.h"
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\gamevar.h
+	<iostream>
+	<array>
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\charactermenu.h
+	"button.h"
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\shop.h
+	"engine.h"
+	"layer.h"
+	"button.h"
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\engine.h
+	<bits/stdc++.h>
+	"map.h"
+	"gamevar.h"
+	"actor.h"
+	"layer.h"
+	"rightpanel.h"
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\map.h
+	<bits/stdc++.h>
+
+1713498947 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\actor.h
+	<bits/stdc++.h>
+	"combat.h"
+	"ai.h"
+	"pickable.h"
+	"container.h"
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\combat.h
+	<bits/stdc++.h>
+
+1713518694 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\ai.h
+	<bits/stdc++.h>
+	"SDL.h"
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\pickable.h
+	<bits/stdc++.h>
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\container.h
+	<bits/stdc++.h>
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\rightpanel.h
+	"layer.h"
+	"button.h"
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\gamelayer.h
+	"engine.h"
+	"layer.h"
+
+1713498949 source:c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\sources\actor.cpp
+	"actor.h"
+	"engine.h"
+	"map.h"
+
+1713518586 source:c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\sources\ai.cpp
+	"ai.h"
+	"engine.h"
+	"actor.h"
+	"globals.h"
+
+1713498949 source:c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\sources\charactermenu.cpp
+	"charactermenu.h"
+	"globals.h"
+	"engine.h"
+
+1713498949 source:c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\sources\charactersaveload.cpp
+	"charactersaveload.h"
+	"engine.h"
+
+1713498949 source:c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\sources\combat.cpp
+	"combat.h"
+	"actor.h"
+	"engine.h"
+
+1713498949 source:c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\sources\container.cpp
+	"container.h"
+	"actor.h"
+
+1713498949 source:c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\sources\engine.cpp
+	"engine.h"
+	"gamevar.h"
+	"rightpanel.h"
+	"map.h"
+	"actor.h"
+	"inventory.h"
+
+1713498948 c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\headers\inventory.h
+	<bits/stdc++.h>
+	"layer.h"
+	"button.h"
+
+1713498949 source:c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\sources\globals.cpp
+	"globals.h"
+
+1713498949 source:c:\users\asus\desktop\new folder\btl-ltnc-main\somegame\sources\inventory.cpp
+	"inventory.h"
+	"actor.h"
+	"engine.h"
+	"globals.h"
 

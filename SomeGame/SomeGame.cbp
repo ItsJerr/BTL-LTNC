@@ -42,20 +42,38 @@
 			<Add directory="C:/Users/Administrator/Desktop/C++/Uni/SDL2_ttf-2.22.0/i686-w64-mingw32/lib" />
 			<Add directory="C:/Users/Administrator/Desktop/C++/Uni/SDL2-2.30.0/i686-w64-mingw32/lib" />
 		</Linker>
+		<Unit filename="headers/actor.h" />
+		<Unit filename="headers/ai.h" />
 		<Unit filename="headers/button.h" />
 		<Unit filename="headers/charactermenu.h" />
 		<Unit filename="headers/charactersaveload.h" />
+		<Unit filename="headers/combat.h" />
+		<Unit filename="headers/container.h" />
 		<Unit filename="headers/engine.h" />
+		<Unit filename="headers/gamelayer.h" />
 		<Unit filename="headers/gamevar.h" />
 		<Unit filename="headers/globals.h" />
+		<Unit filename="headers/inventory.h" />
 		<Unit filename="headers/layer.h" />
 		<Unit filename="headers/mainmenu.h" />
+		<Unit filename="headers/map.h" />
+		<Unit filename="headers/pickable.h" />
+		<Unit filename="headers/rightpanel.h" />
 		<Unit filename="headers/savefile.h" />
-		<Unit filename="headers/shop.h" />
+		<Unit filename="sources/actor.cpp" />
+		<Unit filename="sources/ai.cpp" />
 		<Unit filename="sources/charactermenu.cpp" />
 		<Unit filename="sources/charactersaveload.cpp" />
+		<Unit filename="sources/combat.cpp" />
+		<Unit filename="sources/container.cpp" />
+		<Unit filename="sources/engine.cpp" />
+		<Unit filename="sources/globals.cpp" />
+		<Unit filename="sources/inventory.cpp" />
 		<Unit filename="sources/main.cpp" />
 		<Unit filename="sources/mainmenu.cpp" />
+		<Unit filename="sources/map.cpp" />
+		<Unit filename="sources/pickable.cpp" />
+		<Unit filename="sources/rightpanel.cpp" />
 		<Unit filename="sources/savefile.cpp" />
 		<Extensions />
 	</Project>

@@ -18,15 +18,6 @@ public:
         /// MUST BE IMPLEMENTED IN MEMBER FUNCTIONS: Returns True if handled, False otherwise.
     }
     virtual void DisplayAsset() {}
-
-    /// for Button and TextBox
-    virtual void SetText(const string& msg) {}
-    virtual void SetPosition(const SDL_Rect* pos, int dx, int dy) {}
-    /// for Button
-    virtual void SetColor(const SDL_Color& RimColor, const SDL_Color& InnerColor, const SDL_Color& TextColor,
-                          const SDL_Color& FlashColor) {}
-    /// for TextBox
-    virtual void SetColor(const SDL_Color& RimColor, const SDL_Color& InnerColor, const SDL_Color& TextColor) {}
 };
 
 class Layer {
@@ -80,7 +71,11 @@ public:
 
         return true;
     }
-    void DisplayAsset() override;
+    void DisplayAsset() override {
+        SDL_SetRenderDrawColor(gRenderer, DotColor.r, DotColor.g, DotColor.b, DotColor.a);
+        for (int i = 0; i < ParticleCount; ++i) SDL_RenderFillRect(gRenderer, &DotLocations[i]);
+        assert(gRenderer != nullptr);
+    }
 private:
     const static int ParticleCount = 1000;
     bool status = 0;

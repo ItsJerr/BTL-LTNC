@@ -32,7 +32,7 @@ public:
 private:
     class ConfirmationBox: public EventReceiver {
     public:
-        ConfirmationBox(const int& idx, NewCharacterLayer& parent);
+        ConfirmationBox(const int idx, NewCharacterLayer& parent);
         ~ConfirmationBox();
 
         bool HandleEvent(const SDL_Event* event) final;
@@ -52,4 +52,4 @@ private:
     bool DisplayingPreview[5] = {0, 0, 0, 0, 0}, ButtonFlashing = 0;
 };
 
-#endif // NEWGAME_H
+#endif // LOADCHARACTER_H

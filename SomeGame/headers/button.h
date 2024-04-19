@@ -15,22 +15,28 @@ class Button: public EventReceiver {
 public:
      Button(const string& msg, const SDL_Rect& rect, const int& rimWidth, function<bool()> onClick, bool* scrFlashCheck = nullptr,
             bool* dependencies = nullptr, int WrapLength = 0)
-            : text(msg), rim(rect), rimColor(white), centerColor(black), textColor(white), flashColor(offwhite),
+            : text(msg), TextFont(gFont), rim(rect), rimColor(white), centerColor(black), textColor(white), flashColor(offwhite),
             FlashEndAction(onClick), wrapLength(WrapLength), dependencies(dependencies), ButtonFlashing(scrFlashCheck) {
         center = rim;
         center.x += rimWidth; center.y += rimWidth; center.h -= 2 * rimWidth; center.w -= 2 * rimWidth;
 
-        TTF_SizeText(gFont, text.c_str(), &centerText.w, &centerText.h);
+        textSurface = TTF_RenderText_Solid_Wrapped(TextFont, text.c_str(), textColor, wrapLength);
+
+        centerText.w = textSurface -> w, centerText.h = textSurface -> h;
         centerText.x = center.x + (center.w - centerText.w) / 2;
         centerText.y = center.y + (center.h - centerText.h) / 2;
     }
 
-    void SetText(const string& msg) final {
+    void SetText(const string& msg) {
         text = msg;
     }
 
-    void SetColor(const SDL_Color& RimColor, const SDL_Color& InnerColor, const SDL_Color& TextColor, const SDL_Color& FlashColor) final {
+    void SetColor(const SDL_Color& RimColor, const SDL_Color& InnerColor, const SDL_Color& TextColor, const SDL_Color& FlashColor) {
         rimColor = RimColor; centerColor = InnerColor; textColor = TextColor; flashColor = FlashColor;
+    }
+
+    void SetFont(TTF_Font* const target) {
+        TextFont = target;
     }
 
     bool HandleEvent(const SDL_Event* event) final {
@@ -58,7 +64,7 @@ public:
         if (textTexture) SDL_DestroyTexture(textTexture);
     }
 
-    void DisplayAsset() final {
+    void DisplayAsset() override {
         if (textSurface) {
             SDL_FreeSurface(textSurface);
             textSurface = nullptr;
@@ -70,9 +76,9 @@ public:
         if (inFlash == 1) {
             /// 3 ticks per sec, flashes for 1 sec
             if ((flashFrameCounter / 10) % 2 == 0)
-                textSurface = TTF_RenderText_Solid_Wrapped(gFont, text.c_str(), flashColor, wrapLength);
+                textSurface = TTF_RenderText_Solid_Wrapped(TextFont, text.c_str(), flashColor, wrapLength);
             else
-                textSurface = TTF_RenderText_Solid_Wrapped(gFont, text.c_str(), textColor, wrapLength);
+                textSurface = TTF_RenderText_Solid_Wrapped(TextFont, text.c_str(), textColor, wrapLength);
 
             textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
 
@@ -84,7 +90,7 @@ public:
         }
         else {
             flashFrameCounter = 0;
-            textSurface = TTF_RenderText_Solid_Wrapped(gFont, text.c_str(), textColor, wrapLength);
+            textSurface = TTF_RenderText_Solid_Wrapped(TextFont, text.c_str(), textColor, wrapLength);
             textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
         }
 
@@ -120,25 +126,35 @@ protected:
     bool* dependencies = nullptr;
     int flashFrameCounter = 0, wrapLength = 0;
     function<bool()> FlashEndAction;
+
+    TTF_Font* TextFont = nullptr;
 };
 
 class TextBox: public EventReceiver {
 public:
+    void RenderText() {
+        if (textSurface) SDL_FreeSurface(textSurface);
+        if (textTexture) SDL_DestroyTexture(textTexture);
+
+        textSurface = TTF_RenderText_Solid_Wrapped(TextFont, text.c_str(), textColor, wrapLength);
+        textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+
+        centerText.w = textSurface -> w, centerText.h = textSurface -> h;
+    }
+
     TextBox(const string& msg, const SDL_Rect& rect, const int& rimWidth, bool* displayed = nullptr, bool* dependencies = nullptr,
             bool* scrFlashCheck = nullptr, int WrapLength = 0)
-            : text(msg), rim(rect), rimColor(white), centerColor(black), textColor(white), dependencies(dependencies),
+            : text(msg), TextFont(gFont), rim(rect), rimColor(white), centerColor(black), textColor(white), dependencies(dependencies),
             displayed(displayed), ButtonFlashing(scrFlashCheck), wrapLength(WrapLength) {
         center = rim;
         center.x += rimWidth; center.y += rimWidth;
         center.h -= 2 * rimWidth; center.w -= 2 * rimWidth;
 
-        TTF_SizeText(gFont, text.c_str(), &centerText.w, &centerText.h);
+        RenderText();
 
+        centerText.w = textSurface -> w, centerText.h = textSurface -> h;
         centerText.x = center.x + (center.w - centerText.w) / 2;
         centerText.y = center.y + (center.h - centerText.h) / 2;
-
-        textSurface = TTF_RenderText_Solid_Wrapped(gFont, text.c_str(), textColor, wrapLength);
-        textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
     }
 
     ~TextBox() {
@@ -146,47 +162,38 @@ public:
         if (textTexture) SDL_DestroyTexture(textTexture);
     }
 
-    void SetText(const string& msg) final {
+    void SetText(const string& msg) {
         text = msg;
-
-        if (textSurface) SDL_FreeSurface(textSurface);
-        if (textTexture) SDL_DestroyTexture(textTexture);
-
-        textSurface = TTF_RenderText_Solid_Wrapped(gFont, text.c_str(), textColor, wrapLength);
-        textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+        RenderText();
     }
 
-    void SetColor(const SDL_Color& RimColor, const SDL_Color& InnerColor, const SDL_Color& TextColor) final {
+    void SetColor(const SDL_Color& RimColor, const SDL_Color& InnerColor, const SDL_Color& TextColor) {
         rimColor = RimColor; centerColor = InnerColor; textColor = TextColor;
-
-        if (textSurface) SDL_FreeSurface(textSurface);
-        if (textTexture) SDL_DestroyTexture(textTexture);
-
-        textSurface = TTF_RenderText_Solid_Wrapped(gFont, text.c_str(), textColor, wrapLength);
-        textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+        RenderText();
     }
 
-    void SetPosition(const SDL_Rect* pos = nullptr, int dx = -1, int dy = -1) final {
+    void SetPosition(const SDL_Rect* pos = nullptr, int dx = -1, int dy = -1) {
         if (pos) {
             int rimWidth = center.x - rim.x;
-            rim = *pos;
+            rim = center = *pos;
             center.x += rimWidth; center.y += rimWidth;
             center.h -= 2 * rimWidth; center.w -= 2 * rimWidth;
         }
-        if (!~dx && !~dy) {
-            centerText.x = center.x + (center.w - centerText.w) / 2;
-            centerText.y = center.y + (center.h - centerText.h) / 2;
-        }
-        else {
-            centerText.x = center.x + dx;
-            centerText.y = center.y + dy;
-        }
+        if (!~dx) centerText.x = center.x + (center.w - centerText.w) / 2;
+        else centerText.x = center.x + dx;
+        if (!~dy) centerText.y = center.y + (center.h - centerText.h) / 2;
+        else centerText.y = center.y + dy;
 
-        if (textSurface) SDL_FreeSurface(textSurface);
-        if (textTexture) SDL_DestroyTexture(textTexture);
+        RenderText();
+    }
 
-        textSurface = TTF_RenderText_Solid_Wrapped(gFont, text.c_str(), textColor, wrapLength);
-        textTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+    void SetFont(TTF_Font* const target) {
+        TextFont = target;
+        RenderText();
+
+        centerText.w = textSurface -> w, centerText.h = textSurface -> h;
+        centerText.x = center.x + (center.w - centerText.w) / 2;
+        centerText.y = center.y + (center.h - centerText.h) / 2;
     }
 
     bool HandleEvent(const SDL_Event* event) final {
@@ -203,8 +210,10 @@ public:
 		return false;
     }
 
-    void DisplayAsset() final {
+    void DisplayAsset() override {
         if (displayed != nullptr && !*displayed) return;
+        // RenderText();
+
         /// draw outer rectangle
         SDL_SetRenderDrawColor(gRenderer, rimColor.r, rimColor.g, rimColor.b, rimColor.a);
         SDL_RenderFillRect(gRenderer, &rim);
@@ -230,6 +239,7 @@ protected:
     SDL_Color rimColor, centerColor, textColor;
     SDL_Surface* textSurface = nullptr;
     SDL_Texture* textTexture = nullptr;
+    TTF_Font* TextFont = nullptr;
     string text = "";
     bool *displayed = nullptr, *dependencies = nullptr, *ButtonFlashing = nullptr;
     bool isHovered = 0;

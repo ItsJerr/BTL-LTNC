@@ -1,7 +1,12 @@
+// this is blatantly disregarding any normal coding conventions
+// just doing this because it makes my job a lot shorter
+// will look to fix this if i have time
+
 #ifndef GAMEVAR_H
 #define GAMEVAR_H
 
 #include <iostream>
+#include <array>
 using namespace std;
 
 const int CLASSICMODE = 100;
@@ -13,43 +18,52 @@ public:
     int SaveFileIndex = 0;
 
     /// Player stats
-    int PlayerLevel, PlayerEXP, CoinBalance;
-    /// Every stat increases by 2% per level, max is 50
-    bool MainGameCompleted, GunBought;
-    int HPUpgradeLevel; /// Increases max HP by 5% each level, max is 50
-    int AttackUpgradeLevel; /// Increases all attack damage by 5% each level, max is 50
-    int GunUpgradeLevel; /// Increases gun damage by 30% each level, max is 10
-    int ManaUpgradeLevel; /// Increases max MP by 5% each level, max is 50
-    int AmmoUpgradeLevel; /// Increases initial ammo and max ammo by 30% each level, max is 5
-    int MagicResistanceUpgradeLevel; /// Increases resistance to enemy magic attack by 5% each level, max is 50;
-    int ArmorUpgradeLevel; /// Increases armor effectiveness by 50% per level, max is 5
+    int PlayerLevel = 0, PlayerEXP = 0, CoinBalance = 0;
+    bool MainGameCompleted = 0;
 
-    float HPModifier, DMGModifier, GunDMGModifier, ManaModifier, AmmoModifier, MagicResModifier, ArmorModifier;
+    /// Purchasable upgrades
+    int AttackUpgradeLevel = 0; /// Increases all attack damage by 2% each level, max is 20
+    int CritUpgradeLevel = 0; /// Increases crit chance by 1% each level, max is 20
+    int DefenseUpgradeLevel = 0; /// Reduces damage taken by 0.5% each level, max is 20
+    int EvasionUpgradeLevel = 0; /// Increases evasion chance by 1% each level, max is 20
+    int ArmorUpgradeLevel = 0; /// Increases armor effectiveness by 50% per level, max is 5
+    int LuckUpgradeLevel = 0; /// Increases player luck for loot drops, monster spawns, etc... Works as a direct addition to randomly rolled values.
+    int InventoryUpgradeLevel = 0; /// Increases the number of slots in the inventory, max is 5. 20 - 40 - 60 - 80 - 100 - 200
+
+    float AttackModifier, CritChance, DefenseModifier, EvasionChance, GunAttackModifier, ArmorModifier;
 
     /// Dungeon info
     bool InDungeon;
-    int DungeonMode, DungeonLevel;
-    int EnemyHPModifier; /// +2 HP for every monster each 2 level
-    float EnemyDamageModifier; /// Increases by 5% every dungeon level
+    int DungeonMode, DungeonLevel, TurnCount;
 
+    float CurrentHP, MaxHP, CurrentMP, MaxMP;
+    // todo: include player status and inventory in here
+
+    // todo: remove this, calculate this in BonusStat in Actor instead
     void CalculateModifiers() {
-        HPModifier = 1.0 + (0.05 * HPUpgradeLevel) + (0.02 * PlayerLevel);
-        DMGModifier = 1.0 + (0.05 * AttackUpgradeLevel) + (0.02 * PlayerLevel);
-        GunDMGModifier = 1.0 + (0.3 * GunUpgradeLevel) + (0.02 * PlayerLevel);
-        ManaModifier = 1.0 + (0.05 * ManaUpgradeLevel) + (0.02 * PlayerLevel);
-        AmmoModifier = 1.0 + (0.3 * AmmoUpgradeLevel) + (0.02 * PlayerLevel);
+        AttackModifier = 1.0 + (0.05 * AttackUpgradeLevel) + (0.02 * PlayerLevel);
+        CritChance = 0.005 * CritUpgradeLevel + 0.002 * PlayerLevel;
+        DefenseModifier = 1.0 - (0.005 * DefenseUpgradeLevel) + 0.002 * PlayerLevel;
+        EvasionChance = 0.005 * EvasionUpgradeLevel + 0.002 * PlayerLevel;
         ArmorModifier = 1.0 + (0.5 * ArmorUpgradeLevel) + (0.02 * PlayerLevel);
-        MagicResModifier = 1.0 + (0.05 * MagicResistanceUpgradeLevel) + (0.02 * PlayerLevel);
-        EnemyHPModifier = (DungeonLevel - 1) / 2;
-        EnemyDamageModifier = 1.0 + (0.05 * DungeonLevel) / 2;
     }
 
-    void Wipe() { /// for the love of god, dont use this anywhere else other than creating a new character. PLEASE NO
-        GameDataLoaded = 1;
-        PlayerLevel = PlayerEXP = CoinBalance = MainGameCompleted = GunBought = HPUpgradeLevel = AttackUpgradeLevel = GunUpgradeLevel
-        = ManaUpgradeLevel = AmmoUpgradeLevel = MagicResistanceUpgradeLevel = ArmorUpgradeLevel = InDungeon = DungeonMode
-        = DungeonLevel = 0;
+    int GetInventoryCapacity() {
+        return array<int, 6>{20, 40, 60, 80, 100, 200}[InventoryUpgradeLevel];
+    }
 
+    void ClearPlayerStats() {
+        PlayerLevel = PlayerEXP = CoinBalance = MainGameCompleted = AttackUpgradeLevel = CritUpgradeLevel = DefenseUpgradeLevel = EvasionUpgradeLevel = ArmorUpgradeLevel = LuckUpgradeLevel = InventoryUpgradeLevel = 0;
+    }
+
+    void ClearDungeonStats() {
+        InDungeon = DungeonMode = DungeonLevel = CurrentHP = CurrentMP = 0;
+    }
+
+    void Wipe() {
+        GameDataLoaded = 1;
+        ClearPlayerStats();
+        ClearDungeonStats();
         CalculateModifiers();
     }
 };

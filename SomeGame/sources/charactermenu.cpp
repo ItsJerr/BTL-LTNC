@@ -1,12 +1,13 @@
 #include "charactermenu.h"
 #include "globals.h"
+#include "engine.h"
 
 bool PlayClassicClickAction() {
-    GameEngine -> gGameData -> InDungeon = 1;
-    GameEngine -> gGameData -> DungeonMode = CLASSICMODE;
-    GameEngine -> gGameData -> DungeonLevel = 1;
+    gEngine -> gGameData -> InDungeon = 1;
+    gEngine -> gGameData -> DungeonMode = CLASSICMODE;
+    gEngine -> gGameData -> DungeonLevel = 1;
 
-    GameEngine -> gGameData -> CalculateModifiers();
+    gEngine -> gGameData -> CalculateModifiers();
 
     SDL_Event tmp; SDL_zero(tmp);
     tmp.type = ChangeModeEventID;
@@ -17,11 +18,11 @@ bool PlayClassicClickAction() {
 }
 
 bool PlayEndlessClickAction() {
-    GameEngine -> gGameData -> InDungeon = 1;
-    GameEngine -> gGameData -> DungeonMode = ENDLESSMODE;
-    GameEngine -> gGameData -> DungeonLevel = 1;
+    gEngine -> gGameData -> InDungeon = 1;
+    gEngine -> gGameData -> DungeonMode = ENDLESSMODE;
+    gEngine -> gGameData -> DungeonLevel = 1;
 
-    GameEngine -> gGameData -> CalculateModifiers();
+    gEngine -> gGameData -> CalculateModifiers();
 
     SDL_Event tmp; SDL_zero(tmp);
     tmp.type = ChangeModeEventID;
@@ -42,6 +43,8 @@ bool ShopClickAction() {
 }
 
 bool MainMenuClickAction() {
+    gEngine -> gGameData -> GameDataLoaded = 0;
+
     SDL_Event tmp; SDL_zero(tmp);
     tmp.type = ChangeModeEventID;
     tmp.user.data1 = new int(MAINMENUID);
@@ -51,7 +54,7 @@ bool MainMenuClickAction() {
 }
 
 CharacterMenuLayer::CharacterMenuLayer() {
-    if (!GameEngine -> gGameData -> GameDataLoaded) {
+    if (!gEngine -> gGameData -> GameDataLoaded) {
         cerr << "Error: Entering character menu without a character properly loaded";
         assert(false);
     }
@@ -61,14 +64,14 @@ CharacterMenuLayer::CharacterMenuLayer() {
     Buttons[0] = new Button("play classic", {600, 300, 360, 75}, 3, PlayClassicClickAction, &DisplayControl[0], &DisplayControl[1]);
     ButtonDescriptions[0] = new TextBox("begin adventure", {-10, 830, 1570, 75}, 5, &DisplayControl[1], nullptr, &DisplayControl[0]);
 
-    if (GameEngine -> gGameData -> MainGameCompleted) {
+    if (gEngine -> gGameData -> MainGameCompleted) {
         Buttons[1] = new Button("play endless", {600, 381, 360, 75}, 3, PlayEndlessClickAction, &DisplayControl[0],
                                 &DisplayControl[2]);
         ButtonDescriptions[1] = new TextBox("begin adventure", {-10, 830, 1570, 75}, 3, &DisplayControl[2]);
     }
     else {
         Buttons[1] = new TextBox("play endless", {600, 381, 360, 75}, 3, nullptr, &DisplayControl[2]);
-        Buttons[1] -> SetColor(white, black, offwhite);
+        dynamic_cast<TextBox*>(Buttons[1]) -> SetColor(white, black, offwhite);
         ButtonDescriptions[1] = new TextBox("unlocks after completing classic mode once", {-10, 830, 1570, 75}, 3,
                                             &DisplayControl[2], nullptr, &DisplayControl[0]);
     }
