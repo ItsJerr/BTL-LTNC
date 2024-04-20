@@ -11,5 +11,4 @@ BTL Lập trình nâng cao INT2215 51
 * Các lý do bảo vệ
 1. Game có thuật toán nằm ngoài chương trình đã học(Thuật toán Prim hỗ trợ xây dựng map cho mỗi màn chơi).
 2. Game có đồ họa đa dạng, riêng biệt cho rất nhiều nhân vật, vật phẩm và trang bị.
-3. Game có nhạc nền phù hợp với bối cảnh trò chơi.
-4. Game có nhiều tính năng để người chơi tương tác với môi trường trong game.  
+3. Game có nhiều tính năng để người chơi tương tác với môi trường trong game.  
