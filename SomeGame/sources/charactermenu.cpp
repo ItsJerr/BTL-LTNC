@@ -70,14 +70,17 @@ CharacterMenuLayer::CharacterMenuLayer() {
                                             &DisplayControl[2], nullptr, &DisplayControl[0]);
     }
 
-    Buttons[2] = new Button("shop", {600, 462, 360, 75}, 3, ShopClickAction, &DisplayControl[0], &DisplayControl[3]);
-    ButtonDescriptions[2] = new TextBox("enter the shop", {-10, 830, 1570, 75}, 3, &DisplayControl[3], nullptr, &DisplayControl[0]);
+    // {600, 462, 360, 75}
 
-    Buttons[3] = new Button("main menu", {600, 543, 360, 75}, 3, MainMenuClickAction, &DisplayControl[0], &DisplayControl[4]);
-    ButtonDescriptions[3] = new TextBox("back to main menu", {-10, 830, 1570, 75}, 3, &DisplayControl[4], nullptr,
+    Buttons[2] = new Button("main menu", {600, 462, 360, 75}, 3, MainMenuClickAction, &DisplayControl[0], &DisplayControl[4]);
+    ButtonDescriptions[2] = new TextBox("back to main menu", {-10, 830, 1570, 75}, 3, &DisplayControl[4], nullptr,
                                         &DisplayControl[0]);
 
-    for (int i = 0; i < 4; ++i) {
+//    Buttons[3] = new Button("main menu", {600, 543, 360, 75}, 3, MainMenuClickAction, &DisplayControl[0], &DisplayControl[4]);
+//    ButtonDescriptions[3] = new TextBox("back to main menu", {-10, 830, 1570, 75}, 3, &DisplayControl[4], nullptr,
+//                                        &DisplayControl[0]);
+
+    for (int i = 0; i < 3; ++i) {
         insiders.push_back(Buttons[i]);
         insiders.push_back(ButtonDescriptions[i]);
     }

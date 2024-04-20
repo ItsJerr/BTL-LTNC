@@ -87,13 +87,18 @@ void PlayerAI::update(Actor* owner, const SDL_Event* event) {
                 gEngine -> StatPanel -> AddMessage("Congratulations, you completed the game!");
                 gEngine -> StatPanel -> AddMessage("Press (Enter) to continue...");
                 gEngine -> GameStatus = Engine::Dead;
+
                 gEngine -> comp = 1;
+
+                for (Actor* actor : owner -> container -> inventory) delete actor;
+                owner -> container -> inventory.clear();
                 gEngine -> EngineSaveGame();
             }
             else {
                 gEngine -> StatPanel -> AddMessage("You take a moment to rest, and recover your strength.");
                 gEngine -> Player -> combat -> heal(gEngine -> Player -> combat -> MaxHP / 2);
                 gEngine -> StatPanel -> AddMessage("After a rare moment of peace, you descend deeper into the heart of the dungeon...");
+                ++gEngine -> Floor;
 
                 gEngine -> EngineSaveGame();
                 gEngine -> CreateLevel();

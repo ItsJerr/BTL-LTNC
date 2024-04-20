@@ -51,7 +51,7 @@ void LoadGame(const int& fileIndex, GameData* dataLoc) {
         "MaxHP", "AttackUpgradeLevel", "CritUpgradeLevel",
         "DefenseUpgradeLevel", "EvasionUpgradeLevel", "InventoryUpgradeLevel",
         "InDungeon", "DungeonMode", "DungeonLevel", "TurnCount",
-        "CurrentHP", "InventorySize", "weapon", "armor"
+        "InventorySize", "CurrentHP", "weapon", "armor"
     };
 
     for (size_t i = 0; i < variableNames.size(); ++i) {
@@ -72,7 +72,7 @@ void LoadGame(const int& fileIndex, GameData* dataLoc) {
     }
 
     for (int i = 0; i < dataLoc -> InventorySize; ++i) {
-        string s; int t; cin >> s >> t;
+        string s; int t; loadFileStream >> s >> t;
         dataLoc -> inv.emplace_back(s, t);
     }
 
@@ -116,8 +116,8 @@ void SaveGame(const GameData* dataLoc) {
     saveFileStream << "DungeonMode " << dataLoc -> DungeonMode << endl;
     saveFileStream << "DungeonLevel " << dataLoc -> DungeonLevel << endl;
     saveFileStream << "TurnCount " << dataLoc -> TurnCount << endl;
-    saveFileStream << "CurrentHP " << dataLoc -> CurrentHP << endl;
     saveFileStream << "InventorySize " << dataLoc -> inv.size() << endl;
+    saveFileStream << "CurrentHP " << dataLoc -> CurrentHP << endl;
     saveFileStream << "weapon " << dataLoc -> weapon << endl;
     saveFileStream << "armor " << dataLoc -> armor << endl;
 

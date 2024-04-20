@@ -35,7 +35,7 @@ LoadCharacterLayer::LoadCharacterLayer() {
 
                 SDL_Event tmp; SDL_zero(tmp);
                 tmp.type = ChangeModeEventID;
-                tmp.user.data1 = new int(CHARACTERMENUID);
+                tmp.user.data1 = new int(gEngine -> gGameData -> InDungeon ? INGAMEID : CHARACTERMENUID);
                 SDL_PushEvent(&tmp);
 
                 return 0;
