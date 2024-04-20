@@ -27,15 +27,15 @@ RightPanel::RightPanel() {
     Experience -> SetColor(transparent, transparent, SDL_Color{255, 255, 255, 200});
     Experience -> SetPosition(nullptr, 0, -1);
 
-    Health = new TextBox("Health: ", {1240, 70, 0, 24}, 0);
+    Balance = new TextBox("Balance: ", {1240, 70, 0, 24}, 0);
+    Balance -> SetFont(gameFont);
+    Balance -> SetColor(transparent, transparent, SDL_Color{255, 255, 255, 200});
+    Balance -> SetPosition(nullptr, 0, -1);
+
+    Health = new TextBox("Health: ", {1240, 95, 0, 24}, 0);
     Health -> SetFont(gameFont);
     Health -> SetColor(transparent, transparent, SDL_Color{255, 255, 255, 200});
     Health -> SetPosition(nullptr, 0, -1);
-
-    Mana = new TextBox("Mana: ", {1240, 95, 0, 24}, 0);
-    Mana -> SetFont(gameFont);
-    Mana -> SetColor(transparent, transparent, SDL_Color{255, 255, 255, 200});
-    Mana -> SetPosition(nullptr, 0, -1);
 
     Floor = new TextBox("Floor: ", {1240, 120, 0, 24}, 0);
     Floor -> SetFont(gameFont);
@@ -62,8 +62,8 @@ RightPanel::~RightPanel() {
     for (TextBox* asset : ConstAssets) delete asset;
     delete Level;
     delete Experience;
+    delete Balance;
     delete Health;
-    delete Mana;
     delete Floor;
     delete Turn;
     delete Weapon;
@@ -76,7 +76,11 @@ void RightPanel::Display() {
     for (TextBox* asset : ConstAssets) asset -> DisplayAsset();
 
     // remaking strings
+    Level -> SetText("Level: " + to_string(static_cast<PlayerAI*>(gEngine -> Player -> ai) -> xpLevel));
+    Experience -> SetText("Experience: " + to_string(static_cast<PlayerAI*>(gEngine -> Player -> ai) -> currentXP) + "/" + to_string(static_cast<PlayerAI*>(gEngine -> Player -> ai) -> getNextLevelXp()));
+    Balance -> SetText("Balance: " + to_string(gEngine -> Player -> balance));
     Health -> SetText("Health: " + to_string(gEngine -> Player -> combat -> HP) + "/" + to_string(gEngine -> Player -> combat -> MaxHP));
+    Floor -> SetText("Floor: " + to_string(gEngine -> Floor));
     Turn -> SetText("Turn: " + to_string(gEngine -> Turn));
     if (gEngine -> Player -> weapon) Weapon -> SetText("Weapon: " + gEngine -> Player -> weapon -> name);
     else Weapon -> SetText("Weapon: none");
@@ -86,8 +90,8 @@ void RightPanel::Display() {
     // stats
     Level -> DisplayAsset();
     Experience -> DisplayAsset();
+    Balance -> DisplayAsset();
     Health -> DisplayAsset();
-    Mana -> DisplayAsset();
     Floor -> DisplayAsset();
     Turn -> DisplayAsset();
     Weapon -> DisplayAsset();

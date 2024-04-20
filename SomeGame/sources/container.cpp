@@ -15,7 +15,4 @@ bool Container::add(Actor* actor) {
 void Container::remove(Actor* actor) {
     auto it = find(inventory.begin(), inventory.end(), actor);
     if (it != inventory.end()) inventory.erase(it);
-    else {
-        cerr << "error: cannot find " << actor -> name << " in inventory.";
-    }
 }

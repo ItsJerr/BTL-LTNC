@@ -38,35 +38,26 @@ void LoadGame(const int& fileIndex, GameData* dataLoc) {
     //{ Define variables to load from the file
                                // Player data
     vector<void*> variables = {&dataLoc -> PlayerLevel, &dataLoc -> PlayerEXP, &dataLoc -> CoinBalance, &dataLoc -> MainGameCompleted,
-                               &dataLoc -> AttackUpgradeLevel, &dataLoc -> CritUpgradeLevel,
-                               &dataLoc -> DefenseUpgradeLevel, &dataLoc -> EvasionUpgradeLevel,
-                               &dataLoc -> ArmorUpgradeLevel, &dataLoc -> LuckUpgradeLevel, &dataLoc -> InventoryUpgradeLevel,
+                               &dataLoc -> MaxHP, &dataLoc -> AttackUpgradeLevel, &dataLoc -> CritUpgradeLevel,
+                               &dataLoc -> DefenseUpgradeLevel, &dataLoc -> EvasionUpgradeLevel, &dataLoc -> InventoryUpgradeLevel,
                                // Dungeon data
-                               &dataLoc -> InDungeon, &dataLoc -> DungeonMode, &dataLoc -> DungeonLevel,
-                               &dataLoc -> CurrentHP, &dataLoc -> CurrentMP};
+                               &dataLoc -> InDungeon, &dataLoc -> DungeonMode, &dataLoc -> DungeonLevel, &dataLoc -> TurnCount,
+                               &dataLoc -> InventorySize, &dataLoc -> CurrentHP, &dataLoc -> weapon, &dataLoc -> armor};
     //}
 
     // Load variables from file using the template function
     const vector<string> variableNames = {
         "PlayerLevel", "PlayerEXP", "CoinBalance", "MainGameCompleted",
-        "AttackUpgradeLevel", "CritUpgradeLevel",
-        "DefenseUpgradeLevel", "EvasionUpgradeLevel",
-        "ArmorUpgradeLevel", "LuckUpgradeLevel", "InventoryUpgradeLevel",
-        "InDungeon", "DungeonMode", "DungeonLevel",
-        "CurrentHP", "CurrentMP"
+        "MaxHP", "AttackUpgradeLevel", "CritUpgradeLevel",
+        "DefenseUpgradeLevel", "EvasionUpgradeLevel", "InventoryUpgradeLevel",
+        "InDungeon", "DungeonMode", "DungeonLevel", "TurnCount",
+        "CurrentHP", "InventorySize", "weapon", "armor"
     };
 
     for (size_t i = 0; i < variableNames.size(); ++i) {
         if (variableNames[i] == "InDungeon" || variableNames[i] == "MainGameCompleted") {
             // Load boolean variables
             if (!LoadVariableFromFile(loadFileStream, static_cast<bool*>(variables[i]), variableNames[i])) {
-                loadFileStream.close();
-                return;
-            }
-        }
-        else if (variableNames[i] == "CurrentHP" || variableNames[i] == "CurrentMP") {
-            // Load float variables
-            if (!LoadVariableFromFile(loadFileStream, static_cast<float*>(variables[i]), variableNames[i])) {
                 loadFileStream.close();
                 return;
             }
@@ -78,6 +69,11 @@ void LoadGame(const int& fileIndex, GameData* dataLoc) {
                 return;
             }
         }
+    }
+
+    for (int i = 0; i < dataLoc -> InventorySize; ++i) {
+        string s; int t; cin >> s >> t;
+        dataLoc -> inv.emplace_back(s, t);
     }
 
     loadFileStream.close();
@@ -110,18 +106,22 @@ void SaveGame(const GameData* dataLoc) {
     saveFileStream << "PlayerEXP " << dataLoc -> PlayerEXP << endl;
     saveFileStream << "CoinBalance " << dataLoc -> CoinBalance << endl;
     saveFileStream << "MainGameCompleted " << dataLoc -> MainGameCompleted << endl;
+    saveFileStream << "MaxHP " << dataLoc -> MaxHP << endl;
     saveFileStream << "AttackUpgradeLevel " << dataLoc -> AttackUpgradeLevel << endl;
     saveFileStream << "CritUpgradeLevel " << dataLoc -> CritUpgradeLevel << endl;
     saveFileStream << "DefenseUpgradeLevel " << dataLoc -> DefenseUpgradeLevel << endl;
     saveFileStream << "EvasionUpgradeLevel " << dataLoc -> EvasionUpgradeLevel << endl;
-    saveFileStream << "ArmorUpgradeLevel " << dataLoc -> ArmorUpgradeLevel << endl;
-    saveFileStream << "LuckUpgradeLevel " << dataLoc -> LuckUpgradeLevel << endl;
     saveFileStream << "InventoryUpgradeLevel " << dataLoc -> InventoryUpgradeLevel << endl;
     saveFileStream << "InDungeon " << dataLoc -> InDungeon << endl;
     saveFileStream << "DungeonMode " << dataLoc -> DungeonMode << endl;
     saveFileStream << "DungeonLevel " << dataLoc -> DungeonLevel << endl;
+    saveFileStream << "TurnCount " << dataLoc -> TurnCount << endl;
     saveFileStream << "CurrentHP " << dataLoc -> CurrentHP << endl;
-    saveFileStream << "CurrentMP " << dataLoc -> CurrentMP << endl;
+    saveFileStream << "InventorySize " << dataLoc -> inv.size() << endl;
+    saveFileStream << "weapon " << dataLoc -> weapon << endl;
+    saveFileStream << "armor " << dataLoc -> armor << endl;
+
+    for (auto i : dataLoc -> inv) saveFileStream << i.first << " " << i.second << endl;
     //}
 
     saveFileStream.close();
@@ -153,7 +153,7 @@ pair<bool, SDL_Texture*> PreviewSaveFile(const int& fileIndex) {
         string Description = "";
         Description += "Level: " + to_string(TempData -> PlayerLevel) + "\n";
 
-        Description += "Experience: " + to_string(TempData -> PlayerEXP) + "/\n";
+        Description += "Experience: " + to_string(TempData -> PlayerEXP) + "\n";
 
         Description += "Balance: " + to_string(TempData -> CoinBalance) + " coin" + ((TempData -> CoinBalance > 1) ? "s" : "") + "\n";
 
@@ -168,15 +168,9 @@ pair<bool, SDL_Texture*> PreviewSaveFile(const int& fileIndex) {
         while (stat.size() > 1 && (stat.back() == '0' || stat.back() == '.')) stat.pop_back();
         Description += "Damage taken -" + stat + "%\n";
 
-        cerr << TempData -> EvasionChance << endl;
-
         stat = to_string(100.0 * (TempData -> EvasionChance));
         while (stat.size() > 1 && (stat.back() == '0' || stat.back() == '.')) stat.pop_back();
         Description += "Evasion chance +" + stat + "%\n";
-
-        Description += "Armor Effectiveness +" + to_string((int)(100 * (TempData -> ArmorModifier - 1))) + "%\n";
-
-        Description += "Luck +" + to_string(TempData -> LuckUpgradeLevel) + "\n";
 
         Description += "Inventory Capacity: " + to_string(TempData -> GetInventoryCapacity()) + "\n";
 

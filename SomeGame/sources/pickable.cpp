@@ -7,7 +7,6 @@ bool Pickable::pick(Actor* owner, Actor* wearer) {
     if (wearer -> container && wearer -> container -> add(owner)) {
         auto it = find(gEngine -> actors.begin(), gEngine -> actors.end(), owner);
         if (it != gEngine -> actors.end()) gEngine -> actors.erase(it);
-        else cerr << "error: cannot find " << owner -> name << " in actors list.";
         return true;
     }
     return false;
@@ -26,33 +25,26 @@ bool Pickable::use(Actor* owner, Actor* wearer) {
 Gear::Gear(bool type, int value): type(type), amount(value) {};
 
 bool Gear::use(Actor* owner, Actor* wearer) {
-    cerr << "using1\n";
     if (wearer -> combat) {
         if (type == 0) { // weapon
-            cerr << "using2\n";
             if (wearer -> weapon) {
-                cerr << "using3\n";
-                if (wearer -> container) {
-                    cerr << "moved into inventory: " << wearer -> weapon -> name << endl;
+                if (wearer -> container)
                     wearer -> container -> inventory.push_back(wearer -> weapon); // move the current weapon into the inventory
-                }
             }
             wearer -> weapon = owner;
-            cerr << "using4\n";
         }
         else { // armor
-            cerr << "using2\n";
             if (wearer -> armor) {
-                if (wearer -> container) {
-                    cerr << "using3\n";
-                    cerr << "moved into inventory: " << wearer -> armor -> name << endl;
+                if (wearer -> container)
                     wearer -> container -> inventory.push_back(wearer -> armor); // move the current armor into the inventory
-                }
             }
             wearer -> armor = owner;
-            cerr << "using4\n";
         }
-        return Pickable::use(owner, wearer);
+        if (wearer -> container) {
+            wearer -> container -> remove(owner);
+            return true;
+        }
+        return false;
     }
     return false;
 }
@@ -173,4 +165,11 @@ bool Confuser::use(Actor* owner, Actor* wearer) {
 
     gEngine -> StatPanel -> AddMessage("There is no one here...");
     return false;
+}
+
+bool Coin::pick(Actor* owner, Actor* wearer) {
+    auto it = find(gEngine -> actors.begin(), gEngine -> actors.end(), owner);
+    if (it != gEngine -> actors.end()) gEngine -> actors.erase(it);
+    ++wearer -> balance;
+    return true;
 }

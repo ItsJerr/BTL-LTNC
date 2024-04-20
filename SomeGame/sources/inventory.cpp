@@ -3,7 +3,7 @@
 #include "engine.h"
 #include "globals.h"
 
-Inventory::Inventory(vector<Actor*>* inventory) : inventory(inventory), page(0), index(0) {
+Inventory::Inventory(Actor* owner) : owner(owner), page(0), index(0) {
     title = new TextBox("inventory", {372, 208, 1, 1}, 0);
     title -> SetFont(gameFont);
     title -> SetPosition(nullptr, 0, 0);
@@ -31,6 +31,7 @@ Inventory::~Inventory() {
     delete title;
     delete desc;
     for (int i = 0; i < IP; ++i) delete items[i];
+    delete pointer;
 }
 
 ItemBox::ItemBox(Actor* actor) : actor(actor) {
@@ -111,7 +112,6 @@ void ItemBox::HandleEvent(const SDL_Event* event, Inventory* owner) {
         case SDLK_z: {
             delete owner -> SelectionBox;
             owner -> SelectionBox = nullptr;
-            delete gEngine -> Overlay;
             gEngine -> Overlay = nullptr;
             ++gEngine -> Turn;
             assert(actor != nullptr);
@@ -138,7 +138,7 @@ void Inventory::HandleEvent(const SDL_Event* event) {
             break;
         }
         case SDLK_RIGHT: {
-            if (IP * (page + 1) < (*inventory).size()) {
+            if (IP * (page + 1) < owner -> container -> inventory.size()) {
                 ++page;
                 index = page * IP;
             }
@@ -149,16 +149,15 @@ void Inventory::HandleEvent(const SDL_Event* event) {
             break;
         }
         case SDLK_DOWN: {
-            if (index - page * IP < IP - 1 && index + 1 < (*inventory).size()) ++index;
+            if (index - page * IP < IP - 1 && index + 1 < owner -> container -> inventory.size()) ++index;
             break;
         }
         case SDLK_x: {
-            delete gEngine -> Overlay; // is this safe? idk
             gEngine -> Overlay = nullptr;
             break;
         }
         case SDLK_z: {
-            if (index < (*inventory).size()) SelectionBox = new ItemBox((*inventory)[index]);
+            if (index < owner -> container -> inventory.size()) SelectionBox = new ItemBox(owner -> container -> inventory[index]);
             break;
         }
     }
@@ -182,12 +181,12 @@ void Inventory::Display() {
 
     for (int i = 0; i < IP; ++i) {
         int id = page * IP + i;
-        if (id >= (*inventory).size()) break;
-        items[i] -> SetText((*inventory)[id] -> name);
+        if (id >= owner -> container -> inventory.size()) break;
+        items[i] -> SetText(owner -> container -> inventory[id] -> name);
         items[i] -> DisplayAsset();
     }
 
-    if (index < (*inventory).size()) {
+    if (index < owner -> container -> inventory.size()) {
         int px = index - page * IP;
         SDL_Rect pos = {(px < (IP / 2)) ? 373 : 600, 240 + 20 * (px % (IP / 2)), 1, 1};
         pointer -> SetPosition(&pos, 0, 0);

@@ -3,6 +3,11 @@
 #include "actor.h"
 #include "globals.h"
 
+int PlayerAI::getNextLevelXp() {
+    if (xpLevel == 20) return INT_MAX;
+    return 200 * pow(1.1, xpLevel);
+}
+
 bool PlayerAI::MoveOrAttack(Actor* owner, int x, int y) {
     if (gEngine -> Map -> IsWall(x, y)) return false;
     ++gEngine -> Turn;
@@ -28,20 +33,22 @@ bool PlayerAI::MoveOrAttack(Actor* owner, int x, int y) {
 }
 
 void PlayerAI::update(Actor* owner, const SDL_Event* event) {
-    cerr << "actors: " << endl;
-    for (Actor* actor : gEngine -> actors) {
-        assert(actor != nullptr);
-        cerr << actor -> name << " " << actor << endl;
-    }
-    cerr << "inventory: " << endl;
-    for (Actor* actor : gEngine -> Player -> container -> inventory) {
-        cerr << actor -> name << " " << actor << endl;
-        assert(actor != nullptr);
-    }
-
-    cerr << endl;
-
     if (owner -> combat -> isDead()) return;
+
+    int LevelUpXP = getNextLevelXp();
+    if (currentXP >= LevelUpXP) {
+        ++xpLevel;
+        currentXP -= LevelUpXP;
+        gEngine -> StatPanel -> AddMessage("You reached level " + to_string(xpLevel) + "! Your battle skills grew stronger!");
+
+        owner -> combat -> HP += 2;
+        owner -> combat -> MaxHP += 2;
+        owner -> combat -> attack += 0.5;
+        owner -> combat -> defense += 0.5;
+    }
+
+    owner -> CalcMods();
+
     int dx = 0, dy = 0;
     bool pick = 0, enter = 0;
     switch (event -> key.keysym.scancode) {
@@ -76,10 +83,21 @@ void PlayerAI::update(Actor* owner, const SDL_Event* event) {
     else if (enter) {
         ++gEngine -> Turn;
         if (owner -> x == gEngine -> Stairs -> x && owner -> y == gEngine -> Stairs -> y) {
-            gEngine -> StatPanel -> AddMessage("You take a moment to rest, and recover your strength.");
-            gEngine -> Player -> combat -> heal(gEngine -> Player -> combat -> MaxHP / 2);
-            gEngine -> StatPanel -> AddMessage("After a rare moment of peace, you descend deeper into the heart of the dungeon...");
-            gEngine -> CreateLevel();
+            if (gEngine -> Mode == CLASSICMODE && gEngine -> Floor == 19) {
+                gEngine -> StatPanel -> AddMessage("Congratulations, you completed the game!");
+                gEngine -> StatPanel -> AddMessage("Press (Enter) to continue...");
+                gEngine -> GameStatus = Engine::Dead;
+                gEngine -> comp = 1;
+                gEngine -> EngineSaveGame();
+            }
+            else {
+                gEngine -> StatPanel -> AddMessage("You take a moment to rest, and recover your strength.");
+                gEngine -> Player -> combat -> heal(gEngine -> Player -> combat -> MaxHP / 2);
+                gEngine -> StatPanel -> AddMessage("After a rare moment of peace, you descend deeper into the heart of the dungeon...");
+
+                gEngine -> EngineSaveGame();
+                gEngine -> CreateLevel();
+            }
         }
         else {
             gEngine -> GameStatus = Engine::NewTurn;

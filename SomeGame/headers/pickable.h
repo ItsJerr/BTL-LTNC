@@ -8,7 +8,7 @@ class Actor;
 
 class Pickable {
 public:
-    bool pick(Actor* owner, Actor* wearer);
+    virtual bool pick(Actor* owner, Actor* wearer);
     virtual bool use(Actor* owner, Actor* wearer);
 };
 
@@ -38,6 +38,12 @@ public:
 class Confuser: public Pickable {
 public:
     bool use(Actor* owner, Actor* wearer) override;
+};
+
+class Coin: public Pickable {
+public:
+    bool pick(Actor* owner, Actor* wearer) override;
+    bool use(Actor* owner, Actor* wearer) override {}
 };
 
 #endif // PICKABLE_H

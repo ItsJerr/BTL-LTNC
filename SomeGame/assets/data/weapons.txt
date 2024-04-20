@@ -1,0 +1,12 @@
+Knife 33 22 1 10 1
+Dagger 45 22 2 20 1
+Short Sword 44 22 3 30 1
+Saber 31 22 4 40 3
+Sword 26 22 5 50 4
+Bow 26 23 6 60 5
+Spear 39 22 6 60 5 
+Long Sword 27 22 7 70 10
+Axe 42 22 8 80 12
+Crossbow 30 23 10 100 15
+Hammer 36 22 10 100 15
+Heavy Axe 41 22 12 120 17

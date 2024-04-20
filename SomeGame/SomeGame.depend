@@ -57,9 +57,8 @@
 	"gamevar.h"
 	"button.h"
 
-1713410113 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\gamevar.h
-	<iostream>
-	<array>
+1713576076 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\gamevar.h
+	<bits/stdc++.h>
 
 1709493957 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\newgame.cpp
 	"headers/newgame.h"
@@ -493,11 +492,11 @@
 1709540926 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\newcharacter.cpp
 	"newcharacter.h"
 
-1713410141 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\savefile.cpp
+1713576422 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\savefile.cpp
 	"savefile.h"
 	<iostream>
 
-1713466034 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\main.cpp
+1713576713 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\main.cpp
 	<bits/stdc++.h>
 	"SDL.h"
 	"SDL_image.h"
@@ -532,7 +531,7 @@
 	"button.h"
 	"savefile.h"
 
-1712983834 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\charactersaveload.cpp
+1713576772 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\charactersaveload.cpp
 	"charactersaveload.h"
 	"engine.h"
 
@@ -544,7 +543,7 @@
 	"button.h"
 	"savefile.h"
 
-1713547252 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\engine.h
+1713575378 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\engine.h
 	<bits/stdc++.h>
 	"map.h"
 	"gamevar.h"
@@ -552,7 +551,7 @@
 	"layer.h"
 	"rightpanel.h"
 
-1712996560 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\charactermenu.cpp
+1713574285 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\charactermenu.cpp
 	"charactermenu.h"
 	"globals.h"
 	"engine.h"
@@ -568,65 +567,66 @@
 	"layer.h"
 	"button.h"
 
-1713540573 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\actor.cpp
+1713566963 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\actor.cpp
 	"actor.h"
 	"engine.h"
 	"map.h"
 
-1713540613 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\actor.h
+1713572325 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\actor.h
 	<bits/stdc++.h>
 	"combat.h"
 	"ai.h"
 	"pickable.h"
 	"container.h"
 
-1713548829 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\rightpanel.cpp
+1713566597 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\rightpanel.cpp
 	"rightpanel.h"
 	"engine.h"
 	"globals.h"
 
-1713440308 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\rightpanel.h
+1713566342 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\rightpanel.h
 	"layer.h"
 	"button.h"
 
-1712987925 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\gamelayer.h
+1713572145 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\gamelayer.h
 	"engine.h"
 	"layer.h"
 
-1713547006 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\map.h
+1713559138 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\map.h
 	<bits/stdc++.h>
 
-1713548348 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\map.cpp
+1713564973 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\map.cpp
 	"map.h"
 	"globals.h"
 	"engine.h"
 	"actor.h"
 
-1713549379 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\engine.cpp
+1713576587 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\engine.cpp
 	"engine.h"
 	"gamevar.h"
 	"rightpanel.h"
 	"map.h"
 	"actor.h"
 	"inventory.h"
+	"savefile.h"
 
 1713107995 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\destructible.h
 	<bits/stdc++.h>
 
-1713412881 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\combat.h
+1713572857 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\combat.h
 	<bits/stdc++.h>
 
-1713488725 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\ai.h
+1713564591 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\ai.h
 	<bits/stdc++.h>
 	"SDL.h"
 
-1713500878 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\ai.cpp
+1713575466 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\ai.cpp
 	"ai.h"
 	"engine.h"
 	"actor.h"
 	"globals.h"
 
-1713548192 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\combat.cpp
+1713575052 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\combat.cpp
 	"combat.h"
 	"actor.h"
 	"engine.h"
@@ -637,26 +637,26 @@
 1713427211 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\container.h
 	<bits/stdc++.h>
 
-1713548321 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\pickable.h
+1713563960 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\pickable.h
 	<bits/stdc++.h>
 
-1713548485 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\container.cpp
+1713553525 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\container.cpp
 	"container.h"
 	"actor.h"
 
-1713548990 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\pickable.cpp
+1713564260 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\pickable.cpp
 	"pickable.h"
 	"actor.h"
 	"globals.h"
 	"engine.h"
 
-1713549219 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\inventory.cpp
+1713554896 source:c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\sources\inventory.cpp
 	"inventory.h"
 	"actor.h"
 	"engine.h"
 	"globals.h"
 
-1713456350 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\inventory.h
+1713554828 c:\users\administrator\desktop\c++\uni\btl - ltnc\btl-ltnc\somegame\headers\inventory.h
 	<bits/stdc++.h>
 	"layer.h"
 	"button.h"

@@ -14,7 +14,7 @@ public:
     void HandleEvent(const SDL_Event* event) override {};
 private:
     vector<TextBox*> ConstAssets;
-    TextBox *Level, *Experience, *Health, *Mana, *Floor, *Turn, *Weapon, *Armor;
+    TextBox *Level, *Experience, *Balance, *Health, *Floor, *Turn, *Weapon, *Armor;
     deque<string> MessageList;
 };
 

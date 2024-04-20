@@ -2,7 +2,7 @@
 #include "actor.h"
 #include "engine.h"
 
-CombatStat::CombatStat(int maxHP, float attack, float defense): HP(maxHP), MaxHP(maxHP), attack(attack), defense(defense) {};
+CombatStat::CombatStat(int maxHP, float attack, float defense, int xp): HP(maxHP), MaxHP(maxHP), attack(attack), defense(defense), xp(xp) {};
 
 int CombatStat::heal(int amount) {
     amount = min(amount, MaxHP - HP);
@@ -10,13 +10,14 @@ int CombatStat::heal(int amount) {
     return amount;
 }
 
-void MonsterCombatStat::die(Actor* owner, const string& killer) {
-    if (killer != "Player") return;
-    gEngine -> StatPanel -> AddMessage("Player killed " + owner -> name + "!");
+void MonsterCombatStat::die(Actor* owner, Actor* killer) {
+    if (killer != gEngine -> Player) return;
+    gEngine -> StatPanel -> AddMessage(killer -> name + " killed " + owner -> name + "!");
 }
 
-void PlayerCombatStat::die(Actor* owner, const string& killer) {
-    gEngine -> StatPanel -> AddMessage("Player died! Killed by " + killer + ".");
+void PlayerCombatStat::die(Actor* owner, Actor* killer) {
+    gEngine -> StatPanel -> AddMessage("Player died! Killed by " + killer -> name + ".");
+    gEngine -> StatPanel -> AddMessage("Press (Enter) to continue...");
     gEngine -> GameStatus = Engine::Dead;
 }
 
@@ -24,14 +25,8 @@ void Actor::MeleeCombat(Actor* oppo) {
     float attack = combat -> attack;
     if (weapon) attack += static_cast<Gear*>(weapon -> pickable) -> amount;
 
-    cerr << "ok1\n";
     float defense = oppo -> combat -> defense;
-    if (oppo -> armor) {
-        cerr << "ok2\n";
-        assert(oppo -> armor -> pickable != nullptr);
-        defense += static_cast<Gear*>(oppo -> armor -> pickable) -> amount;
-    }
-    cerr << "ok3\n";
+    if (oppo -> armor) defense += static_cast<Gear*>(oppo -> armor -> pickable) -> amount;
 
     float damage;
 
@@ -66,6 +61,7 @@ void Actor::MeleeCombat(Actor* oppo) {
     oppo -> combat -> HP -= damage;
     if (oppo -> combat -> isDead()) {
         balance += oppo -> value;
-        oppo -> combat -> die(oppo, name);
+        if (name == "Player") static_cast<PlayerAI*>(ai) -> currentXP += oppo -> combat -> xp;
+        oppo -> combat -> die(oppo, this);
     }
 }

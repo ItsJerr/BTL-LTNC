@@ -38,8 +38,11 @@ public:
         if (ai) delete ai;
         if (container) delete container;
         if (pickable) delete pickable;
+        if (weapon) delete weapon;
+        if (armor) delete armor;
     }
 
+    void CalcMods();
     void MeleeCombat(Actor* oppo);
     void Display(int relx, int rely);
     void update(const SDL_Event* event = nullptr);

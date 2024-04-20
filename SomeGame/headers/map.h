@@ -11,9 +11,9 @@ struct Tile {
 
 class DungeonMap {
 public:
-    int CurrentScent = 20, mapx, mapy, roomcnt;
+    int CurrentScent = 20, mapx, mapy, roomcnt, level;
 
-    DungeonMap(int mapx, int mapy, int roomcnt, int HealerCount, int ScrollCount, int MonsterCount);
+    DungeonMap(int level, int mapx, int mapy, int roomcnt, int HealerCount, int ScrollCount, int MonsterCount);
     ~DungeonMap();
     pair<int, int> GetStart();
     pair<int, int> GetTarget();
@@ -37,6 +37,7 @@ private:
     bool CanPlace(int x, int y);
     void AddMonster(int x, int y);
     void AddHealer(int x, int y);
+    void AddScroll(int x, int y);
     void AddGear(int x, int y, bool type);
 };
 

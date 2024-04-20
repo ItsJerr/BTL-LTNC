@@ -13,6 +13,8 @@ public:
 
 class PlayerAI: public AI {
 public:
+    int xpLevel, currentXP;
+    int getNextLevelXp();
     void update(Actor* owner, const SDL_Event* event = nullptr) override;
 
 protected:

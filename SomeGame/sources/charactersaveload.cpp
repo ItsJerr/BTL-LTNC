@@ -31,6 +31,7 @@ LoadCharacterLayer::LoadCharacterLayer() {
         if (SaveFileExistance) {
             function<bool()> OnClickFunction = [this, i]() {
                 LoadGame(i + 1, gEngine -> gGameData);
+                gEngine -> EngineLoadGame();
 
                 SDL_Event tmp; SDL_zero(tmp);
                 tmp.type = ChangeModeEventID;
@@ -72,6 +73,7 @@ NewCharacterLayer::ConfirmationBox::ConfirmationBox(const int idx, NewCharacterL
         gEngine -> gGameData -> SaveFileIndex = idx;
         gEngine -> gGameData -> Wipe();
         SaveGame(gEngine -> gGameData);
+        gEngine -> EngineLoadGame();
 
         SDL_Event tmp; SDL_zero(tmp);
         tmp.type = ChangeModeEventID;

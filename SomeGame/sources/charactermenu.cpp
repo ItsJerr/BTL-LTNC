@@ -3,11 +3,8 @@
 #include "engine.h"
 
 bool PlayClassicClickAction() {
-    gEngine -> gGameData -> InDungeon = 1;
-    gEngine -> gGameData -> DungeonMode = CLASSICMODE;
-    gEngine -> gGameData -> DungeonLevel = 1;
-
-    gEngine -> gGameData -> CalculateModifiers();
+    gEngine -> Mode = CLASSICMODE;
+    gEngine -> Floor = 1;
 
     SDL_Event tmp; SDL_zero(tmp);
     tmp.type = ChangeModeEventID;
@@ -18,11 +15,8 @@ bool PlayClassicClickAction() {
 }
 
 bool PlayEndlessClickAction() {
-    gEngine -> gGameData -> InDungeon = 1;
-    gEngine -> gGameData -> DungeonMode = ENDLESSMODE;
-    gEngine -> gGameData -> DungeonLevel = 1;
-
-    gEngine -> gGameData -> CalculateModifiers();
+    gEngine -> Mode = ENDLESSMODE;
+    gEngine -> Floor = 1;
 
     SDL_Event tmp; SDL_zero(tmp);
     tmp.type = ChangeModeEventID;

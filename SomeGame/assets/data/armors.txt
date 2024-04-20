@@ -1,0 +1,3 @@
+Light Armor 32 24 5 50 1
+Chainmail 33 24 10 100 7 
+Heavy Armor 34 23 15 150 14

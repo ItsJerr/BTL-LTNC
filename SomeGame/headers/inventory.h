@@ -31,14 +31,14 @@ private:
 class Inventory: public Layer {
 public:
     ItemBox* SelectionBox = nullptr;
+    int page, index;
 
-    Inventory(vector<Actor*>* inventory);
+    Inventory(Actor* owner);
     ~Inventory();
     void HandleEvent(const SDL_Event* event) override;
     void Display() override;
 private:
-    vector<Actor*>* inventory;
-    int page, index;
+    Actor* owner;
 
     TextBox* title = nullptr;
     TextBox* desc = nullptr;

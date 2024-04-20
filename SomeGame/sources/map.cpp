@@ -26,60 +26,66 @@ int manhattan(pair<int, int> x, pair<int, int> y) {
     return abs(x.first - y.first) + abs(x.second - y.second);
 }
 
-// add monster at a certain coordinate. will rework later to port a list of monsters
 void DungeonMap::AddMonster(int x, int y) {
-    if (rnd(1, 100) < 80) {
-        gEngine -> actors.push_back(new Actor("Slime", x, y, 40, 11));
-        gEngine -> actors.back() -> combat = new MonsterCombatStat(15, 3, 2);
-        gEngine -> actors.back() -> ai = new MonsterAI();
+    int mx = 0;
+    while (mx < gEngine -> monsters.size()) {
+        if (gEngine -> monsters[mx].level <= level) ++mx;
+        else break;
     }
-    else {
-        gEngine -> actors.push_back(new Actor("Dragonling", x, y, 42, 11));
-        gEngine -> actors.back() -> combat = new MonsterCombatStat(15, 3, 4);
-        gEngine -> actors.back() -> ai = new MonsterAI();
-    }
+    int id = rnd(0, mx - 1);
+    gEngine -> actors.push_back(new Actor(gEngine -> monsters[id].name, x, y, gEngine -> monsters[id].sx, gEngine -> monsters[id].sy));
+    gEngine -> actors.back() -> combat = new MonsterCombatStat(gEngine -> monsters[id].hp, gEngine -> monsters[id].attack, gEngine -> monsters[id].defense, gEngine -> monsters[id].xp);
+    gEngine -> actors.back() -> ai = new MonsterAI();
 }
 
-// add item at a certain coordinate. will rework later to port a list of items
 void DungeonMap::AddHealer(int x, int y) {
     int id = rnd(0, gEngine -> potions.size() - 1);
-    cerr << id << endl;
     gEngine -> actors.push_back(new Actor(gEngine -> potions[id].name, x, y, gEngine -> potions[id].sx, gEngine -> potions[id].sy));
     gEngine -> actors.back() -> blocks = 0;
     gEngine -> actors.back() -> pickable = new Healer(gEngine -> potions[id].amount, gEngine -> potions[id].cost);
 }
 
-// add gear at a certain coordinate. will rework later to port a list of gears
 void DungeonMap::AddGear(int x, int y, bool type) {
-    int roll = rnd(1, 100);
     if (type == 0) { // weapon
-        if (roll < 50) {
-            gEngine -> actors.push_back(new Actor("Bow", x, y, 26, 23));
-            gEngine -> actors.back() -> blocks = 0;
-            gEngine -> actors.back() -> pickable = new Gear(0, 3);
+        int mx = 0;
+        while (mx < gEngine -> weapons.size()) {
+            if (gEngine -> weapons[mx].level <= level) ++mx;
+            else break;
         }
-        else {
-            gEngine -> actors.push_back(new Actor("Axe", x, y, 42, 22));
-            gEngine -> actors.back() -> blocks = 0;
-            gEngine -> actors.back() -> pickable = new Gear(0, 4);
-        }
+        int id = rnd(0, mx - 1);
+        gEngine -> actors.push_back(new Actor(gEngine -> weapons[id].name, x, y, gEngine -> weapons[id].sx, gEngine -> weapons[id].sy));
+        gEngine -> actors.back() -> blocks = 0;
+        gEngine -> actors.back() -> pickable = new Gear(0, gEngine -> weapons[id].cost);
     }
     else {
-        if (roll < 50) {
-            gEngine -> actors.push_back(new Actor("Light Armor", x, y, 32, 24));
-            gEngine -> actors.back() -> blocks = 0;
-            gEngine -> actors.back() -> pickable = new Gear(1, 3);
+        int mx = 0;
+        while (mx < gEngine -> armors.size()) {
+            if (gEngine -> armors[mx].level <= level) ++mx;
+            else break;
         }
-        else {
-            gEngine -> actors.push_back(new Actor("Chainmail", x, y, 33, 24));
-            gEngine -> actors.back() -> blocks = 0;
-            gEngine -> actors.back() -> pickable = new Gear(1, 4);
-        }
+        int id = rnd(0, mx - 1);
+        gEngine -> actors.push_back(new Actor(gEngine -> armors[id].name, x, y, gEngine -> armors[id].sx, gEngine -> armors[id].sy));
+        gEngine -> actors.back() -> blocks = 0;
+        gEngine -> actors.back() -> pickable = new Gear(1, gEngine -> armors[id].cost);
     }
 }
 
-// generate maps using a primitive "digging" method: dig non-intersecting rooms in an originally all-wall map
-DungeonMap::DungeonMap(int mapx, int mapy, int roomcnt, int HealerCount, int ScrollCount, int MonsterCount): mapx(mapx), mapy(mapy), roomcnt(roomcnt) {
+void DungeonMap::AddScroll(int x, int y) {
+    int roll = rnd(1, 100);
+    if (roll < 50) {
+        gEngine -> actors.push_back(new Actor("Scroll of Fireball", x, y, 1, 34));
+        gEngine -> actors.back() -> blocks = 0;
+        gEngine -> actors.back() -> pickable = new Fireball();
+    }
+    else {
+        gEngine -> actors.push_back(new Actor("Scroll of Confusion", x, y, 30, 25));
+        gEngine -> actors.back() -> blocks = 0;
+        gEngine -> actors.back() -> pickable = new Confuser();
+    }
+}
+
+// generate maps using a primitive "digging" method: dig non-intersecting rooms in an originally all-walls map
+DungeonMap::DungeonMap(int level, int mapx, int mapy, int roomcnt, int HealerCount, int ScrollCount, int MonsterCount): level(level), mapx(mapx), mapy(mapy), roomcnt(roomcnt) {
     Map = new Tile*[mapx];
     for (int i = 0; i < mapx; ++i) Map[i] = new Tile[mapy];
 
@@ -163,17 +169,6 @@ DungeonMap::DungeonMap(int mapx, int mapy, int roomcnt, int HealerCount, int Scr
     delete connected;
     delete dist;
 
-    while (MonsterCount--) {
-        int room = rnd(1, rooms.size() - 1);
-        int x = rnd(get<0>(rooms[room]), get<0>(rooms[room]) + get<2>(rooms[room]) - 1);
-        int y = rnd(get<1>(rooms[room]), get<1>(rooms[room]) + get<3>(rooms[room]) - 1);
-        while (!CanPlace(x, y)) {
-            x = rnd(get<0>(rooms[room]), get<0>(rooms[room]) + get<2>(rooms[room]) - 1);
-            y = rnd(get<1>(rooms[room]), get<1>(rooms[room]) + get<3>(rooms[room]) - 1);
-        }
-        AddMonster(x, y);
-    }
-
     while (HealerCount--) {
         int room = rnd(0, rooms.size() - 1);
         int x = rnd(get<0>(rooms[room]), get<0>(rooms[room]) + get<2>(rooms[room]) - 1);
@@ -185,7 +180,18 @@ DungeonMap::DungeonMap(int mapx, int mapy, int roomcnt, int HealerCount, int Scr
         AddHealer(x, y);
     }
 
-    for (int i = 0; i < 10; ++i) {
+    while (ScrollCount--) {
+        int room = rnd(0, rooms.size() - 1);
+        int x = rnd(get<0>(rooms[room]), get<0>(rooms[room]) + get<2>(rooms[room]) - 1);
+        int y = rnd(get<1>(rooms[room]), get<1>(rooms[room]) + get<3>(rooms[room]) - 1);
+        while (!CanPlace(x, y)) {
+            x = rnd(get<0>(rooms[room]), get<0>(rooms[room]) + get<2>(rooms[room]) - 1);
+            y = rnd(get<1>(rooms[room]), get<1>(rooms[room]) + get<3>(rooms[room]) - 1);
+        }
+        AddScroll(x, y);
+    }
+
+    for (int i = 0; i < 4; ++i) {
         int room = rnd(0, rooms.size() - 1);
         int x = rnd(get<0>(rooms[room]), get<0>(rooms[room]) + get<2>(rooms[room]) - 1);
         int y = rnd(get<1>(rooms[room]), get<1>(rooms[room]) + get<3>(rooms[room]) - 1);
@@ -194,6 +200,30 @@ DungeonMap::DungeonMap(int mapx, int mapy, int roomcnt, int HealerCount, int Scr
             y = rnd(get<1>(rooms[room]), get<1>(rooms[room]) + get<3>(rooms[room]) - 1);
         }
         AddGear(x, y, i & 1);
+    }
+
+    for (int i = 0; i < 5; ++i) {
+        int room = rnd(0, rooms.size() - 1);
+        int x = rnd(get<0>(rooms[room]), get<0>(rooms[room]) + get<2>(rooms[room]) - 1);
+        int y = rnd(get<1>(rooms[room]), get<1>(rooms[room]) + get<3>(rooms[room]) - 1);
+        while (!CanPlace(x, y)) {
+            x = rnd(get<0>(rooms[room]), get<0>(rooms[room]) + get<2>(rooms[room]) - 1);
+            y = rnd(get<1>(rooms[room]), get<1>(rooms[room]) + get<3>(rooms[room]) - 1);
+        }
+        gEngine -> actors.push_back(new Actor("Coin", x, y, 4, 19));
+        gEngine -> actors.back() -> blocks = 0;
+        gEngine -> actors.back() -> pickable = new Coin();
+    }
+
+    while (MonsterCount--) {
+        int room = rnd(1, rooms.size() - 1);
+        int x = rnd(get<0>(rooms[room]), get<0>(rooms[room]) + get<2>(rooms[room]) - 1);
+        int y = rnd(get<1>(rooms[room]), get<1>(rooms[room]) + get<3>(rooms[room]) - 1);
+        while (!CanPlace(x, y)) {
+            x = rnd(get<0>(rooms[room]), get<0>(rooms[room]) + get<2>(rooms[room]) - 1);
+            y = rnd(get<1>(rooms[room]), get<1>(rooms[room]) + get<3>(rooms[room]) - 1);
+        }
+        AddMonster(x, y);
     }
 }
 

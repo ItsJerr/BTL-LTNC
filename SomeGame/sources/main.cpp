@@ -93,8 +93,8 @@ void Init() {
     ChangeModeEventID = FrameEventID + 1;
 
     /// Setting up main menu
-    ChangeMode(INGAMEID);
-    gEngine -> StartGame();
+    ChangeMode(MAINMENUID);
+    // gEngine -> StartGame();
 }
 
 /// call once per frame. clears the renderer so needs to redraw everything

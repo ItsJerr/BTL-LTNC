@@ -5,6 +5,11 @@
 #include "layer.h"
 
 class GameLayer: public Layer {
+public:
+    GameLayer() {
+        gEngine -> StartGame();
+    }
+
     void HandleEvent(const SDL_Event* event) override {
         gEngine -> HandleEvent(event);
     }
